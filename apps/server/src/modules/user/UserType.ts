@@ -2,6 +2,7 @@ import { connectionDefinitions } from "@entria/graphql-mongo-helpers";
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { globalIdField } from "graphql-relay";
 import { addTypeLoader, nodeInterface } from "../node/register";
+import { UserLoader } from "./UserLoader";
 import type { User } from "./UserModel";
 
 export const UserType = new GraphQLObjectType<User>({
@@ -29,9 +30,7 @@ export const UserType = new GraphQLObjectType<User>({
 	interfaces: () => [nodeInterface],
 });
 
-addTypeLoader(UserType, (ctx, id) => {
-	ctx.dataLoaders.UserLoader.load(id);
-});
+addTypeLoader(UserType, UserLoader.load);
 
 export const UserConnection = connectionDefinitions({
 	name: "User",

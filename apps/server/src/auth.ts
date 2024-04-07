@@ -13,11 +13,8 @@ export const generateToken = (user: User) =>
 export const verifyToken = async (token: string, context: Context) => {
 	try {
 		const decoded = jwt.verify(process.env.JWT_SECRET, token) as TokenPayload;
-		const user = await UserLoader.load(
-			{ dataloaders: context.dataLoaders },
-			decoded.id,
-		);
-		return user;
+
+		return await UserLoader.load(context, decoded.id);
 	} catch (_) {
 		return null;
 	}

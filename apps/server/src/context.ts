@@ -4,12 +4,12 @@ import type { User } from "./modules/user/UserModel";
 
 export type Context = {
 	user: User | null;
-	dataLoaders: DataLoaders;
+	dataloaders: DataLoaders;
 };
 
 export const buildContext = async (ctx: ExecutionContext): Promise<Context> => {
 	return {
 		user: null,
-		dataLoaders: getDataLoaders(),
+		dataloaders: getDataLoaders(),
 	};
 };
