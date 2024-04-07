@@ -1,0 +1,22 @@
+{
+	"name": "woovi-crm",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"lint": "turbo lint",
+		"format": "pnpm biome format --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.6.3",
+		"@repo/tailwind-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"prettier": "^3.2.5",
+		"turbo": "latest",
+		"typescript": "^5.4.3"
+	},
+	"packageManager": "pnpm@8.9.0",
+	"engines": {
+		"node": ">=18"
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"rootDirs": ["src"],
+		"outDir": "./dist",
+		"lib": ["es2020"],
+		"target": "es2020",
+		"module": "ES2020",
+		"strict": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"types": ["node"]
+	},
+	"exclude": ["node_modules"],
+	"include": ["./**/*.ts", "env.d.ts"]
+}
