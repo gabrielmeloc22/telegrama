@@ -17,6 +17,7 @@
 		"@koa/cors": "^5.0.0",
 		"@koa/router": "^12.0.1",
 		"@types/koa-mount": "^4.0.5",
+		"bcrypt": "^5.1.1",
 		"dotenv": "^16.4.5",
 		"graphql": "^16.8.1",
 		"graphql-helix": "^1.13.0",
@@ -24,6 +25,7 @@
 		"graphql-playground-middleware-koa": "^1.6.22",
 		"graphql-relay": "^0.10.1",
 		"graphql-sse": "^2.5.3",
+		"jsonwebtoken": "^9.0.2",
 		"koa": "^2.15.2",
 		"koa-logger": "^3.2.1",
 		"koa-mount": "^4.0.0",
@@ -31,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.6.4",
+		"@types/bcrypt": "^5.0.2",
 		"@types/jsonwebtoken": "^9.0.6",
 		"@types/koa": "^2.15.0",
 		"@types/koa-logger": "^3.1.5",
