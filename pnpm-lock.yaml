@@ -68,6 +68,9 @@ importers:
       graphql-relay:
         specifier: ^0.10.1
         version: 0.10.1(graphql@16.8.1)
+      graphql-scalars:
+        specifier: ^1.23.0
+        version: 1.23.0(graphql@16.8.1)
       graphql-sse:
         specifier: ^2.5.3
         version: 2.5.3(graphql@16.8.1)
@@ -2162,6 +2165,16 @@ packages:
       graphql: ^16.2.0
     dependencies:
       graphql: 16.8.1
+    dev: false
+
+  /graphql-scalars@1.23.0(graphql@16.8.1):
+    resolution: {integrity: sha512-YTRNcwitkn8CqYcleKOx9IvedA8JIERn8BRq21nlKgOr4NEcTaWEG0sT+H92eF3ALTFbPgsqfft4cw+MGgv0Gg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.8.1
+      tslib: 2.6.2
     dev: false
 
   /graphql-sse@2.5.3(graphql@16.8.1):
