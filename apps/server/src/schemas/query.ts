@@ -8,13 +8,8 @@ export const query = new GraphQLObjectType({
 	name: "query",
 	description: "Root query",
 	fields: () => ({
-		users: {
-			type: new GraphQLNonNull(UserConnection.connectionType),
-			args: connectionArgs,
-			resolve: async (_, args, context) =>
-				await UserLoader.loadAll(context, args),
-		},
 		node: Node,
 		nodes: Nodes,
+		users: Users,
 	}),
 });

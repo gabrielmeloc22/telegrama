@@ -34,8 +34,7 @@ const {
 
 		return load?.(context, id) || null;
 	},
-	// biome-ignore lint/complexity/noBannedTypes: just a generic object
-	(obj: Object) => {
+	(obj: object) => {
 		const { type } = typesLoaders[obj.constructor.name] || { type: null };
 
 		return type.name;
