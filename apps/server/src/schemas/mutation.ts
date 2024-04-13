@@ -1,3 +1,4 @@
+import { SendMessage } from "@/modules/message/mutations/SendMessageMutation";
 import { Login } from "@/modules/user/mutations/LoginMutation";
 import { Register } from "@/modules/user/mutations/RegisterMutation";
 import { GraphQLObjectType } from "graphql";
@@ -7,5 +8,6 @@ export const mutation = new GraphQLObjectType({
 	fields: () => ({
 		register: Register,
 		login: Login,
+		sendMessage: SendMessage,
 	}),
 });

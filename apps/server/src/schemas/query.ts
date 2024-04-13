@@ -1,8 +1,7 @@
+import { Messages } from "@/modules/message/queries/Messages";
 import { Node, Nodes } from "@/modules/node/register";
-import { UserLoader } from "@/modules/user/UserLoader";
-import { UserConnection } from "@/modules/user/UserType";
-import { GraphQLNonNull, GraphQLObjectType } from "graphql";
-import { connectionArgs } from "graphql-relay";
+import { Users } from "@/modules/user/queries/Users";
+import { GraphQLObjectType } from "graphql";
 
 export const query = new GraphQLObjectType({
 	name: "query",
@@ -10,6 +9,7 @@ export const query = new GraphQLObjectType({
 	fields: () => ({
 		node: Node,
 		nodes: Nodes,
+		messages: Messages,
 		users: Users,
 	}),
 });
