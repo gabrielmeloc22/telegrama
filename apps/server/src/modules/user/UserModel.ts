@@ -15,7 +15,7 @@ const UserSchema = new Schema<User>(
 		avatar: String,
 	},
 	{
-		collection: "user",
+		collection: "User",
 		timestamps: true,
 	},
 );
