@@ -3,19 +3,20 @@ import type { Context } from "@/context";
 import { genSaltSync, hashSync } from "bcrypt";
 import { GraphQLNonNull, GraphQLString } from "graphql";
 import { mutationWithClientMutationId } from "graphql-relay";
+import { EmailAddressResolver } from "graphql-scalars";
 import { type User, UserModel } from "../UserModel";
 import { UserType } from "../UserType";
 
-interface RegisterInput {
+type RegisterInput = {
 	username: string;
 	email: string;
 	password: string;
-}
+};
 
-interface RegisterOutput {
+type RegisterOutput = {
 	token: string | null;
 	user: User | null;
-}
+};
 
 export const Register = mutationWithClientMutationId<
 	RegisterInput,
@@ -33,10 +34,10 @@ export const Register = mutationWithClientMutationId<
 	},
 	inputFields: {
 		username: { type: new GraphQLNonNull(GraphQLString) },
-		email: { type: new GraphQLNonNull(GraphQLString) },
+		email: { type: EmailAddressResolver },
 		password: { type: new GraphQLNonNull(GraphQLString) },
 	},
-	mutateAndGetPayload: async ({ email, password, username }, ctx) => {
+	mutateAndGetPayload: async ({ email, password, username }, { ctx }) => {
 		const userAlreadyExists = !!(await UserModel.findOne({
 			$or: [
 				{ email: email.trim().toLowerCase() },
@@ -58,10 +59,12 @@ export const Register = mutationWithClientMutationId<
 		});
 		const token = generateToken(user);
 
-		// TODO: find ways to improve error handling
-		user.save().catch((err) => {
-			throw new Error(err.message);
-		});
+		try {
+			await user.save();
+			ctx.cookies.set("token", token);
+		} catch (err) {
+			throw new Error(JSON.stringify(err));
+		}
 
 		return { token, user };
 	},
