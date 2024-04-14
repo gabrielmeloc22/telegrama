@@ -1,6 +1,7 @@
 import type { Context } from "@/context";
+import { connectionArgs } from "@entria/graphql-mongo-helpers";
 import { type GraphQLFieldConfig, GraphQLNonNull } from "graphql";
-import { type ConnectionArguments, connectionArgs } from "graphql-relay";
+import type { ConnectionArguments } from "graphql-relay";
 import { UserLoader } from "../UserLoader";
 import { UserConnection } from "../UserType";
 
