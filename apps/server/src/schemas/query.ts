@@ -1,3 +1,4 @@
+import { Chats } from "@/modules/chat/queries/Chats";
 import { Messages } from "@/modules/message/queries/Messages";
 import { Node, Nodes } from "@/modules/node/register";
 import { Users } from "@/modules/user/queries/Users";
@@ -11,5 +12,6 @@ export const query = new GraphQLObjectType({
 		nodes: Nodes,
 		messages: Messages,
 		users: Users,
+		chats: Chats,
 	}),
 });
