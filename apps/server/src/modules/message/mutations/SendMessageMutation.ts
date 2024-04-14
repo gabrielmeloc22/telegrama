@@ -1,6 +1,7 @@
 import type { Context } from "@/context";
-import { ChatModel } from "@/modules/chat/ChatModel";
+import { type Chat, ChatModel } from "@/modules/chat/ChatModel";
 import { UserModel } from "@/modules/user/UserModel";
+import { pubSub } from "@/pubsub";
 import { GraphQLNonNull, GraphQLString } from "graphql";
 import { fromGlobalId, mutationWithClientMutationId } from "graphql-relay";
 import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
@@ -49,9 +50,10 @@ export const SendMessage = mutationWithClientMutationId<
 		});
 
 		const session = await startSession();
+		let chat: Chat;
 
 		try {
-			const chat =
+			chat =
 				(await ChatModel.findOne({
 					$and: [
 						{ users: { $size: 2 } },
@@ -64,11 +66,11 @@ export const SendMessage = mutationWithClientMutationId<
 				}).save({ session }));
 
 			message.chat = chat.id;
-
 			await message.save({ session });
 		} finally {
 			await session.endSession();
 		}
+		await pubSub.publish("MESSAGE:NEW", { id: message.id, chatId: chat.id });
 
 		return {
 			content: message.content,
