@@ -1,0 +1,304 @@
+schema {
+  query: query
+  mutation: mutation
+  subscription: subscription
+}
+
+"""Root query"""
+type query {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
+
+  """All messages"""
+  messages(after: String, first: Int, before: String, last: Int, chatId: String!): MessageConnection!
+
+  """All users"""
+  users(after: String, first: Int, before: String, last: Int): UserConnection!
+
+  """My chats"""
+  chats(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): ChatConnection!
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""A connection to a list of items."""
+type MessageConnection implements Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]!
+}
+
+"""A connection to a list of items."""
+interface Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type MessageEdge {
+  """The item at the end of the edge."""
+  node: Message
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type Message implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """mongoose_id"""
+  _id: String!
+  from: User!
+  delivered: Boolean!
+  deliveredAt: DateTime
+  seen: Boolean!
+  seenAt: DateTime
+  content: String!
+  createdAt: DateTime
+  chat: Chat!
+}
+
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """mongoose_id"""
+  _id: String!
+  username: String!
+  avatar: String
+  email: String
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type Chat implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """mongoose_id"""
+  _id: String!
+
+  """The recipient when not a group chat"""
+  user: User
+  lastMessage: Message
+  group: Boolean
+
+  """Group chat users"""
+  users: [User!]!
+}
+
+"""A connection to a list of items."""
+type UserConnection implements Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+"""A connection to a list of items."""
+type ChatConnection implements Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ChatEdge]!
+}
+
+"""An edge in a connection."""
+type ChatEdge {
+  """The item at the end of the edge."""
+  node: Chat
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type mutation {
+  register(input: RegisterUserInput!): RegisterUserPayload
+  login(input: LoginMutationInput!): LoginMutationPayload
+  sendMessage(input: SendMessageInput!): SendMessagePayload
+}
+
+type RegisterUserPayload {
+  token: String
+  user: User
+  clientMutationId: String
+}
+
+input RegisterUserInput {
+  username: String!
+  email: EmailAddress
+  password: String!
+  clientMutationId: String
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
+scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
+
+type LoginMutationPayload {
+  token: String!
+  user: User
+  clientMutationId: String
+}
+
+input LoginMutationInput {
+  password: NonEmptyString
+  email: String
+  username: String
+  clientMutationId: String
+}
+
+"""A string that cannot be passed as an empty value"""
+scalar NonEmptyString
+
+type SendMessagePayload {
+  content: String!
+  createdAt: DateTime
+  clientMutationId: String
+}
+
+input SendMessageInput {
+  content: NonEmptyString
+  to: String!
+  clientMutationId: String
+}
+
+type subscription {
+  newMessage(input: NewMessageInput!): NewMessagePayload
+}
+
+type NewMessagePayload {
+  message: MessageEdge
+  clientSubscriptionId: String
+}
+
+input NewMessageInput {
+  chatId: String!
+  clientSubscriptionId: String
+}

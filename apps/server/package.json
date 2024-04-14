@@ -3,11 +3,12 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsx --require dotenv/config --watch src/index.ts",
+		"build": "pnpm generate:schema && tsc",
+		"dev": "pnpm generate:schema && tsx --require dotenv/config --watch src/index.ts",
 		"format": "pnpm biome format ./src --write",
 		"lint": "pnpm biome lint ./src",
-		"check": "pnpm biome check --apply ./src"
+		"check": "pnpm biome check --apply ./src",
+		"generate:schema": "tsx ./scripts/generateSchema.ts && cp ./schema/schema.graphql ../web/data"
 	},
 	"license": "ISC",
 	"dependencies": {

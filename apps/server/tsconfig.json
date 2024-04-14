@@ -15,5 +15,5 @@
 		"types": ["node"]
 	},
 	"exclude": ["node_modules"],
-	"include": ["env.d.ts", "./src/**.ts"]
+	"include": ["env.d.ts", "./**/*.ts"]
 }
