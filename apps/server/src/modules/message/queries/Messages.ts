@@ -1,22 +1,34 @@
 import type { Context } from "@/context";
-import { connectionArgs } from "@entria/graphql-mongo-helpers";
-import { type GraphQLFieldConfig, GraphQLNonNull } from "graphql";
-import type { ConnectionArguments } from "graphql-relay";
+import { connectionArgs, withFilter } from "@entria/graphql-mongo-helpers";
+import {
+	type GraphQLFieldConfig,
+	GraphQLNonNull,
+	GraphQLString,
+} from "graphql";
+import { type ConnectionArguments, fromGlobalId } from "graphql-relay";
 import { MessageLoader } from "../MessageLoader";
 import { MessageConnection } from "../MessageType";
 
 export const Messages: GraphQLFieldConfig<
 	unknown,
 	Context,
-	ConnectionArguments
+	ConnectionArguments & { chatId: string }
 > = {
 	type: new GraphQLNonNull(MessageConnection.connectionType),
 	description: "All messages",
-	args: connectionArgs,
-	resolve: async (_, args, context) => {
+	args: {
+		...connectionArgs,
+		chatId: { type: new GraphQLNonNull(GraphQLString) },
+	},
+	resolve: async (_, { chatId, ...args }, context) => {
 		if (!context.user) {
 			throw new Error("User not authenticated");
 		}
-		return await MessageLoader.loadAll(context, args);
+		return await MessageLoader.loadAll(
+			context,
+			withFilter(args, {
+				chat: fromGlobalId(chatId).id,
+			}),
+		);
 	},
 };
