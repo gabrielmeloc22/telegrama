@@ -10,17 +10,18 @@ export interface Message extends Document {
 	content: string;
 	createdAt: Date;
 	updatedAt: Date;
+	chat: Types.ObjectId;
 }
 
 const MessageSchema = new Schema<Message>(
 	{
-		to: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		from: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		delivered: { type: Boolean, default: false, required: true },
 		deliveredAt: Date,
 		seen: { type: Boolean, default: false, required: true },
 		seenAt: Date,
 		content: { type: String, required: true },
+		chat: { type: Schema.Types.ObjectId, ref: "Chat", required: true },
 	},
 	{
 		timestamps: true,

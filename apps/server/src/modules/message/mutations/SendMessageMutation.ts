@@ -1,8 +1,10 @@
 import type { Context } from "@/context";
+import { ChatModel } from "@/modules/chat/ChatModel";
 import { UserModel } from "@/modules/user/UserModel";
 import { GraphQLNonNull, GraphQLString } from "graphql";
-import { mutationWithClientMutationId } from "graphql-relay";
+import { fromGlobalId, mutationWithClientMutationId } from "graphql-relay";
 import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
+import { startSession } from "mongoose";
 import { MessageModel } from "../MessageModel";
 
 type SendMessageInput = {
@@ -34,7 +36,7 @@ export const SendMessage = mutationWithClientMutationId<
 			throw new Error("Sender not specified");
 		}
 
-		const recipient = await UserModel.findById(to);
+		const recipient = await UserModel.findById(fromGlobalId(to).id);
 
 		if (!recipient) {
 			throw new Error("Recipient does not exist");
@@ -46,10 +48,25 @@ export const SendMessage = mutationWithClientMutationId<
 			to: recipient,
 		});
 
+		const session = await startSession();
+
 		try {
-			await message.save();
-		} catch {
-			throw new Error("Unexpected error");
+			const chat =
+				(await ChatModel.findOne({
+					$and: [
+						{ users: { $size: 2 } },
+						{ users: { $all: [user._id, recipient._id] } },
+					],
+				})) ||
+				(await new ChatModel({
+					users: [recipient._id, user._id],
+				}).save({ session }));
+
+			message.chat = chat.id;
+
+			await message.save({ session });
+		} finally {
+			await session.endSession();
 		}
 
 		return {
