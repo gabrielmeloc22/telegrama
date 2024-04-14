@@ -5,7 +5,7 @@
 		},
 		"rootDirs": ["src"],
 		"outDir": "./dist",
-		"lib": ["es2020"],
+		"lib": ["es2020", "ESNext.AsyncIterable"],
 		"target": "es2020",
 		"module": "ES2020",
 		"strict": true,

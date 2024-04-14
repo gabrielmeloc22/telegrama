@@ -68,12 +68,18 @@ importers:
       graphql-relay:
         specifier: ^0.10.1
         version: 0.10.1(graphql@16.8.1)
+      graphql-relay-subscription:
+        specifier: ^1.0.0
+        version: 1.0.0(graphql@16.8.1)
       graphql-scalars:
         specifier: ^1.23.0
         version: 1.23.0(graphql@16.8.1)
       graphql-sse:
         specifier: ^2.5.3
         version: 2.5.3(graphql@16.8.1)
+      graphql-subscriptions:
+        specifier: ^2.0.0
+        version: 2.0.0(graphql@16.8.1)
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -2161,6 +2167,14 @@ packages:
       koa: 2.15.3
     dev: false
 
+  /graphql-relay-subscription@1.0.0(graphql@16.8.1):
+    resolution: {integrity: sha512-ga+wEJEMf4MB4lCxLNjyr8BIC7bhVA0SMzC8+oKIW9ny9R7RPSEz5yT/BUJO26ekGRDTQY8bBwrR+iJl2dq11Q==}
+    peerDependencies:
+      graphql: '>=16.0.0'
+    dependencies:
+      graphql: 16.8.1
+    dev: false
+
   /graphql-relay@0.10.1(graphql@16.8.1):
     resolution: {integrity: sha512-8AtwSe6B0/b4+YzynHr38PP7S+zX5Vs5LEo0BEzGCPq/THAiHa5H5ZLf3bRbKbok15ADxDQSsGJmlqXeJDDPIw==}
     engines: {node: ^12.20.0 || ^14.15.0 || >= 15.9.0}
@@ -2187,6 +2201,15 @@ packages:
       graphql: '>=0.11 <=16'
     dependencies:
       graphql: 16.8.1
+    dev: false
+
+  /graphql-subscriptions@2.0.0(graphql@16.8.1):
+    resolution: {integrity: sha512-s6k2b8mmt9gF9pEfkxsaO1lTxaySfKoEJzEfmwguBbQ//Oq23hIXCfR1hm4kdh5hnR20RdwB+s3BCb+0duHSZA==}
+    peerDependencies:
+      graphql: ^15.7.2 || ^16.0.0
+    dependencies:
+      graphql: 16.8.1
+      iterall: 1.3.0
     dev: false
 
   /graphql@16.8.1:
@@ -2503,6 +2526,10 @@ packages:
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
+
+  /iterall@1.3.0:
+    resolution: {integrity: sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==}
+    dev: false
 
   /jackspeak@2.3.6:
     resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
