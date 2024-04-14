@@ -60,6 +60,7 @@ export const SendMessage = mutationWithClientMutationId<
 				})) ||
 				(await new ChatModel({
 					users: [recipient._id, user._id],
+					lastMessage: message,
 				}).save({ session }));
 
 			message.chat = chat.id;

@@ -8,13 +8,18 @@ import {
 	GraphQLString,
 } from "graphql";
 import { globalIdField } from "graphql-relay";
+import { MessageLoader } from "../message/MessageLoader";
+import { MessageType } from "../message/MessageType";
 import { addTypeLoader, nodeInterface } from "../node/register";
 import { UserModel } from "../user/UserModel";
 import { UserType } from "../user/UserType";
 import { ChatLoader } from "./ChatLoader";
 import type { Chat } from "./ChatModel";
 
-export const ChatType = new GraphQLObjectType<Chat, Context>({
+export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
+	Chat,
+	Context
+>({
 	name: "Chat",
 	fields: () => ({
 		id: globalIdField("Chat"),
@@ -33,6 +38,11 @@ export const ChatType = new GraphQLObjectType<Chat, Context>({
 					)
 				);
 			},
+		},
+		lastMessage: {
+			type: MessageType,
+			resolve: async (chat, _args, ctx) =>
+				chat.lastMessage ? MessageLoader.load(ctx, chat.lastMessage) : null,
 		},
 		group: {
 			type: GraphQLBoolean,
