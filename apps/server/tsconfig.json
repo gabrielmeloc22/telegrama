@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"skipLibCheck": true,
 		"paths": {
 			"@/*": ["./src/*"]
 		},
@@ -14,5 +15,5 @@
 		"types": ["node"]
 	},
 	"exclude": ["node_modules"],
-	"include": ["./**/*.ts", "env.d.ts"]
+	"include": ["env.d.ts", "./src/**.ts"]
 }

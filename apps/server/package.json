@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"build": "tsc",
-		"dev": "tsx  --require dotenv/config --watch src/index.ts",
+		"dev": "tsx --require dotenv/config --watch src/index.ts",
 		"format": "pnpm biome format ./src --write",
 		"lint": "pnpm biome lint ./src",
 		"check": "pnpm biome check --apply ./src"
