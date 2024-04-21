@@ -1,3 +1,3 @@
-import * as components from "./components";
+import "@ui/globals.css";
 
-export { components };
+export * from "./components";
