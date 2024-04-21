@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import { createEnvironment } from "./environment";
 import { RelayEnvironmentProvider } from "react-relay";

@@ -8,7 +8,7 @@ import {
 } from "relay-runtime";
 
 const fetchFn: FetchFunction = (params, variables) => {
-	const response = fetch(process.env.API_URL, {
+	const response = fetch(process.env.NEXT_PUBLIC_API_URL, {
 		method: "POST",
 		headers: [["Content-Type", "application/json"]],
 		body: JSON.stringify({
