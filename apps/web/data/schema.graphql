@@ -24,6 +24,9 @@ type query {
   """All users"""
   users(after: String, first: Int, before: String, last: Int): UserConnection!
 
+  """me"""
+  me(after: String, first: Int, before: String, last: Int): User
+
   """My chats"""
   chats(
     """Returns the items in the list that come after the specified cursor."""
