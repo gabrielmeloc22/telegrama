@@ -5,21 +5,8 @@
 			"@/*": ["./src/*"],
 			"@ui/*": ["../../packages/ui/src/*"]
 		},
-		"plugins": [
-			{
-				"name": "next"
-			}
-		]
+		"plugins": [{ "name": "next" }]
 	},
-	"include": [
-		"next-env.d.ts",
-		"next.config.js",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts",
-		"postcss.config.js",
-		"tailwind.config.ts",
-		"relay.config.js"
-	],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }

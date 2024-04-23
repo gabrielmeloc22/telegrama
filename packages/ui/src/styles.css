@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: theme("colors.slate.200");
     --foreground: theme("colors.slate.800");
+    --background: theme("colors.slate.200");
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;

@@ -3,11 +3,12 @@
 	"version": "0.0.0",
 	"private": true,
 	"license": "MIT",
-	"exports": ["./tailwind.config.js"],
-	"devDependencies": {
-		"tailwindcss": "^3.4.3"
+	"exports": {
+		".": "./tailwind.config.ts"
 	},
-	"dependencies": {
-		"tailwindcss-animate": "^1.0.7"
+	"devDependencies": {
+		"tailwindcss": "^3.4.3",
+		"tailwindcss-animate": "^1.0.7",
+		"@repo/typescript-config": "workspace:*"
 	}
 }
