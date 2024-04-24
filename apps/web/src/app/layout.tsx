@@ -1,9 +1,10 @@
 import "@/app/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import RelayEnvironment from "@/relay/relay-environment";
 import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import RelayEnvironment from "../relay/RelayEnvironment";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
 		<RelayEnvironment>
 			<html lang="en" className="dark">
 				<body className={inter.className}>
-					{children}
+					<Suspense fallback={<p>loading...</p>}>
+						<AuthProvider>{children}</AuthProvider>
+					</Suspense>
 				</body>
 			</html>
 		</RelayEnvironment>
