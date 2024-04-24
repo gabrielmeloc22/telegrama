@@ -12,7 +12,7 @@
 				"noUnusedVariables": "warn"
 			}
 		},
-		"ignore": ["node_modules"]
+		"ignore": ["node_modules", "next", "__generated__"]
 	},
 	"formatter": {
 		"formatWithErrors": true
