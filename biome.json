@@ -6,6 +6,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"nursery": { "useSortedClasses": "warn" },
 			"recommended": true,
 			"correctness": {
 				"noUnusedImports": "warn",
@@ -15,6 +16,7 @@
 		"ignore": ["node_modules", "next", "__generated__"]
 	},
 	"formatter": {
+		"enabled": true,
 		"formatWithErrors": true
 	}
 }
