@@ -33,19 +33,19 @@
 		"koa": "^2.15.3",
 		"koa-logger": "^3.2.1",
 		"koa-mount": "^4.0.0",
-		"mongoose": "^8.3.1"
+		"mongoose": "^8.4.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.6.4",
+		"@biomejs/biome": "^1.7.3",
 		"@types/bcrypt": "^5.0.2",
 		"@types/jsonwebtoken": "^9.0.6",
 		"@types/koa": "^2.15.0",
 		"@types/koa-logger": "^3.1.5",
 		"@types/koa__cors": "^5.0.0",
 		"@types/koa__router": "^12.0.4",
-		"@types/node": "^20.12.7",
+		"@types/node": "^20.12.12",
 		"@types/ws": "^8.5.10",
-		"tsx": "^4.7.2",
+		"tsx": "^4.10.5",
 		"typescript": "^5.4.5"
 	}
 }

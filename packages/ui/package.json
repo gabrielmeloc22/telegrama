@@ -2,7 +2,9 @@
 	"name": "@repo/ui",
 	"version": "0.0.0",
 	"private": true,
-	"sideEffects": ["**/*.css"],
+	"sideEffects": [
+		"**/*.css"
+	],
 	"main": "./src/index.ts",
 	"exports": {
 		"./styles.css": "./dist/index.css",
@@ -20,23 +22,23 @@
 		"@radix-ui/react-label": "^2.0.2",
 		"@radix-ui/react-slot": "^1.0.2",
 		"class-variance-authority": "^0.7.0",
-		"clsx": "^2.1.0",
+		"clsx": "^2.1.1",
 		"lucide-react": "^0.372.0",
-		"react": "^18.2.0",
-		"react-hook-form": "^7.51.3",
+		"react": "^18.3.1",
+		"react-hook-form": "^7.51.4",
 		"tailwind-merge": "^2.3.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.6.3",
+		"@biomejs/biome": "^1.7.3",
 		"@repo/tailwind-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@turbo/gen": "^1.13.1",
-		"@types/node": "^20.12.2",
-		"@types/react": "^18.2.73",
-		"@types/react-dom": "^18.2.23",
+		"@turbo/gen": "^1.13.3",
+		"@types/node": "^20.12.12",
+		"@types/react": "^18.3.2",
+		"@types/react-dom": "^18.3.0",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.38",
 		"tailwindcss": "^3.4.3",
-		"typescript": "^5.4.3"
+		"typescript": "^5.4.5"
 	}
 }
