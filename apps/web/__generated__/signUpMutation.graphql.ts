@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<22d1730d3d890d5e1ed3298758f0993e>>
+ * @generated SignedSource<<cfa59af379513e4942e6206621cf7e34>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,17 +15,17 @@ export type RegisterUserInput = {
   password: string;
   username: string;
 };
-export type registerUserMutation$variables = {
+export type signUpMutation$variables = {
   input: RegisterUserInput;
 };
-export type registerUserMutation$data = {
+export type signUpMutation$data = {
   readonly register: {
     readonly token: string | null | undefined;
   } | null | undefined;
 };
-export type registerUserMutation = {
-  response: registerUserMutation$data;
-  variables: registerUserMutation$variables;
+export type signUpMutation = {
+  response: signUpMutation$data;
+  variables: signUpMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -67,7 +67,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "registerUserMutation",
+    "name": "signUpMutation",
     "selections": (v1/*: any*/),
     "type": "mutation",
     "abstractKey": null
@@ -76,20 +76,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "registerUserMutation",
+    "name": "signUpMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f1a5228d0cf33e1ff75caaa29e405346",
+    "cacheID": "66dd23d210dcae92f1ea1c34e58b6a99",
     "id": null,
     "metadata": {},
-    "name": "registerUserMutation",
+    "name": "signUpMutation",
     "operationKind": "mutation",
-    "text": "mutation registerUserMutation(\n  $input: RegisterUserInput!\n) {\n  register(input: $input) {\n    token\n  }\n}\n"
+    "text": "mutation signUpMutation(\n  $input: RegisterUserInput!\n) {\n  register(input: $input) {\n    token\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4de06e8b20de0f0ff8dfe9ff75bead99";
+(node as any).hash = "7ccb1de92d60cc47ad30bd70a4a99d20";
 
 export default node;

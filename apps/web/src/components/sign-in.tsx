@@ -13,7 +13,7 @@ import {
 } from "@repo/ui";
 import { graphql, useMutation } from "react-relay";
 import { z } from "zod";
-import type { loginMutation } from "../../__generated__/loginMutation.graphql";
+import type { signInMutation } from "../../__generated__/signInMutation.graphql";
 
 const LoginFormSchema = z.object({
 	credential: z.union([
@@ -28,8 +28,8 @@ const LoginFormSchema = z.object({
 	password: z.string().min(1, "Please enter a password"),
 });
 
-const LoginMutation = graphql`
-  mutation loginMutation($input: LoginMutationInput!) {
+const SignInMutation = graphql`
+  mutation signInMutation($input: LoginMutationInput!) {
     login(input: $input) {
       token
     }
@@ -37,7 +37,7 @@ const LoginMutation = graphql`
 `;
 
 export function SignIn() {
-	const [mutate, loading] = useMutation<loginMutation>(LoginMutation);
+	const [mutate, loading] = useMutation<signInMutation>(SignInMutation);
 	const form = useZodForm(LoginFormSchema, {
 		defaultValues: {
 			credential: "",

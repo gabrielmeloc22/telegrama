@@ -13,8 +13,8 @@ import {
 import { useMutation } from "react-relay";
 import { graphql } from "relay-runtime";
 import { z } from "zod";
-import type { registerUserMutation } from "../../__generated__/registerUserMutation.graphql";
 import { login } from "@/utils/auth";
+import type { signUpMutation } from "../../__generated__/signUpMutation.graphql";
 
 const UserRegisterFormSchema = z.object({
 	username: z
@@ -25,7 +25,7 @@ const UserRegisterFormSchema = z.object({
 });
 
 const RegisterUserMutation = graphql`
-  mutation registerUserMutation($input: RegisterUserInput!) {
+  mutation signUpMutation($input: RegisterUserInput!) {
     register(input: $input) {
       token
     }
@@ -34,8 +34,7 @@ const RegisterUserMutation = graphql`
 
 export function SignUp() {
 	const form = useZodForm(UserRegisterFormSchema);
-	const [register, loading] =
-		useMutation<registerUserMutation>(RegisterUserMutation);
+	const [register, loading] = useMutation<signUpMutation>(RegisterUserMutation);
 
 	const onSubmit = form.handleSubmit((data) => {
 		register({
