@@ -4,6 +4,7 @@ import {
   Form,
   FormControl,
   FormField,
+  FormInputPlaceholder,
   FormItem,
   FormLabel,
   FormMessage,
@@ -80,17 +81,19 @@ export function Login() {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="flex w-full max-w-xs flex-col gap-2 items-center"
+          className="flex w-full max-w-xs flex-col items-center gap-4"
         >
           <FormField
             name="credential"
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="username or mail address" {...field} />
-                </FormControl>
+                <FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormInputPlaceholder>Username or Email</FormInputPlaceholder>
+                </FormLabel>
                 <FormMessage />
               </FormItem>
             )}
@@ -100,19 +103,21 @@ export function Login() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="username or mail address"
-                    {...field}
-                  />
-                </FormControl>
+                <FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="username or mail address"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormInputPlaceholder>Password</FormInputPlaceholder>
+                </FormLabel>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="mt-10 flex flex-col gap-2">
+          <div className="mt-10 flex gap-8">
             <Button type="submit" isLoading={loading}>
               Login
             </Button>

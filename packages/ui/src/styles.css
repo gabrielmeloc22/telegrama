@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --foreground: theme("colors.slate.800");
-    --background: theme("colors.slate.200");
+    --foreground: theme("colors.neutral.800");
+    --background: theme("colors.neutral.200");
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -13,14 +13,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: theme("colors.indigo.600");
-    --primary-foreground: theme("colors.indigo.100");
+    --primary: theme("colors.violet.600");
+    --primary-foreground: theme("colors.violet.100");
 
-    --secondary: theme("colors.indigo.700");
-    --secondary-foreground: theme("colors.indigo.200");
+    --secondary: theme("colors.violet.700");
+    --secondary-foreground: theme("colors.violet.200");
 
-    --muted: theme("colors.slate.500");
-    --muted-foreground: theme("colors.slate.700");
+    --muted: theme("colors.neutral.500");
+    --muted-foreground: theme("colors.neutral.700");
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -29,15 +29,15 @@
     --destructive-foreground: theme("colors.red.100");
 
     --border: 214.3 31.8% 91.4%;
-    --input: theme("colors.slate.300");
+    --input: theme("colors.neutral.400");
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: theme("colors.slate.900");
-    --foreground: theme("colors.slate.200");
+    --background: theme("colors.neutral.800");
+    --foreground: theme("colors.neutral.200");
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -45,14 +45,14 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: theme("colors.indigo.500");
-    --primary-foreground: theme("colors.indigo.100");
+    --primary: theme("colors.violet.500");
+    --primary-foreground: white;
 
-    --secondary: theme("colors.indigo.600");
-    --secondary-foreground: theme("colors.indigo.200");
+    --secondary: theme("colors.violet.600");
+    --secondary-foreground: white;
 
-    --muted: theme("colors.slate.700");
-    --muted-foreground: theme("colors.slate.500");
+    --muted: theme("colors.neutral.500");
+    --muted-foreground: theme("colors.neutral.400");
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
@@ -61,7 +61,7 @@
     --destructive-foreground: theme("colors.red.100");
 
     --border: 217.2 32.6% 17.5%;
-    --input: theme("colors.slate.800");
+    --input: theme("colors.neutral.700");
     --ring: 212.7 26.8% 83.9%;
   }
 }

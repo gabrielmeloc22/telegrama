@@ -5,12 +5,13 @@ import React from "react";
 import { Spinner } from "./spinner";
 
 const variants = cva(
-  "rounded-md flex justify-center w-fit text-sm transition-colors",
+  "rounded-md flex justify-center w-fit text-sm transition-colors font-medium",
   {
     variants: {
       design: {
-        primary:
-          "bg-primary text-primary-foreground border-blue-800 hover:bg-secondary",
+        primary: "bg-primary text-primary-foreground hover:bg-secondary",
+        outline:
+          "border border-primary text-primary hover:bg-primary hover:text-primary-foreground",
       },
       size: {
         sm: "py-1 px-2",
