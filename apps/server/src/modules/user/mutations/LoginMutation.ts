@@ -8,50 +8,49 @@ import { type User, UserModel } from "../UserModel";
 import { UserType } from "../UserType";
 
 type LoginInput = {
-	username?: string;
-	email?: string;
-	password: string;
+  username?: string;
+  email?: string;
+  password: string;
 };
 
 type LoginOutput = {
-	user: User;
-	token: string;
+  user: User;
+  token: string;
 };
 
 export const Login = mutationWithClientMutationId<
-	LoginInput,
-	Promise<LoginOutput>,
-	Context
+  LoginInput,
+  Promise<LoginOutput>,
+  Context
 >({
-	name: "LoginMutation",
-	inputFields: {
-		password: { type: GraphQLNonEmptyString },
-		email: { type: GraphQLString },
-		username: { type: GraphQLString },
-	},
-	outputFields: {
-		token: { type: new GraphQLNonNull(GraphQLString) },
-		user: { type: UserType },
-	},
-	mutateAndGetPayload: async ({ email, username, password }, { ctx }) => {
-		const user = await UserModel.findOne({
-			$or: [
-				{ email: email?.toLowerCase()?.trim() },
-				{ username: username?.trim() },
-			],
-		}).select("+password");
+  name: "LoginMutation",
+  inputFields: {
+    password: { type: GraphQLNonEmptyString },
+    email: { type: GraphQLString },
+    username: { type: GraphQLString },
+  },
+  outputFields: {
+    token: { type: new GraphQLNonNull(GraphQLString) },
+    user: { type: UserType },
+  },
+  mutateAndGetPayload: async ({ email, username, password }) => {
+    const user = await UserModel.findOne({
+      $or: [
+        { email: email?.toLowerCase()?.trim() },
+        { username: username?.trim() },
+      ],
+    }).select("+password");
 
-		if (!user) {
-			throw new Error("Invalid email or username");
-		}
+    if (!user) {
+      throw new Error("Invalid email or username");
+    }
 
-		if (!(await compare(password, user.password))) {
-			throw new Error("Invalid credentials");
-		}
+    if (!(await compare(password, user.password))) {
+      throw new Error("Invalid password");
+    }
 
-		const token = generateToken(user);
-		ctx.cookies.set("token", token);
+    const token = generateToken(user);
 
-		return { token, user };
-	},
+    return { token, user };
+  },
 });

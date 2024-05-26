@@ -37,7 +37,7 @@ export const Register = mutationWithClientMutationId<
 		email: { type: EmailAddressResolver },
 		password: { type: new GraphQLNonNull(GraphQLString) },
 	},
-	mutateAndGetPayload: async ({ email, password, username }, { ctx }) => {
+	mutateAndGetPayload: async ({ email, password, username }) => {
 		const userAlreadyExists = !!(await UserModel.findOne({
 			$or: [
 				{ email: email.trim().toLowerCase() },
@@ -61,7 +61,6 @@ export const Register = mutationWithClientMutationId<
 
 		try {
 			await user.save();
-			ctx.cookies.set("token", token);
 		} catch (err) {
 			throw new Error(JSON.stringify(err));
 		}
