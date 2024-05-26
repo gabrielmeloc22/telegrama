@@ -13,38 +13,56 @@ const config: Omit<Config, ""> = {
 		},
 		extend: {
 			colors: {
-				border: "var(--border)",
-				input: "var(--input)",
-				ring: "var(--ring)",
-				background: "var(--background)",
-				foreground: "var(--foreground)",
+				border:
+					"color-mix(in srgb, var(--border) calc(100% * <alpha-value>), transparent)",
+				input:
+					"color-mix(in srgb, var(--input) calc(100% * <alpha-value>), transparent)",
+				ring: "color-mix(in srgb, var(--ring) calc(100% * <alpha-value>), transparent)",
+				background:
+					"color-mix(in srgb, var(--background) calc(100% * <alpha-value>), transparent)",
+				foreground:
+					"color-mix(in srgb, var(--foreground) calc(100% * <alpha-value>), transparent)",
 				primary: {
-					DEFAULT: "var(--primary)",
-					foreground: "var(--primary-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--primary) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--primary-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				secondary: {
-					DEFAULT: "var(--secondary)",
-					foreground: "var(--secondary-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--secondary) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--secondary-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				destructive: {
-					DEFAULT: "var(--destructive)",
-					foreground: "var(--destructive-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--destructive) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--destructive-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				muted: {
-					DEFAULT: "var(--muted)",
-					foreground: "var(--muted-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--muted) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--muted-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				accent: {
-					DEFAULT: "var(--accent)",
-					foreground: "var(--accent-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--accent) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--accent-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				popover: {
-					DEFAULT: "var(--popover)",
-					foreground: "var(--popover-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--popover) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--popover-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 				card: {
-					DEFAULT: "var(--card)",
-					foreground: "var(--card-foreground)",
+					DEFAULT:
+						"color-mix(in srgb, var(--card) calc(100% * <alpha-value>), transparent)",
+					foreground:
+						"color-mix(in srgb, var(--card-foreground) calc(100% * <alpha-value>), transparent)",
 				},
 			},
 			borderRadius: {
