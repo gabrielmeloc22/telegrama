@@ -39,6 +39,10 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
         );
       },
     },
+    name: {
+      type: GraphQLString,
+      resolve: async (chat) => chat.name,
+    },
     lastMessage: {
       type: MessageType,
       resolve: async (chat, _args, ctx) =>
