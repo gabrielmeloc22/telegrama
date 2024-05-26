@@ -127,8 +127,8 @@ importers:
         specifier: ^8.5.10
         version: 8.5.10
       tsx:
-        specifier: ^4.10.5
-        version: 4.10.5
+        specifier: ^4.11.0
+        version: 4.11.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -1506,8 +1506,8 @@ packages:
       '@types/keygrip': 1.0.6
       '@types/node': 20.12.12
 
-  /@types/express-serve-static-core@4.19.0:
-    resolution: {integrity: sha512-bGyep3JqPCRry1wq+O5n7oiBgGWmeIJXPjXXCo8EK0u8duZGSYar7cGqd3ML2JUsLGeB7fmc06KYo9fLGWqPvQ==}
+  /@types/express-serve-static-core@4.19.1:
+    resolution: {integrity: sha512-ej0phymbFLoCB26dbbq5PGScsf2JAJ4IJHjG10LalgUV36XKTmA4GdA+PVllKvRk0sEKt64X8975qFnkSi0hqA==}
     dependencies:
       '@types/node': 20.12.12
       '@types/qs': 6.9.15
@@ -1518,7 +1518,7 @@ packages:
     resolution: {integrity: sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==}
     dependencies:
       '@types/body-parser': 1.19.5
-      '@types/express-serve-static-core': 4.19.0
+      '@types/express-serve-static-core': 4.19.1
       '@types/qs': 6.9.15
       '@types/serve-static': 1.15.7
 
@@ -4735,8 +4735,8 @@ packages:
     engines: {node: '>=0.6.x'}
     dev: false
 
-  /tsx@4.10.5:
-    resolution: {integrity: sha512-twDSbf7Gtea4I2copqovUiNTEDrT8XNFXsuHpfGbdpW/z9ZW4fTghzzhAG0WfrCuJmJiOEY1nLIjq4u3oujRWQ==}
+  /tsx@4.11.0:
+    resolution: {integrity: sha512-vzGGELOgAupsNVssAmZjbUDfdm/pWP4R+Kg8TVdsonxbXk0bEpE1qh0yV6/QxUVXaVlNemgcPajGdJJ82n3stg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:

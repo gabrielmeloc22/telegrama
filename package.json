@@ -1,23 +1,24 @@
 {
-	"name": "telegrama",
-	"private": true,
-	"scripts": {
-		"build": "turbo build",
-		"dev": "turbo dev",
-		"lint": "turbo lint",
-		"format": "turbo format"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.7.3",
-		"@repo/tailwind-config": "workspace:*",
-		"@repo/typescript-config": "workspace:*",
-		"graphql-config": "^5.0.3",
-		"prettier": "^3.2.5",
-		"turbo": "latest",
-		"typescript": "^5.4.5"
-	},
-	"packageManager": "pnpm@8.9.0",
-	"engines": {
-		"node": ">=18"
-	}
+  "name": "telegrama",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "turbo format",
+    "type-check": "turbo type-check"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.7.3",
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "graphql-config": "^5.0.3",
+    "prettier": "^3.2.5",
+    "turbo": "latest",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  }
 }
