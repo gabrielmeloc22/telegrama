@@ -5,14 +5,15 @@ import React from "react";
 import { Spinner } from "./spinner";
 
 const variants = cva(
-	"rounded-md flex justify-center w-fit text-sm transition-colors font-medium",
+	"rounded-md flex justify-center w-fit text-sm transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed",
 	{
 		variants: {
 			design: {
-				primary: "bg-primary text-primary-foreground hover:bg-secondary",
+				primary:
+					"bg-primary text-primary-foreground enabled:hover:bg-secondary",
 				outline:
-					"border border-primary text-primary hover:bg-primary hover:text-primary-foreground",
-				link: "hover:underline text-primary",
+					"border border-primary text-primary enabled:hover:bg-primary enabled:hover:text-primary-foreground",
+				link: "enabled:hover:underline text-primary",
 				ghost: "",
 			},
 			size: {
@@ -60,7 +61,7 @@ export const Button = React.forwardRef<
 			{...props}
 		>
 			<Slottable>{children}</Slottable>
-			{isLoading && <Spinner />}
+			{isLoading && <Spinner className="ml-2 size-5" />}
 		</button>
 	),
 );
