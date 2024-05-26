@@ -36,7 +36,7 @@
   }
 
   .dark {
-    --background: theme("colors.neutral.800");
+    --background: theme("colors.neutral.900");
     --foreground: theme("colors.neutral.200");
 
     --card: 222.2 84% 4.9%;

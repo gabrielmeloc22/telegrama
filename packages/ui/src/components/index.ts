@@ -13,8 +13,13 @@ import {
 import { Input } from "./input";
 import { Label } from "./label";
 import { Spinner } from "./spinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
   Button,
   Form,
   FormControl,
