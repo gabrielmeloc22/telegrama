@@ -10,7 +10,7 @@ const Spinner = React.forwardRef<
 		ref={ref}
 		role="status"
 		aria-live="polite"
-		className={cn(className)}
+		className={cn("flex size-7", className)}
 		{...props}
 	>
 		<LoaderCircle className="size-full animate-spin" />

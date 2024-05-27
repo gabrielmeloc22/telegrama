@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Button } from "./button";
 import {
   Form,
@@ -16,21 +17,24 @@ import { Spinner } from "./spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 export {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Button,
   Form,
   FormControl,
   FormDescription,
-  FormInputPlaceholder,
   FormField,
+  FormInputPlaceholder,
   FormItem,
   FormLabel,
   FormMessage,
   Input,
   Label,
   Spinner,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   useFormField,
 };
