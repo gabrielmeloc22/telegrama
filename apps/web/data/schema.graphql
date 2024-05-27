@@ -163,6 +163,7 @@ type Chat implements Node {
 
   """The recipient when not a group chat"""
   user: User
+  name: String
   lastMessage: Message
   group: Boolean
 

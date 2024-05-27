@@ -34,14 +34,20 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
         return (
           chat.users.length === 2 &&
           UserModel.findById(
-            chat.users.find(({ _id }) => !_id.toString() === ctx.user?.id)
+            chat.users.find(({ _id }) => !_id.equals(ctx.user?.id))
           )
         );
       },
     },
     name: {
       type: GraphQLString,
-      resolve: async (chat) => chat.name,
+      resolve: async (chat, _, ctx) =>
+        chat.name ??
+        (
+          await UserModel.findById(
+            chat.users.find(({ _id }) => !_id.equals(ctx.user?.id))
+          )
+        )?.username,
     },
     lastMessage: {
       type: MessageType,
