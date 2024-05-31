@@ -1,9 +1,12 @@
 import type { Context } from "@/context";
-import { type Chat, ChatModel } from "@/modules/chat/ChatModel";
-import { UserModel } from "@/modules/user/UserModel";
+import { ChatModel } from "@/modules/chat/ChatModel";
 import { pubSub } from "@/pubsub";
-import { GraphQLNonNull, GraphQLString } from "graphql";
-import { fromGlobalId, mutationWithClientMutationId } from "graphql-relay";
+import { GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
+import {
+	fromGlobalId,
+	mutationWithClientMutationId,
+	toGlobalId,
+} from "graphql-relay";
 import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
 import { startSession } from "mongoose";
 import { MessageModel } from "../MessageModel";
@@ -16,6 +19,7 @@ type SendMessageInput = {
 type SendMessageOutput = {
 	content: string;
 	createdAt: Date;
+	id: string;
 };
 
 export const SendMessage = mutationWithClientMutationId<
@@ -31,48 +35,39 @@ export const SendMessage = mutationWithClientMutationId<
 	outputFields: {
 		content: { type: new GraphQLNonNull(GraphQLString) },
 		createdAt: { type: DateTimeResolver },
+		id: { type: GraphQLID },
 	},
 	mutateAndGetPayload: async ({ content, to }, { user }) => {
 		if (!user) {
 			throw new Error("Sender not specified");
 		}
 
-		const recipient = await UserModel.findById(fromGlobalId(to).id);
+		const chat = await ChatModel.findById(fromGlobalId(to).id);
 
-		if (!recipient) {
-			throw new Error("Recipient does not exist");
+		if (!chat) {
+			throw new Error("Chat does not exist");
 		}
 
 		const message = new MessageModel({
 			content: content.trim(),
 			from: user,
-			to: recipient,
 		});
 
 		const session = await startSession();
-		let chat: Chat;
 
 		try {
-			chat =
-				(await ChatModel.findOne({
-					$and: [
-						{ users: { $size: 2 } },
-						{ users: { $all: [user._id, recipient._id] } },
-					],
-				})) ||
-				(await new ChatModel({
-					users: [recipient._id, user._id],
-					lastMessage: message,
-				}).save({ session }));
-
+			chat.lastMessage = message.id;
 			message.chat = chat.id;
+
 			await message.save({ session });
+			await chat.save({ session });
 		} finally {
 			await session.endSession();
 		}
 		await pubSub.publish("MESSAGE:NEW", { id: message.id, chatId: chat.id });
 
 		return {
+			id: toGlobalId("message", message.id),
 			content: message.content,
 			createdAt: message.createdAt,
 		};
