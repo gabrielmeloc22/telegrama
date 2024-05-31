@@ -2,14 +2,14 @@ import bodyParser from "@koa/bodyparser";
 import cors from "@koa/cors";
 import Router from "@koa/router";
 import {
-	getGraphQLParameters,
-	processRequest,
-	renderGraphiQL,
-	sendResult,
-	shouldRenderGraphiQL,
+  getGraphQLParameters,
+  processRequest,
+  renderGraphiQL,
+  sendResult,
+  shouldRenderGraphiQL,
 } from "graphql-helix";
 import koaPlayground from "graphql-playground-middleware-koa";
-import { createHandler } from "graphql-sse";
+import { createHandler } from "graphql-sse/lib/use/koa";
 import Koa from "koa";
 import logger from "koa-logger";
 import mount from "koa-mount";
@@ -21,46 +21,54 @@ const router = new Router();
 
 app.use(bodyParser());
 app.on("error", (error) => {
-	console.log("App error:", error);
+  console.log("App error:", error);
 });
 
 app.use(logger());
 app.use(cors());
-app.use(mount("/graphql/stream", createHandler({ schema })));
+app.use(
+  mount(
+    "/graphql/stream",
+    createHandler({
+      schema,
+      context: ({ context }) => buildContext(context),
+    })
+  )
+);
 
 router.all(
-	"/graphiql",
-	koaPlayground({
-		endpoint: "/graphql",
-	}),
+  "/graphiql",
+  koaPlayground({
+    endpoint: "/graphql",
+  })
 );
 
 router.all("/graphql", async (ctx) => {
-	const request = {
-		body: ctx.request.body,
-		headers: ctx.req.headers,
-		method: ctx.request.method,
-		query: ctx.request.query,
-	};
+  const request = {
+    body: ctx.request.body,
+    headers: ctx.req.headers,
+    method: ctx.request.method,
+    query: ctx.request.query,
+  };
 
-	if (shouldRenderGraphiQL(request)) {
-		ctx.body = renderGraphiQL({});
-		return;
-	}
+  if (shouldRenderGraphiQL(request)) {
+    ctx.body = renderGraphiQL({});
+    return;
+  }
 
-	const { operationName, query, variables } = getGraphQLParameters(request);
+  const { operationName, query, variables } = getGraphQLParameters(request);
 
-	const result = await processRequest({
-		operationName,
-		query,
-		variables,
-		request,
-		schema,
-		contextFactory: () => buildContext(ctx),
-	});
+  const result = await processRequest({
+    operationName,
+    query,
+    variables,
+    request,
+    schema,
+    contextFactory: () => buildContext(ctx),
+  });
 
-	ctx.respond = false;
-	sendResult(result, ctx.res);
+  ctx.respond = false;
+  sendResult(result, ctx.res);
 });
 
 app.use(router.routes()).use(router.allowedMethods());
