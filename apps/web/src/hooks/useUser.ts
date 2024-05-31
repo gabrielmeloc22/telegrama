@@ -1,6 +1,11 @@
 "use client";
 
-import { graphql, useLazyLoadQuery } from "react-relay";
+import { useState } from "react";
+import {
+	graphql,
+	useLazyLoadQuery,
+	useSubscribeToInvalidationState,
+} from "react-relay";
 import type { useUserQuery } from "../../__generated__/useUserQuery.graphql";
 
 const MeQuery = graphql`
@@ -14,11 +19,16 @@ const MeQuery = graphql`
 `;
 
 export function useUser() {
-  const { me } = useLazyLoadQuery<useUserQuery>(MeQuery, {});
+	const [fetchKey, setFetchKey] = useState(0);
+	const { me } = useLazyLoadQuery<useUserQuery>(MeQuery, {}, { fetchKey });
 
-  if (!me) {
-    return null;
-  }
+	useSubscribeToInvalidationState([], () => {
+		setFetchKey((prev) => prev + 1);
+	});
 
-  return me;
+	if (!me) {
+		return null;
+	}
+
+	return me;
 }

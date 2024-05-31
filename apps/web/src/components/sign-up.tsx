@@ -1,4 +1,5 @@
 import { useZodForm } from "@/hooks/useZodForm";
+import { login } from "@/utils/auth";
 import {
 	Button,
 	Form,
@@ -10,10 +11,10 @@ import {
 	FormMessage,
 	Input,
 } from "@ui/components";
+import { useRouter } from "next/navigation";
 import { useMutation } from "react-relay";
 import { graphql } from "relay-runtime";
 import { z } from "zod";
-import { login } from "@/utils/auth";
 import type { signUpMutation } from "../../__generated__/signUpMutation.graphql";
 
 const UserRegisterFormSchema = z.object({
@@ -33,16 +34,21 @@ const RegisterUserMutation = graphql`
 `;
 
 export function SignUp() {
+	const router = useRouter();
+
 	const form = useZodForm(UserRegisterFormSchema);
 	const [register, loading] = useMutation<signUpMutation>(RegisterUserMutation);
 
 	const onSubmit = form.handleSubmit((data) => {
 		register({
 			variables: { input: data },
+			updater: (store) => {
+				store.invalidateStore();
+			},
 			onCompleted: (data) => {
 				if (data.register?.token) {
 					login(data.register.token);
-					location.reload();
+					router.push("/c");
 				}
 			},
 		});

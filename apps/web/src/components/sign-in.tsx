@@ -11,6 +11,7 @@ import {
 	FormMessage,
 	Input,
 } from "@repo/ui";
+import { useRouter } from "next/navigation";
 import { graphql, useMutation } from "react-relay";
 import { z } from "zod";
 import type { signInMutation } from "../../__generated__/signInMutation.graphql";
@@ -37,6 +38,8 @@ const SignInMutation = graphql`
 `;
 
 export function SignIn() {
+	const router = useRouter();
+
 	const [mutate, loading] = useMutation<signInMutation>(SignInMutation);
 	const form = useZodForm(LoginFormSchema, {
 		defaultValues: {
@@ -50,10 +53,13 @@ export function SignIn() {
 			variables: {
 				input: { username: data.credential, password: data.password },
 			},
+			updater: (store) => {
+				store.invalidateStore();
+			},
 			onCompleted: (data, errors) => {
 				if (data.login?.token) {
 					login(data.login.token);
-					location.reload();
+					router.push("/c");
 				}
 				if (errors) {
 					// TODO: improve error handling with server codes
