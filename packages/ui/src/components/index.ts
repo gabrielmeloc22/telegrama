@@ -13,6 +13,11 @@ import {
 } from "./form";
 import { Input } from "./input";
 import { Label } from "./label";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "./resizable";
 import { Spinner } from "./spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
@@ -37,4 +42,7 @@ export {
   TabsList,
   TabsTrigger,
   useFormField,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
 };
