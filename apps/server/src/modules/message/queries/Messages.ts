@@ -5,7 +5,7 @@ import {
 	GraphQLNonNull,
 	GraphQLString,
 } from "graphql";
-import { type ConnectionArguments, fromGlobalId } from "graphql-relay";
+import type { ConnectionArguments } from "graphql-relay";
 import { MessageLoader } from "../MessageLoader";
 import { MessageConnection } from "../MessageType";
 
@@ -24,10 +24,11 @@ export const Messages: GraphQLFieldConfig<
 		if (!context.user) {
 			throw new Error("User not authenticated");
 		}
+
 		return await MessageLoader.loadAll(
 			context,
 			withFilter(args, {
-				chat: fromGlobalId(chatId).id,
+				chat: chatId,
 			}),
 		);
 	},

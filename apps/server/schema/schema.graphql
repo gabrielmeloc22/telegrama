@@ -41,6 +41,9 @@ type query {
     """Returns the last n items from the list."""
     last: Int
   ): ChatConnection!
+
+  """A chat"""
+  chat(chatId: String!): Chat
 }
 
 """An object with an ID"""
@@ -284,6 +287,7 @@ scalar NonEmptyString
 type SendMessagePayload {
   content: String!
   createdAt: DateTime
+  id: ID
   clientMutationId: String
 }
 
