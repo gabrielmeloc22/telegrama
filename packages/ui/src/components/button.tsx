@@ -20,6 +20,7 @@ const variants = cva(
 				sm: "py-1 px-2",
 				md: "py-2 px-4",
 				lg: "py-3 px-8",
+				icon: "aspect-square rounded-full size-fit p-3",
 			},
 		},
 		compoundVariants: [
