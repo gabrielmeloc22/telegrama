@@ -21,6 +21,7 @@
     "@types/koa-mount": "^4.0.5",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "escape-string-regexp": "^5.0.0",
     "graphql": "^16.8.1",
     "graphql-helix": "^1.13.0",
     "graphql-playground-html": "^1.6.30",
