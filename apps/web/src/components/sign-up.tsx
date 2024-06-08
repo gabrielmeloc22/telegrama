@@ -42,8 +42,10 @@ export function SignUp() {
 	const onSubmit = form.handleSubmit((data) => {
 		register({
 			variables: { input: data },
-			updater: (store) => {
-				store.invalidateStore();
+			updater: (store, data) => {
+				if (data?.register?.token) {
+					store.invalidateStore();
+				}
 			},
 			onCompleted: (data) => {
 				if (data.register?.token) {

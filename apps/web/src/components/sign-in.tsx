@@ -53,8 +53,10 @@ export function SignIn() {
 			variables: {
 				input: { username: data.credential, password: data.password },
 			},
-			updater: (store) => {
-				store.invalidateStore();
+			updater: (store, data) => {
+				if (data?.login?.token) {
+					store.invalidateStore();
+				}
 			},
 			onCompleted: (data, errors) => {
 				if (data.login?.token) {
@@ -102,11 +104,7 @@ export function SignIn() {
 						<FormItem className="w-full">
 							<FormLabel>
 								<FormControl>
-									<Input
-										type="password"
-										placeholder="username or mail address"
-										{...field}
-									/>
+									<Input type="password" {...field} />
 								</FormControl>
 								<FormInputPlaceholder>Password</FormInputPlaceholder>
 							</FormLabel>
