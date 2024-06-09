@@ -8,6 +8,10 @@ export type DataLoaders = {
 	ChatLoader: ReturnType<typeof ChatLoader.getLoader>;
 };
 
+export type FilterInput<TFilter> = {
+	filter: TFilter;
+};
+
 export const getDataLoaders = (): DataLoaders => {
 	return {
 		UserLoader: UserLoader.getLoader(),

@@ -22,7 +22,7 @@ type query {
   messages(after: String, first: Int, before: String, last: Int, chatId: String!): MessageConnection!
 
   """All users"""
-  users(after: String, first: Int, before: String, last: Int, query: String): UserConnection!
+  users(after: String, first: Int, before: String, last: Int, filter: UserFilter): UserConnection!
 
   """me"""
   me(after: String, first: Int, before: String, last: Int): User
@@ -207,6 +207,10 @@ type UserEdge {
 
   """A cursor for use in pagination."""
   cursor: String!
+}
+
+input UserFilter {
+  username: String
 }
 
 """A connection to a list of items."""

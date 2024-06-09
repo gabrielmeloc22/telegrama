@@ -1,9 +1,9 @@
 import type { Context } from "@/context";
 import { connectionArgs, withFilter } from "@entria/graphql-mongo-helpers";
 import {
-	type GraphQLFieldConfig,
 	GraphQLNonNull,
 	GraphQLString,
+	type GraphQLFieldConfig,
 } from "graphql";
 import type { ConnectionArguments } from "graphql-relay";
 import { MessageLoader } from "../MessageLoader";
