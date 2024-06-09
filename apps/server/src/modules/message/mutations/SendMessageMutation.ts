@@ -1,5 +1,8 @@
 import type { Context } from "@/context";
-import { ChatModel } from "@/modules/chat/ChatModel";
+import { ChatLoader } from "@/modules/chat/ChatLoader";
+import { ChatModel, type Chat } from "@/modules/chat/ChatModel";
+import { ChatConnection } from "@/modules/chat/ChatType";
+import { UserModel } from "@/modules/user/UserModel";
 import { pubSub } from "@/pubsub";
 import { GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
 import {
@@ -20,6 +23,7 @@ type SendMessageOutput = {
 	content: string;
 	createdAt: Date;
 	id: string;
+	chat: Chat | null;
 };
 
 export const SendMessage = mutationWithClientMutationId<
@@ -30,26 +34,54 @@ export const SendMessage = mutationWithClientMutationId<
 	name: "SendMessage",
 	inputFields: {
 		content: { type: GraphQLNonEmptyString },
-		to: { type: new GraphQLNonNull(GraphQLString) },
+		to: {
+			type: new GraphQLNonNull(GraphQLString),
+			description: "The recipient id, a user or a chat",
+		},
 	},
 	outputFields: {
 		content: { type: new GraphQLNonNull(GraphQLString) },
 		createdAt: { type: DateTimeResolver },
 		id: { type: GraphQLID },
+		chat: {
+			type: ChatConnection.edgeType,
+			resolve: async (res, _, ctx) => {
+				const { chat } = await res;
+				const node = await ChatLoader.load(ctx, chat?.id);
+
+				if (!node) {
+					return null;
+				}
+
+				return { cursor: toGlobalId("Chat", node.id), node };
+			},
+		},
 	},
 	mutateAndGetPayload: async ({ content, to }, { user }) => {
 		if (!user) {
 			throw new Error("Sender not specified");
 		}
 
-		const chat = await ChatModel.findById(fromGlobalId(to).id);
+		let newChat = false;
+		let chat = await ChatModel.findById(fromGlobalId(to).id);
+		const recipient = await UserModel.findById(fromGlobalId(to).id);
+
+		if (!chat && !recipient) {
+			throw new Error("Recipient not specified");
+		}
 
 		if (!chat) {
-			throw new Error("Chat does not exist");
+			newChat = true;
+			chat = new ChatModel({
+				users:
+					recipient?.id === user.id.toString()
+						? [user.id]
+						: [recipient?.id, user.id],
+			});
 		}
 
 		const message = new MessageModel({
-			content: content.trim(),
+			content,
 			from: user,
 		});
 
@@ -70,6 +102,7 @@ export const SendMessage = mutationWithClientMutationId<
 			id: toGlobalId("message", message.id),
 			content: message.content,
 			createdAt: message.createdAt,
+			chat: newChat ? chat : null,
 		};
 	},
 });

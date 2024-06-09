@@ -24,6 +24,9 @@ type query {
   """All users"""
   users(after: String, first: Int, before: String, last: Int, filter: UserFilter): UserConnection!
 
+  """A user"""
+  user(userId: String!): User
+
   """me"""
   me(after: String, first: Int, before: String, last: Int): User
 
@@ -150,12 +153,10 @@ type User implements Node {
   username: String!
   avatar: String
   email: String
-}
 
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-"""
-scalar DateTime
+  """Chat between a user and the authenticated user"""
+  chat: Chat
+}
 
 type Chat implements Node {
   """The ID of an object"""
@@ -166,12 +167,37 @@ type Chat implements Node {
 
   """The recipient when not a group chat"""
   user: User
-  name: String
+  name: String!
   lastMessage: Message
   group: Boolean
 
   """Group chat users"""
-  users: [User!]!
+  users(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): UserConnection
+  messages(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): MessageConnection
 }
 
 """A connection to a list of items."""
@@ -208,6 +234,11 @@ type UserEdge {
   """A cursor for use in pagination."""
   cursor: String!
 }
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
 
 input UserFilter {
   username: String
@@ -292,11 +323,14 @@ type SendMessagePayload {
   content: String!
   createdAt: DateTime
   id: ID
+  chat: ChatEdge
   clientMutationId: String
 }
 
 input SendMessageInput {
   content: NonEmptyString
+
+  """The recipient id, a user or a chat"""
   to: String!
   clientMutationId: String
 }
