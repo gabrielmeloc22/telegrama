@@ -4,12 +4,9 @@ import { ChatModel, type Chat } from "@/modules/chat/ChatModel";
 import { ChatConnection } from "@/modules/chat/ChatType";
 import { UserModel } from "@/modules/user/UserModel";
 import { pubSub } from "@/pubsub";
+import { getObjectId } from "@entria/graphql-mongo-helpers";
 import { GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
-import {
-	fromGlobalId,
-	mutationWithClientMutationId,
-	toGlobalId,
-} from "graphql-relay";
+import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
 import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
 import { startSession } from "mongoose";
 import { MessageModel } from "../MessageModel";
@@ -53,7 +50,7 @@ export const SendMessage = mutationWithClientMutationId<
 					return null;
 				}
 
-				return { cursor: toGlobalId("Chat", node.id), node };
+				return { cursor: toGlobalId("chat", node.id), node };
 			},
 		},
 	},
@@ -62,21 +59,28 @@ export const SendMessage = mutationWithClientMutationId<
 			throw new Error("Sender not specified");
 		}
 
-		let newChat = false;
-		let chat = await ChatModel.findById(fromGlobalId(to).id);
-		const recipient = await UserModel.findById(fromGlobalId(to).id);
+		const toId = to;
+		const selfMessage = toId === user.id.toString();
+
+		let chat = await ChatModel.findOne({
+			users: {
+				$size: selfMessage ? 1 : 2,
+				$all: selfMessage ? [user.id] : [getObjectId(toId), user.id],
+			},
+		});
+
+		const recipient = await UserModel.findById(toId);
 
 		if (!chat && !recipient) {
 			throw new Error("Recipient not specified");
 		}
 
+		let newChat = false;
+
 		if (!chat) {
 			newChat = true;
 			chat = new ChatModel({
-				users:
-					recipient?.id === user.id.toString()
-						? [user.id]
-						: [recipient?.id, user.id],
+				users: selfMessage ? [user.id] : [recipient?.id, user.id],
 			});
 		}
 
@@ -96,13 +100,18 @@ export const SendMessage = mutationWithClientMutationId<
 		} finally {
 			await session.endSession();
 		}
-		await pubSub.publish("MESSAGE:NEW", { id: message.id, chatId: chat.id });
+		await pubSub.publish("MESSAGE:NEW", {
+			id: message.id,
+			chatId: chat.id,
+			userId: recipient?.id,
+			newChat,
+		});
 
 		return {
 			id: toGlobalId("message", message.id),
 			content: message.content,
 			createdAt: message.createdAt,
-			chat: newChat ? chat : null,
+			chat,
 		};
 	},
 });

@@ -9,9 +9,9 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 } from "graphql";
-import { connectionArgs, globalIdField } from "graphql-relay";
+import { connectionArgs, globalIdField, toGlobalId } from "graphql-relay";
 import { MessageLoader } from "../message/MessageLoader";
-import { MessageConnection, MessageType } from "../message/MessageType";
+import { MessageConnection } from "../message/MessageType";
 import { addTypeLoader, nodeInterface } from "../node/register";
 import { UserLoader } from "../user/UserLoader";
 import { UserModel } from "../user/UserModel";
@@ -55,9 +55,17 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 				)?.username,
 		},
 		lastMessage: {
-			type: MessageType,
-			resolve: async (chat, _args, ctx) =>
-				chat.lastMessage ? MessageLoader.load(ctx, chat.lastMessage) : null,
+			type: MessageConnection.edgeType,
+			resolve: async (chat, _args, ctx) => {
+				const node = chat.lastMessage
+					? await MessageLoader.load(ctx, chat.lastMessage)
+					: null;
+
+				return {
+					cursor: toGlobalId("message", node?.id),
+					node,
+				};
+			},
 		},
 		group: {
 			type: GraphQLBoolean,

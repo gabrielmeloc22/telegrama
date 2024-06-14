@@ -1,4 +1,5 @@
 import type { Context } from "@/context";
+import { getChat } from "@/modules/chat/util/getChat";
 import { connectionArgs, withFilter } from "@entria/graphql-mongo-helpers";
 import {
 	GraphQLNonNull,
@@ -12,21 +13,26 @@ import { MessageConnection } from "../MessageType";
 export const Messages: GraphQLFieldConfig<
 	unknown,
 	Context,
-	ConnectionArguments & { chatId: string }
+	ConnectionArguments & { chatId: string; userId: string }
 > = {
 	type: new GraphQLNonNull(MessageConnection.connectionType),
 	description: "All messages",
 	args: {
 		...connectionArgs,
-		chatId: { type: new GraphQLNonNull(GraphQLString) },
+		chatId: { description: "The chat id", type: GraphQLString },
+		userId: {
+			description: "The user id for individual chats",
+			type: GraphQLString,
+		},
 	},
-	resolve: async (_, { chatId, ...args }, context) => {
-		if (!context.user) {
+	resolve: async (_, args, ctx) => {
+		if (!ctx.user) {
 			throw new Error("User not authenticated");
 		}
+		const chatId = await getChat(ctx, args);
 
 		return await MessageLoader.loadAll(
-			context,
+			ctx,
 			withFilter(args, {
 				chat: chatId,
 			}),

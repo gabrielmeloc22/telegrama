@@ -1,36 +1,32 @@
 import type { Context } from "@/context";
-import {
-  type GraphQLFieldConfig,
-  GraphQLNonNull,
-  GraphQLString,
-} from "graphql";
+import { GraphQLString, type GraphQLFieldConfig } from "graphql";
 import { ChatLoader } from "../ChatLoader";
 import { ChatType } from "../ChatType";
-import { ChatModel } from "../ChatModel";
+import { getChat } from "../util/getChat";
 
 type ChatQueryArguments = {
-  chatId: string;
+	chatId?: string;
+	userId?: string;
 };
 
 export const Chat: GraphQLFieldConfig<unknown, Context, ChatQueryArguments> = {
-  type: ChatType,
-  description: "A chat",
-  args: {
-    chatId: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-  },
-  resolve: async (_, args, ctx) => {
-    if (
-      !ctx.user ||
-      !(await ChatModel.findOne({
-        _id: args.chatId,
-        users: { $elemMatch: { $eq: ctx.user?.id } },
-      }))
-    ) {
-      throw new Error("Not authorized");
-    }
+	type: ChatType,
+	description: "A chat",
+	args: {
+		chatId: {
+			description: "Chat id for use with group chats",
+			type: GraphQLString,
+		},
+		userId: {
+			description: "User id for use with individual chats",
+			type: GraphQLString,
+		},
+	},
+	resolve: async (_, args, ctx) => {
+		const chatId = await getChat(ctx, args);
 
-    return ChatLoader.load(ctx, args.chatId);
-  },
+		if (!chatId) return null;
+
+		return ChatLoader.load(ctx, chatId);
+	},
 };
