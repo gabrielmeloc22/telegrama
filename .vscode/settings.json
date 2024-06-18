@@ -9,5 +9,7 @@
 		"quickfix.biome": "explicit",
 		"source.organizeImports": "explicit"
 	},
-	"editor.formatOnSave": true
+	"editor.formatOnSave": true,
+	"relay.rootDirectory": "./apps/web",
+	"relay.autoStartCompiler": true
 }

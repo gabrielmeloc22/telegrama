@@ -42,7 +42,7 @@
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: theme("colors.neutral.900");
+    --popover: theme("colors.neutral.800");
     --popover-foreground: white;
 
     --primary: theme("colors.violet.500");

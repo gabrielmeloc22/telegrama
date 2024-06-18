@@ -19,13 +19,24 @@ type query {
   ): [Node]!
 
   """All messages"""
-  messages(after: String, first: Int, before: String, last: Int, chatId: String!): MessageConnection!
+  messages(
+    after: String
+    first: Int
+    before: String
+    last: Int
+
+    """The chat id"""
+    chatId: String
+
+    """The user id for individual chats"""
+    userId: String
+  ): MessageConnection!
 
   """All users"""
   users(after: String, first: Int, before: String, last: Int, filter: UserFilter): UserConnection!
 
   """A user"""
-  user(userId: String!): User
+  user(userId: String): User
 
   """me"""
   me(after: String, first: Int, before: String, last: Int): User
@@ -46,7 +57,13 @@ type query {
   ): ChatConnection!
 
   """A chat"""
-  chat(chatId: String!): Chat
+  chat(
+    """Chat id for use with group chats"""
+    chatId: String
+
+    """User id for use with individual chats"""
+    userId: String
+  ): Chat
 }
 
 """An object with an ID"""
@@ -141,7 +158,7 @@ type Message implements Node {
   seenAt: DateTime
   content: String!
   createdAt: DateTime
-  chat: Chat!
+  chat: ChatEdge
 }
 
 type User implements Node {
@@ -153,9 +170,20 @@ type User implements Node {
   username: String!
   avatar: String
   email: String
+}
 
-  """Chat between a user and the authenticated user"""
-  chat: Chat
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+"""An edge in a connection."""
+type ChatEdge {
+  """The item at the end of the edge."""
+  node: Chat
+
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 type Chat implements Node {
@@ -168,7 +196,7 @@ type Chat implements Node {
   """The recipient when not a group chat"""
   user: User
   name: String!
-  lastMessage: Message
+  lastMessage: MessageEdge
   group: Boolean
 
   """Group chat users"""
@@ -235,11 +263,6 @@ type UserEdge {
   cursor: String!
 }
 
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-"""
-scalar DateTime
-
 input UserFilter {
   username: String
 }
@@ -268,15 +291,6 @@ type ChatConnection implements Connection {
 
   """A list of edges."""
   edges: [ChatEdge]!
-}
-
-"""An edge in a connection."""
-type ChatEdge {
-  """The item at the end of the edge."""
-  node: Chat
-
-  """A cursor for use in pagination."""
-  cursor: String!
 }
 
 type mutation {
@@ -340,11 +354,13 @@ type subscription {
 }
 
 type NewMessagePayload {
+  newChat: Boolean
   message: MessageEdge
   clientSubscriptionId: String
 }
 
 input NewMessageInput {
-  chatId: String!
+  userId: String
+  chatId: String
   clientSubscriptionId: String
 }
