@@ -11,7 +11,6 @@ import {
 	FormMessage,
 	Input,
 } from "@ui/components";
-import { useRouter } from "next/navigation";
 import { useMutation } from "react-relay";
 import { graphql } from "relay-runtime";
 import { z } from "zod";
@@ -34,8 +33,6 @@ const RegisterUserMutation = graphql`
 `;
 
 export function SignUp() {
-	const router = useRouter();
-
 	const form = useZodForm(UserRegisterFormSchema);
 	const [register, loading] = useMutation<signUpMutation>(RegisterUserMutation);
 
@@ -50,7 +47,6 @@ export function SignUp() {
 			onCompleted: (data) => {
 				if (data.register?.token) {
 					login(data.register.token);
-					router.push("/c");
 				}
 			},
 		});

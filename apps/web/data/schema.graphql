@@ -43,6 +43,8 @@ type query {
 
   """My chats"""
   chats(
+    search: String
+
     """Returns the items in the list that come after the specified cursor."""
     after: String
 
@@ -297,6 +299,8 @@ type mutation {
   register(input: RegisterUserInput!): RegisterUserPayload
   login(input: LoginMutationInput!): LoginMutationPayload
   sendMessage(input: SendMessageInput!): SendMessagePayload
+  sendTypingStatus(input: SendTypingStatusInput!): SendTypingStatusPayload
+  deleteMessage(input: DeleteMessageInput!): DeleteMessagePayload
 }
 
 type RegisterUserPayload {
@@ -349,18 +353,57 @@ input SendMessageInput {
   clientMutationId: String
 }
 
-type subscription {
-  newMessage(input: NewMessageInput!): NewMessagePayload
+type SendTypingStatusPayload {
+  clientMutationId: String
 }
 
-type NewMessagePayload {
+input SendTypingStatusInput {
+  chatId: String!
+  typing: Boolean!
+  userId: String!
+  clientMutationId: String
+}
+
+type DeleteMessagePayload {
+  """The messages id to be deleted"""
+  deletedIds: [ID]
+  clientMutationId: String
+}
+
+input DeleteMessageInput {
+  chatId: String!
+
+  """The messages id to be deleted"""
+  ids: [ID]
+  clientMutationId: String
+}
+
+type subscription {
+  onMessage(input: MessageInput!): MessagePayload
+  onType(input: onTypeInput!): onTypePayload
+}
+
+type MessagePayload {
   newChat: Boolean
-  message: MessageEdge
+  chat: Chat
+  deletedMessages: [ID]
+  newMessage: MessageEdge
   clientSubscriptionId: String
 }
 
-input NewMessageInput {
+input MessageInput {
   userId: String
   chatId: String
+  clientSubscriptionId: String
+}
+
+type onTypePayload {
+  typing: Boolean
+  userId: String
+  clientSubscriptionId: String
+}
+
+input onTypeInput {
+  chatId: String!
   clientSubscriptionId: String
 }

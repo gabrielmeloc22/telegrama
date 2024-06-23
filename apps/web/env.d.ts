@@ -3,3 +3,9 @@ declare namespace NodeJS {
 		NEXT_PUBLIC_API_URL: string;
 	}
 }
+
+declare namespace JSX {
+	interface IntrinsicElements {
+		"dotlottie-player": object;
+	}
+}

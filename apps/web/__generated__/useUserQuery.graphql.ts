@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<79841e800860469dd83300fa26f85211>>
+ * @generated SignedSource<<b8249ba27589cad0680f7f22a539a4aa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ConcreteRequest, Query } from 'relay-runtime';
 export type useUserQuery$variables = Record<PropertyKey, never>;
 export type useUserQuery$data = {
   readonly me: {
+    readonly _id: string;
     readonly avatar: string | null | undefined;
     readonly id: string;
     readonly username: string;
@@ -32,6 +33,13 @@ var v0 = [
     "name": "me",
     "plural": false,
     "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "_id",
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -75,16 +83,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "6d8ea2c14d48ba7288fbd76a61d8be4c",
+    "cacheID": "ecff99879fb7f32da28f13341d7b7615",
     "id": null,
     "metadata": {},
     "name": "useUserQuery",
     "operationKind": "query",
-    "text": "query useUserQuery {\n  me {\n    id\n    username\n    avatar\n  }\n}\n"
+    "text": "query useUserQuery {\n  me {\n    _id\n    id\n    username\n    avatar\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "caa588b456f63dd0a936e0374e22ac4f";
+(node as any).hash = "0aa471e1c2b54e8aa5530927c7523a9c";
 
 export default node;

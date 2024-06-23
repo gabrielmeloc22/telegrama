@@ -1,9 +1,9 @@
 "use client";
 
 import { useUser } from "@/hooks/useUser";
+import { Button, Tabs, TabsContent } from "@ui/components";
 import { useEffect, useState } from "react";
 import { SignIn } from "./sign-in";
-import { Button, Tabs, TabsContent } from "@ui/components";
 import { SignUp } from "./sign-up";
 
 import { ArrowLeft } from "lucide-react";
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 					</p>
 				</TabsContent>
 				<TabsContent value="sign-up">
-					<Button design="ghost" onClick={() => setValue("sign-in")}>
+					<Button design="unstyled" onClick={() => setValue("sign-in")}>
 						<ArrowLeft />
 					</Button>
 					<SignUp />

@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cn, mergeRefs } from "@ui/lib/utils";
+import { cn } from "@ui/lib/utils";
 import React, {
 	useContext,
 	useEffect,
@@ -13,9 +13,10 @@ type NavigationDirection = "backwards" | "forwards";
 type NavigationStackContextData = {
 	tab: number;
 	direction: NavigationDirection;
+	navigating: boolean;
 	goForwards: () => void;
 	goBackwards: () => void;
-	navigating: boolean;
+	reset: () => void;
 	onNavigationEnd: () => void;
 };
 
@@ -29,8 +30,6 @@ const NavigationStack = React.forwardRef<
 		value?: number;
 	}
 >(({ children, value, ...props }, ref) => {
-	const wrapper = useRef<HTMLDivElement>(null);
-
 	const [tab, setTab] = useState(0);
 	const [direction, setDirection] = useState<NavigationDirection>("forwards");
 	const [navigating, setNavigating] = useState(false);
@@ -42,16 +41,23 @@ const NavigationStack = React.forwardRef<
 	};
 
 	const goBackwards = () => {
-		if (tab <= 0) return;
+		if (tab === 0) return;
 
 		setNavigating(true);
 		setDirection("backwards");
 		setTab((tab) => tab - 1);
 	};
 
+	const reset = () => {
+		if (tab === 0) return;
+
+		setNavigating(true);
+		setDirection("backwards");
+		setTab(0);
+	};
+
 	const onNavigationEnd = () => {
 		setNavigating(false);
-		wrapper.current?.focus();
 	};
 
 	return (
@@ -61,16 +67,18 @@ const NavigationStack = React.forwardRef<
 				direction,
 				goBackwards,
 				goForwards,
+				reset,
 				onNavigationEnd,
 				navigating,
 			}}
 		>
 			<div
-				ref={mergeRefs(ref, wrapper)}
+				ref={ref}
 				// biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
 				tabIndex={0}
 				onKeyDown={(e) => {
 					if (e.key === "Escape") {
+						e.nativeEvent.stopImmediatePropagation();
 						goBackwards();
 					}
 				}}
@@ -114,8 +122,9 @@ const NavigationStackItem = React.forwardRef<
 	HTMLDivElement,
 	HTMLAttributes<HTMLDivElement> & {
 		value: number;
+		forceMount?: boolean;
 	}
->(({ children, value, ...props }, ref) => {
+>(({ children, value, forceMount = false, ...props }, ref) => {
 	const el = useRef<HTMLDivElement>(null);
 	const { tab, direction, navigating, onNavigationEnd } = useContext(
 		NavigationStackContext,
@@ -141,14 +150,19 @@ const NavigationStackItem = React.forwardRef<
 				}
 			}}
 			style={{
-				transitionDuration: selected ? "0.25s" : "0.4s",
+				transitionDuration: selected
+					? "0.3s"
+					: !selected && direction === "backwards"
+						? "0.35s"
+						: "0.8s",
 				transitionTimingFunction: "cubic-bezier(.4, 0, .2, 1)",
 				transform: `translateX(${offsetX}%)`,
 			}}
 			className={cn("size-full min-w-full transition-transform")}
 			{...props}
 		>
-			{(selected ||
+			{(forceMount ||
+				selected ||
 				(navigating &&
 					((direction === "forwards" && tab === value + 1) ||
 						(direction === "backwards" && tab === value - 1)))) &&
@@ -157,4 +171,17 @@ const NavigationStackItem = React.forwardRef<
 	);
 });
 
-export { NavigationStack, NavigationStackItem, NavigationStackTrigger };
+const useNavigationStackControls = () => {
+	const { goBackwards, goForwards, reset } = React.useContext(
+		NavigationStackContext,
+	);
+
+	return { goBackwards, goForwards, reset };
+};
+
+export {
+	NavigationStack,
+	NavigationStackItem,
+	NavigationStackTrigger,
+	useNavigationStackControls,
+};

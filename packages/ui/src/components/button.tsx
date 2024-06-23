@@ -5,16 +5,19 @@ import React from "react";
 import { Spinner } from "./spinner";
 
 const variants = cva(
-	"rounded-md flex justify-center w-fit text-sm transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed",
+	"rounded-md flex justify-center items-center w-fit text-sm transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed outline-none",
 	{
 		variants: {
 			design: {
 				primary:
 					"bg-primary text-primary-foreground enabled:hover:bg-secondary",
+				"primary-ghost": "text-primary hover:bg-primary/10",
 				outline:
 					"border border-primary text-primary enabled:hover:bg-primary enabled:hover:text-primary-foreground",
 				link: "enabled:hover:underline text-primary",
-				ghost: "",
+				ghost: "hover:bg-muted/20",
+				"error-ghost": "text-red-500 hover:bg-red-500/10",
+				unstyled: "",
 			},
 			size: {
 				sm: "py-1 px-2",
@@ -28,7 +31,7 @@ const variants = cva(
 				design: "link",
 				className: "p-0",
 			},
-			{ design: "ghost", className: "p-0" },
+			{ design: "unstyled", className: "p-0" },
 		],
 	},
 );

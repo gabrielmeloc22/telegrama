@@ -1,3 +1,5 @@
-export default function Page(): JSX.Element {
-	return <main className="">batata</main>;
+import { redirect } from "next/navigation";
+
+export default function Page() {
+	return redirect("/c");
 }

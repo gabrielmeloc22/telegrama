@@ -1,5 +1,6 @@
 "use client";
 
+import { logout } from "@/utils/auth";
 import { useState } from "react";
 import {
 	graphql,
@@ -11,6 +12,7 @@ import type { useUserQuery } from "../../__generated__/useUserQuery.graphql";
 const MeQuery = graphql`
   query useUserQuery {
     me {
+			_id
       id
       username
       avatar
@@ -27,6 +29,7 @@ export function useUser() {
 	});
 
 	if (!me) {
+		logout();
 		return null;
 	}
 
