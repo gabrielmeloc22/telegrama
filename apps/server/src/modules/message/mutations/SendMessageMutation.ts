@@ -3,13 +3,14 @@ import { ChatLoader } from "@/modules/chat/ChatLoader";
 import { ChatModel, type Chat } from "@/modules/chat/ChatModel";
 import { ChatConnection } from "@/modules/chat/ChatType";
 import { UserModel } from "@/modules/user/UserModel";
-import { pubSub } from "@/pubsub";
+import { events, pubSub } from "@/pubsub";
 import { getObjectId } from "@entria/graphql-mongo-helpers";
 import { GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
 import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
 import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
 import { startSession } from "mongoose";
 import { MessageModel } from "../MessageModel";
+import type { MessageSubscription } from "../subscription/OnMessage";
 
 type SendMessageInput = {
 	to: string;
@@ -100,12 +101,13 @@ export const SendMessage = mutationWithClientMutationId<
 		} finally {
 			await session.endSession();
 		}
-		await pubSub.publish("MESSAGE:NEW", {
-			id: message.id,
+		await pubSub.publish(events.message.new, {
+			topic: events.message.new,
+			newMessageId: message.id,
 			chatId: chat.id,
 			userId: recipient?.id,
 			newChat,
-		});
+		} satisfies MessageSubscription);
 
 		return {
 			id: toGlobalId("message", message.id),

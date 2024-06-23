@@ -45,14 +45,20 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 		},
 		name: {
 			type: new GraphQLNonNull(GraphQLString),
-			resolve: async (chat, _, ctx) =>
-				chat.name ??
-				(
-					await UserModel.findById(
-						chat.users.find(({ _id }) => !_id.equals(ctx.user?.id)) ??
-							chat.users[0],
-					)
-				)?.username,
+			resolve: async (chat, _, ctx) => {
+				const selfChat =
+					chat.users.length === 1 && chat.users[0].equals(ctx.user?.id);
+
+				return selfChat
+					? "Saved Messages"
+					: chat.name ??
+							(
+								await UserModel.findById(
+									chat.users.find(({ _id }) => !_id.equals(ctx.user?.id)) ??
+										chat.users[0],
+								)
+							)?.username;
+			},
 		},
 		lastMessage: {
 			type: MessageConnection.edgeType,
