@@ -160,15 +160,12 @@ const MessageMotionWrapper = (props: HTMLMotionProps<"div">) => {
 		<motion.div
 			layout="position"
 			initial={{
-				y: 50,
+				y: 100,
 				opacity: 0,
 			}}
 			animate={{
 				opacity: 1,
 				y: 0,
-				transition: {
-					duration: 0.1,
-				},
 			}}
 			exit={{
 				x: 50,
@@ -177,9 +174,7 @@ const MessageMotionWrapper = (props: HTMLMotionProps<"div">) => {
 			transition={{
 				duration: 0.2,
 				ease: "easeInOut",
-				bounce: {
-					type: "spring",
-				},
+				type: "just",
 			}}
 			{...props}
 		/>
