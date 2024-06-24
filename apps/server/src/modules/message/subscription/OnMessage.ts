@@ -1,20 +1,14 @@
 import type { Context } from "@/context";
 import { ChatLoader } from "@/modules/chat/ChatLoader";
 import { ChatModel } from "@/modules/chat/ChatModel";
-import { ChatType } from "@/modules/chat/ChatType";
-import { getChat } from "@/modules/chat/util/getChat";
+import { ChatConnection } from "@/modules/chat/ChatType";
 import { events, pubSub } from "@/pubsub";
-import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLID, GraphQLList } from "graphql";
 import { toGlobalId } from "graphql-relay";
 import { subscriptionWithClientId } from "graphql-relay-subscription";
 import { withFilter } from "graphql-subscriptions";
 import { MessageLoader } from "../MessageLoader";
 import { MessageConnection } from "../MessageType";
-
-type MessageSubscriptionInput = {
-	userId?: string;
-	chatId?: string;
-};
 
 export type MessageSubscription = {
 	topic: (typeof events.message)[keyof typeof events.message];
@@ -27,23 +21,20 @@ export type MessageSubscription = {
 
 export const MessageSubscription = subscriptionWithClientId<
 	MessageSubscription,
-	Context,
-	MessageSubscriptionInput
+	Context
 >({
 	name: "Message",
-	inputFields: {
-		userId: {
-			type: GraphQLString,
-		},
-		chatId: {
-			type: GraphQLString,
-		},
-	},
 	outputFields: {
 		newChat: { type: GraphQLBoolean, resolve: (payload) => payload.newChat },
 		chat: {
-			type: ChatType,
-			resolve: async (payload, _, ctx) => ChatLoader.load(ctx, payload.chatId),
+			type: ChatConnection.edgeType,
+			resolve: async (payload, _, ctx) => {
+				const node = await ChatLoader.load(ctx, payload.chatId);
+
+				if (!node) return null;
+
+				return { node, cursor: toGlobalId("chat", node?.id) };
+			},
 		},
 		deletedMessages: {
 			type: new GraphQLList(GraphQLID),
@@ -74,32 +65,13 @@ export const MessageSubscription = subscriptionWithClientId<
 					events.message.edit,
 					events.message.delete,
 				]),
-			async (payload: MessageSubscription, input: MessageSubscriptionInput) => {
-				switch (payload.topic) {
-					case "MESSAGE:NEW": {
-						const chatId = await getChat(ctx, {
-							chatId: input.chatId,
-							userId: input.userId,
-						});
+			async (payload: MessageSubscription) => {
+				const chat = await ChatModel.findOne({
+					_id: payload.chatId,
+					users: ctx.user?.id,
+				});
 
-						return chatId === payload.chatId;
-					}
-
-					case "MESSAGE:DELETE": {
-						const chat = await ChatModel.find({
-							users: { $all: ctx.user?.id.toString() },
-						});
-
-						return !!chat;
-					}
-
-					case "MESSAGE:EDIT":
-						break;
-
-					default:
-						false;
-				}
-				return false;
+				return !!chat;
 			},
 		);
 		return resolver(null, input, ctx);

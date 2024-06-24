@@ -61,13 +61,16 @@ const ChatListQuery = graphql`
 `;
 
 const ChatListSubscription = graphql`
-  subscription chatListSubscription($input: MessageInput!,  $chatConnections: [ID!]!) {
+  subscription chatListSubscription($input: MessageInput!, $chatConnections: [ID!]!) {
     onMessage(input: $input) {
 			newChat
 			deletedMessages
-			chat {
-				user {
-					_id
+			chat @appendEdge(connections: $chatConnections){
+				node {
+					...chatItemFragment
+					user {
+						_id
+					}
 				}
 			}
       newMessage {
@@ -75,12 +78,6 @@ const ChatListSubscription = graphql`
 					...chatMessageFragment
 					from {
 						_id
-					}
-					chat @appendEdge(connections: $chatConnections){
-						cursor
-						node {
-							...chatItemFragment
-						}
 					}
         }
       }
@@ -113,11 +110,9 @@ export function ChatList({ filter }: ChatListProps) {
 				const newMessage = messageData?.onMessage?.newMessage?.node;
 				const fromUserId =
 					newMessage?.from._id === user?._id
-						? messageData?.onMessage?.chat?.user?._id
-						: newMessage?.from._id ?? messageData?.onMessage?.chat?.user?._id;
-
-				const chat = store.getRootField("onMessage").getLinkedRecord("chat");
-				store.getRoot().setLinkedRecord(chat, "chat", { userId: fromUserId });
+						? messageData?.onMessage?.chat?.node?.user?._id
+						: newMessage?.from._id ??
+							messageData?.onMessage?.chat?.node?.user?._id;
 
 				const messages = ConnectionHandler.getConnection(
 					store.getRoot(),
@@ -144,11 +139,11 @@ export function ChatList({ filter }: ChatListProps) {
 				}
 			},
 			variables: {
-				input: { userId: (id as string) ?? "" },
+				input: {},
 				chatConnections: [data.chats.__id],
 			},
 		}),
-		[id, ChatListSubscription, data],
+		[user, ChatListSubscription, data],
 	);
 
 	useSubscription<chatListSubscription>(config);

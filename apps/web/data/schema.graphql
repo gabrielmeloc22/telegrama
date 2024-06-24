@@ -385,15 +385,13 @@ type subscription {
 
 type MessagePayload {
   newChat: Boolean
-  chat: Chat
+  chat: ChatEdge
   deletedMessages: [ID]
   newMessage: MessageEdge
   clientSubscriptionId: String
 }
 
 input MessageInput {
-  userId: String
-  chatId: String
   clientSubscriptionId: String
 }
 

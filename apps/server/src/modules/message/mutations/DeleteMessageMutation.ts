@@ -46,6 +46,20 @@ export const DeleteMessageMutation = mutationWithClientMutationId<
 			chat: chat?.id,
 		});
 
+		if (chat) {
+			chat.lastMessage = (
+				await MessageModel.findOne(
+					{
+						chat: chat.id,
+					},
+					{},
+					{ sort: { createdAt: -1 } },
+				)
+			)?.id;
+
+			await chat.save();
+		}
+
 		await pubSub.publish(events.message.delete, {
 			topic: events.message.delete,
 			chatId: chat?.id,

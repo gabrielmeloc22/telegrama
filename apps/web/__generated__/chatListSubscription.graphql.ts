@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<08cc72d7acc39e242f7867e4eb62472e>>
+ * @generated SignedSource<<0b49e21746c9a49ea92748a68edbde75>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,9 +11,7 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type MessageInput = {
-  chatId?: string | null | undefined;
   clientSubscriptionId?: string | null | undefined;
-  userId?: string | null | undefined;
 };
 export type chatListSubscription$variables = {
   chatConnections: ReadonlyArray<string>;
@@ -22,20 +20,17 @@ export type chatListSubscription$variables = {
 export type chatListSubscription$data = {
   readonly onMessage: {
     readonly chat: {
-      readonly user: {
-        readonly _id: string;
+      readonly node: {
+        readonly user: {
+          readonly _id: string;
+        } | null | undefined;
+        readonly " $fragmentSpreads": FragmentRefs<"chatItemFragment">;
       } | null | undefined;
     } | null | undefined;
     readonly deletedMessages: ReadonlyArray<string | null | undefined> | null | undefined;
     readonly newChat: boolean | null | undefined;
     readonly newMessage: {
       readonly node: {
-        readonly chat: {
-          readonly cursor: string;
-          readonly node: {
-            readonly " $fragmentSpreads": FragmentRefs<"chatItemFragment">;
-          } | null | undefined;
-        } | null | undefined;
         readonly from: {
           readonly _id: string;
         };
@@ -95,28 +90,28 @@ v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "cursor",
+  "name": "id",
   "storageKey": null
 },
 v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "username",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "username",
+  "name": "avatar",
   "storageKey": null
 },
 v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "avatar",
+  "name": "createdAt",
   "storageKey": null
 },
 v11 = {
@@ -124,13 +119,6 @@ v11 = {
   "args": null,
   "kind": "ScalarField",
   "name": "content",
-  "storageKey": null
-},
-v12 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "createdAt",
   "storageKey": null
 };
 return {
@@ -156,7 +144,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "Chat",
+            "concreteType": "ChatEdge",
             "kind": "LinkedField",
             "name": "chat",
             "plural": false,
@@ -164,11 +152,27 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "User",
+                "concreteType": "Chat",
                 "kind": "LinkedField",
-                "name": "user",
+                "name": "node",
                 "plural": false,
-                "selections": (v6/*: any*/),
+                "selections": [
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "chatItemFragment"
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "user",
+                    "plural": false,
+                    "selections": (v6/*: any*/),
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               }
             ],
@@ -203,34 +207,6 @@ return {
                     "name": "from",
                     "plural": false,
                     "selections": (v6/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "ChatEdge",
-                    "kind": "LinkedField",
-                    "name": "chat",
-                    "plural": false,
-                    "selections": [
-                      (v7/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Chat",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "args": null,
-                            "kind": "FragmentSpread",
-                            "name": "chatItemFragment"
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
                     "storageKey": null
                   }
                 ],
@@ -268,7 +244,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "Chat",
+            "concreteType": "ChatEdge",
             "kind": "LinkedField",
             "name": "chat",
             "plural": false,
@@ -276,19 +252,87 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "User",
+                "concreteType": "Chat",
                 "kind": "LinkedField",
-                "name": "user",
+                "name": "node",
                 "plural": false,
                 "selections": [
-                  (v5/*: any*/),
-                  (v8/*: any*/)
+                  (v7/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "name",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "group",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "user",
+                    "plural": false,
+                    "selections": [
+                      (v5/*: any*/),
+                      (v8/*: any*/),
+                      (v9/*: any*/),
+                      (v7/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "MessageEdge",
+                    "kind": "LinkedField",
+                    "name": "lastMessage",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Message",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v7/*: any*/),
+                          (v10/*: any*/),
+                          (v11/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
                 ],
                 "storageKey": null
-              },
-              (v8/*: any*/)
+              }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "appendEdge",
+            "key": "",
+            "kind": "LinkedHandle",
+            "name": "chat",
+            "handleArgs": [
+              {
+                "kind": "Variable",
+                "name": "connections",
+                "variableName": "chatConnections"
+              }
+            ]
           },
           {
             "alias": null,
@@ -306,7 +350,7 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v8/*: any*/),
+                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -315,9 +359,9 @@ return {
                     "name": "from",
                     "plural": false,
                     "selections": [
+                      (v7/*: any*/),
                       (v8/*: any*/),
                       (v9/*: any*/),
-                      (v10/*: any*/),
                       (v5/*: any*/)
                     ],
                     "storageKey": null
@@ -330,7 +374,7 @@ return {
                     "name": "seen",
                     "storageKey": null
                   },
-                  (v12/*: any*/),
+                  (v10/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -351,100 +395,6 @@ return {
                     "kind": "ScalarField",
                     "name": "deliveredAt",
                     "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "ChatEdge",
-                    "kind": "LinkedField",
-                    "name": "chat",
-                    "plural": false,
-                    "selections": [
-                      (v7/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Chat",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v8/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "name",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "group",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "User",
-                            "kind": "LinkedField",
-                            "name": "user",
-                            "plural": false,
-                            "selections": [
-                              (v5/*: any*/),
-                              (v9/*: any*/),
-                              (v10/*: any*/),
-                              (v8/*: any*/)
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "MessageEdge",
-                            "kind": "LinkedField",
-                            "name": "lastMessage",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "Message",
-                                "kind": "LinkedField",
-                                "name": "node",
-                                "plural": false,
-                                "selections": [
-                                  (v8/*: any*/),
-                                  (v12/*: any*/),
-                                  (v11/*: any*/)
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "filters": null,
-                    "handle": "appendEdge",
-                    "key": "",
-                    "kind": "LinkedHandle",
-                    "name": "chat",
-                    "handleArgs": [
-                      {
-                        "kind": "Variable",
-                        "name": "connections",
-                        "variableName": "chatConnections"
-                      }
-                    ]
                   }
                 ],
                 "storageKey": null
@@ -458,16 +408,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c3438d67b34cdb48eebca92282fefb4e",
+    "cacheID": "6981c7d0fce2d21b261bdb48633dd645",
     "id": null,
     "metadata": {},
     "name": "chatListSubscription",
     "operationKind": "subscription",
-    "text": "subscription chatListSubscription(\n  $input: MessageInput!\n) {\n  onMessage(input: $input) {\n    newChat\n    deletedMessages\n    chat {\n      user {\n        _id\n        id\n      }\n      id\n    }\n    newMessage {\n      node {\n        ...chatMessageFragment\n        from {\n          _id\n          id\n        }\n        chat {\n          cursor\n          node {\n            ...chatItemFragment\n            id\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n"
+    "text": "subscription chatListSubscription(\n  $input: MessageInput!\n) {\n  onMessage(input: $input) {\n    newChat\n    deletedMessages\n    chat {\n      node {\n        ...chatItemFragment\n        user {\n          _id\n          id\n        }\n        id\n      }\n    }\n    newMessage {\n      node {\n        ...chatMessageFragment\n        from {\n          _id\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b24fca59a7e8a1f2172c0ffa338449cf";
+(node as any).hash = "f16c14050d29078ec30b4ef28b32c868";
 
 export default node;
