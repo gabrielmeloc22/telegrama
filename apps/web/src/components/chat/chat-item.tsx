@@ -1,10 +1,26 @@
 import { useUser } from "@/hooks/useUser";
-import { TextEllipsis } from "@ui/components";
+import {
+	Button,
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	TextEllipsis,
+} from "@ui/components";
 import { cn } from "@ui/lib/utils";
+import { MessageCircleX, Trash } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useFragment, useSubscription } from "react-relay";
+import { useFragment, useMutation, useSubscription } from "react-relay";
 import { graphql, type GraphQLSubscriptionConfig } from "relay-runtime";
+import type { chatItemDeleteMutation } from "../../../__generated__/chatItemDeleteMutation.graphql";
 import type { chatItemFragment$key } from "../../../__generated__/chatItemFragment.graphql";
 import type { chatMessagesTypingStatusSubscription } from "../../../__generated__/chatMessagesTypingStatusSubscription.graphql";
 import { UserAvatar } from "../user/user-avatar";
@@ -30,16 +46,38 @@ const ChatItemFragment = graphql`
   }
 `;
 
+const ChatItemDeleteMutation = graphql`
+	mutation chatItemDeleteMutation($input:DeleteChatInput!) {
+		deleteChat(input: $input) {
+			deletedId
+		}
+	}
+`;
+
 type ChatItemProps = {
 	chat: chatItemFragment$key;
 	selected: boolean;
 };
 
 export function ChatItem({ chat, selected }: ChatItemProps) {
-	const [typing, setTyping] = useState(false);
 	const currUser = useUser();
+
 	const data = useFragment<chatItemFragment$key>(ChatItemFragment, chat);
 
+	const [confirmDeletion, setConfirmDeletion] = useState(false);
+	const [deleteChat] = useMutation<chatItemDeleteMutation>(
+		ChatItemDeleteMutation,
+	);
+
+	const onDeleteChat = () => {
+		deleteChat({
+			variables: {
+				input: { chatId: data.id },
+			},
+		});
+	};
+
+	const [typing, setTyping] = useState(false);
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const config = useMemo<
 		GraphQLSubscriptionConfig<chatMessagesTypingStatusSubscription>
@@ -64,35 +102,93 @@ export function ChatItem({ chat, selected }: ChatItemProps) {
 	const fromToday = createdAt.toDateString() === new Date().toDateString();
 
 	return (
-		<Link
-			href={`/c/${data.user?._id}`}
-			className={cn(
-				"flex w-full gap-4 rounded-lg px-3 py-2 transition-all hover:dark:bg-neutral-700/50",
-				selected &&
-					"bg-primary/80 text-primary-foreground hover:dark:bg-primary/80",
-			)}
-		>
-			<UserAvatar name={data.name} imageUrl={data.user?.avatar} color="dark" />
-			<div className="flex h-full w-full flex-col py-2">
-				<div className="flex items-start">
-					<TextEllipsis className="max-w-[15ch]">{data.name}</TextEllipsis>
-					{data.lastMessage && (
-						<p className="ml-auto self-start text-[0.8rem]">
-							{new Intl.DateTimeFormat("default", {
-								timeStyle: fromToday ? "short" : undefined,
-								dateStyle: fromToday ? undefined : "short",
-							}).format(createdAt)}
-						</p>
-					)}
-				</div>
-				<TextEllipsis
-					className={cn("text-neutral-400 text-sm", selected && "text-white")}
+		<ContextMenu>
+			<Dialog open={confirmDeletion} onOpenChange={setConfirmDeletion}>
+				<DeleteChatDialog onDelete={onDeleteChat} />
+			</Dialog>
+			<ContextMenuContent>
+				<ContextMenuItem>
+					<MessageCircleX className="size-5" />
+					Delete messages
+				</ContextMenuItem>
+				<ContextMenuItem
+					design="error-ghost"
+					onClick={() => setConfirmDeletion(true)}
 				>
-					{typing
-						? `${data.user?.username} is typing...`
-						: data.lastMessage?.node?.content}
-				</TextEllipsis>
-			</div>
-		</Link>
+					<Trash className="size-5" /> Delete chat
+				</ContextMenuItem>
+			</ContextMenuContent>
+			<ContextMenuTrigger asChild>
+				<Link
+					href={`/c/${data.user?._id}`}
+					className={cn(
+						"flex w-full gap-4 rounded-lg px-3 py-2 transition-all hover:dark:bg-neutral-700/50",
+						selected &&
+							"bg-primary/80 text-primary-foreground hover:dark:bg-primary/80",
+					)}
+				>
+					<UserAvatar
+						name={data.name}
+						imageUrl={data.user?.avatar}
+						color="dark"
+					/>
+					<div className="flex h-full w-full flex-col py-2">
+						<div className="flex items-start">
+							<TextEllipsis className="max-w-[15ch]">{data.name}</TextEllipsis>
+							{data.lastMessage && (
+								<p className="ml-auto self-start text-[0.8rem]">
+									{new Intl.DateTimeFormat("default", {
+										timeStyle: fromToday ? "short" : undefined,
+										dateStyle: fromToday ? undefined : "short",
+									}).format(createdAt)}
+								</p>
+							)}
+						</div>
+						<TextEllipsis
+							className={cn(
+								"text-neutral-400 text-sm",
+								selected && "text-white",
+							)}
+						>
+							{typing ? "typing..." : data.lastMessage?.node?.content}
+						</TextEllipsis>
+					</div>
+				</Link>
+			</ContextMenuTrigger>
+		</ContextMenu>
+	);
+}
+
+type DeleteMessageDialogProps = {
+	onDelete?: () => void;
+	deleteCount?: number;
+};
+
+export function DeleteChatDialog({
+	onDelete,
+	deleteCount = 1,
+}: DeleteMessageDialogProps) {
+	return (
+		<DialogContent>
+			<DialogHeader>
+				<DialogTitle>
+					Delete {deleteCount > 1 ? `${deleteCount} chats` : "chat"}
+				</DialogTitle>
+			</DialogHeader>
+			<DialogDescription>
+				Are you sure you want to delete{" "}
+				{deleteCount === 1 ? "this chat" : "these chats"}?
+			</DialogDescription>
+			<DialogFooter>
+				<DialogClose asChild>
+					<Button design="primary-ghost">Cancel</Button>
+				</DialogClose>
+				<DialogClose asChild>
+					<Button design="error-ghost" onClick={onDelete}>
+						Delete
+					</Button>
+				</DialogClose>
+			</DialogFooter>
+		</DialogContent>
 	);
 }

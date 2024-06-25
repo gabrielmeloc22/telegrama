@@ -5,11 +5,13 @@ import { ChatConnection } from "@/modules/chat/ChatType";
 import { UserModel } from "@/modules/user/UserModel";
 import { events, pubSub } from "@/pubsub";
 import { getObjectId } from "@entria/graphql-mongo-helpers";
-import { GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLNonNull, GraphQLString } from "graphql";
 import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
-import { DateTimeResolver, GraphQLNonEmptyString } from "graphql-scalars";
+import { GraphQLNonEmptyString } from "graphql-scalars";
 import { startSession } from "mongoose";
+import { MessageLoader } from "../MessageLoader";
 import { MessageModel } from "../MessageModel";
+import { MessageType } from "../MessageType";
 import type { MessageSubscription } from "../subscription/OnMessage";
 
 type SendMessageInput = {
@@ -38,9 +40,10 @@ export const SendMessage = mutationWithClientMutationId<
 		},
 	},
 	outputFields: {
-		content: { type: new GraphQLNonNull(GraphQLString) },
-		createdAt: { type: DateTimeResolver },
-		id: { type: GraphQLID },
+		message: {
+			type: MessageType,
+			resolve: async (out, _, ctx) => MessageLoader.load(ctx, (await out).id),
+		},
 		chat: {
 			type: ChatConnection.edgeType,
 			resolve: async (res, _, ctx) => {
@@ -51,7 +54,7 @@ export const SendMessage = mutationWithClientMutationId<
 					return null;
 				}
 
-				return { cursor: toGlobalId("chat", node.id), node };
+				return { cursor: toGlobalId("Chat", node.id), node };
 			},
 		},
 	},
@@ -110,7 +113,7 @@ export const SendMessage = mutationWithClientMutationId<
 		} satisfies MessageSubscription);
 
 		return {
-			id: toGlobalId("message", message.id),
+			id: toGlobalId("Message", message.id),
 			content: message.content,
 			createdAt: message.createdAt,
 			chat,

@@ -1,7 +1,7 @@
 import type { Context } from "@/context";
 import { ChatLoader } from "@/modules/chat/ChatLoader";
 import { ChatModel } from "@/modules/chat/ChatModel";
-import { ChatConnection } from "@/modules/chat/ChatType";
+import { ChatType } from "@/modules/chat/ChatType";
 import { events, pubSub } from "@/pubsub";
 import { GraphQLBoolean, GraphQLID, GraphQLList } from "graphql";
 import { toGlobalId } from "graphql-relay";
@@ -10,10 +10,17 @@ import { withFilter } from "graphql-subscriptions";
 import { MessageLoader } from "../MessageLoader";
 import { MessageConnection } from "../MessageType";
 
+type MessageTopics = (typeof events.message)[keyof typeof events.message];
+type ChatTopics = Exclude<
+	(typeof events.chat)[keyof typeof events.chat],
+	"CHAT:TYPING"
+>;
+
 export type MessageSubscription = {
-	topic: (typeof events.message)[keyof typeof events.message];
+	topic: MessageTopics | ChatTopics;
 	newMessageId?: string;
 	deletedMessageIds?: string[];
+	chatMembers?: string[];
 	chatId: string;
 	userId?: string;
 	newChat?: boolean;
@@ -27,13 +34,15 @@ export const MessageSubscription = subscriptionWithClientId<
 	outputFields: {
 		newChat: { type: GraphQLBoolean, resolve: (payload) => payload.newChat },
 		chat: {
-			type: ChatConnection.edgeType,
-			resolve: async (payload, _, ctx) => {
-				const node = await ChatLoader.load(ctx, payload.chatId);
-
-				if (!node) return null;
-
-				return { node, cursor: toGlobalId("chat", node?.id) };
+			type: ChatType,
+			resolve: async (payload, _, ctx) => ChatLoader.load(ctx, payload.chatId),
+		},
+		deletedChat: {
+			type: GraphQLID,
+			resolve: (payload) => {
+				return payload.topic === "CHAT:DELETE"
+					? toGlobalId("Chat", payload.chatId)
+					: null;
 			},
 		},
 		deletedMessages: {
@@ -52,7 +61,7 @@ export const MessageSubscription = subscriptionWithClientId<
 
 				return {
 					node,
-					cursor: toGlobalId("message", node.id),
+					cursor: toGlobalId("Message", node.id),
 				};
 			},
 		},
@@ -64,14 +73,21 @@ export const MessageSubscription = subscriptionWithClientId<
 					events.message.new,
 					events.message.edit,
 					events.message.delete,
+					events.chat.delete,
 				]),
 			async (payload: MessageSubscription) => {
-				const chat = await ChatModel.findOne({
-					_id: payload.chatId,
-					users: ctx.user?.id,
-				});
+				switch (payload.topic) {
+					case "CHAT:DELETE":
+						return !!payload.chatMembers?.includes(ctx.user?.id.toString());
 
-				return !!chat;
+					default: {
+						const chat = await ChatModel.findOne({
+							_id: payload.chatId,
+							users: ctx.user?.id,
+						});
+						return !!chat;
+					}
+				}
 			},
 		);
 		return resolver(null, input, ctx);

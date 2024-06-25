@@ -160,11 +160,13 @@ export function DeleteMessageDialog({
 	return (
 		<DialogContent>
 			<DialogHeader>
-				<DialogTitle>Delete message</DialogTitle>
+				<DialogTitle>
+					Delete {deleteCount > 1 ? `${deleteCount} messages` : "message"}
+				</DialogTitle>
 			</DialogHeader>
 			<DialogDescription>
 				Are you sure you want to delete{" "}
-				{deleteCount === 1 ? "this message" : `${deleteCount} messages`}?
+				{deleteCount === 1 ? "this message" : "these messages"}?
 			</DialogDescription>
 			<DialogFooter>
 				<DialogClose asChild>

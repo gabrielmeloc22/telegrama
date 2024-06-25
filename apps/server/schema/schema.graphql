@@ -301,6 +301,7 @@ type mutation {
   sendMessage(input: SendMessageInput!): SendMessagePayload
   sendTypingStatus(input: SendTypingStatusInput!): SendTypingStatusPayload
   deleteMessage(input: DeleteMessageInput!): DeleteMessagePayload
+  deleteChat(input: DeleteChatInput!): DeleteChatPayload
 }
 
 type RegisterUserPayload {
@@ -338,9 +339,7 @@ input LoginMutationInput {
 scalar NonEmptyString
 
 type SendMessagePayload {
-  content: String!
-  createdAt: DateTime
-  id: ID
+  message: Message
   chat: ChatEdge
   clientMutationId: String
 }
@@ -378,6 +377,17 @@ input DeleteMessageInput {
   clientMutationId: String
 }
 
+type DeleteChatPayload {
+  """The deleted chat"""
+  deletedId: ID
+  clientMutationId: String
+}
+
+input DeleteChatInput {
+  chatId: String!
+  clientMutationId: String
+}
+
 type subscription {
   onMessage(input: MessageInput!): MessagePayload
   onType(input: onTypeInput!): onTypePayload
@@ -385,7 +395,8 @@ type subscription {
 
 type MessagePayload {
   newChat: Boolean
-  chat: ChatEdge
+  chat: Chat
+  deletedChat: ID
   deletedMessages: [ID]
   newMessage: MessageEdge
   clientSubscriptionId: String

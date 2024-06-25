@@ -1,3 +1,4 @@
+import { DeleteChatMutation } from "@/modules/chat/mutation/DeleteChatMutation";
 import { SendTypingStatusMutation } from "@/modules/chat/mutation/TypingStatusMutation";
 import { DeleteMessageMutation } from "@/modules/message/mutations/DeleteMessageMutation";
 import { SendMessage } from "@/modules/message/mutations/SendMessageMutation";
@@ -13,5 +14,6 @@ export const mutation = new GraphQLObjectType({
 		sendMessage: SendMessage,
 		sendTypingStatus: SendTypingStatusMutation,
 		deleteMessage: DeleteMessageMutation,
+		deleteChat: DeleteChatMutation,
 	}),
 });

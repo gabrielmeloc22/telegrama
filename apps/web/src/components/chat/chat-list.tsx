@@ -4,7 +4,7 @@ import { useUser } from "@/hooks/useUser";
 import "@dotlottie/player-component";
 import { NavigationStackTrigger } from "@ui/components";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import {
 	useLazyLoadQuery,
@@ -65,12 +65,12 @@ const ChatListSubscription = graphql`
     onMessage(input: $input) {
 			newChat
 			deletedMessages
-			chat @appendEdge(connections: $chatConnections){
-				node {
-					...chatItemFragment
-					user {
-						_id
-					}
+			deletedChat 
+			chat @appendNode(connections: $chatConnections, edgeTypeName: "ChatEdge")  {
+				id
+				...chatItemFragment
+				user {
+					_id
 				}
 			}
       newMessage {
@@ -92,27 +92,27 @@ type ChatListProps = {
 export function ChatList({ filter }: ChatListProps) {
 	const user = useUser();
 	const { id } = useParams();
+	const router = useRouter();
 
-	const chats = useLazyLoadQuery<chatListQuery>(ChatListQuery, {
+	const chatsQuery = useLazyLoadQuery<chatListQuery>(ChatListQuery, {
 		search: filter,
 	});
 
-	const { data, loadNext: _ } = usePaginationFragment<
+	const { data: chatsData, loadNext: _ } = usePaginationFragment<
 		chatListQuery,
 		chatListFragment$key
-	>(ChatListFragment, chats);
+	>(ChatListFragment, chatsQuery);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: the relay docs suggest you to set the subscription as a dependency
 	const config = useMemo<GraphQLSubscriptionConfig<chatListSubscription>>(
 		() => ({
 			subscription: ChatListSubscription,
-			updater: (store, messageData) => {
-				const newMessage = messageData?.onMessage?.newMessage?.node;
+			updater: (store, data) => {
+				const newMessage = data?.onMessage?.newMessage?.node;
 				const fromUserId =
 					newMessage?.from._id === user?._id
-						? messageData?.onMessage?.chat?.node?.user?._id
-						: newMessage?.from._id ??
-							messageData?.onMessage?.chat?.node?.user?._id;
+						? data?.onMessage?.chat?.user?._id
+						: newMessage?.from._id ?? data?.onMessage?.chat?.user?._id;
 
 				const messages = ConnectionHandler.getConnection(
 					store.getRoot(),
@@ -122,8 +122,8 @@ export function ChatList({ filter }: ChatListProps) {
 					},
 				);
 
-				if (messages && messageData?.onMessage?.deletedMessages) {
-					for (const msgId of messageData.onMessage.deletedMessages) {
+				if (messages && data?.onMessage?.deletedMessages) {
+					for (const msgId of data.onMessage.deletedMessages) {
 						msgId && ConnectionHandler.deleteNode(messages, msgId);
 					}
 				}
@@ -137,20 +137,33 @@ export function ChatList({ filter }: ChatListProps) {
 						ConnectionHandler.insertEdgeBefore(messages, message);
 					}
 				}
+
+				if (data?.onMessage?.deletedChat) {
+					const chatConnection = store.get(chatsData.chats.__id);
+
+					chatConnection &&
+						ConnectionHandler.deleteNode(
+							chatConnection,
+							data.onMessage.deletedChat,
+						);
+					messages?.invalidateRecord();
+
+					router.replace("/c");
+				}
 			},
 			variables: {
 				input: {},
-				chatConnections: [data.chats.__id],
+				chatConnections: [chatsData.chats.__id],
 			},
 		}),
-		[user, ChatListSubscription, data],
+		[user, ChatListSubscription, chatsData],
 	);
 
 	useSubscription<chatListSubscription>(config);
 
 	// readonly arrays don't have sort
 	// TODO: move this sort to the API
-	const chatEdges = [...data.chats.edges];
+	const chatEdges = [...chatsData.chats.edges];
 
 	return (
 		<div className="flex w-full flex-col justify-center">

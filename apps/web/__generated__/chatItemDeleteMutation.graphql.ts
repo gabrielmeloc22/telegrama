@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<044397bd0e49826331bef9a610ec0757>>
+ * @generated SignedSource<<4f0b76d2960d26c483df316064e14efb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,22 +9,21 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type SendMessageInput = {
+export type DeleteChatInput = {
+  chatId: string;
   clientMutationId?: string | null | undefined;
-  content?: any | null | undefined;
-  to: string;
 };
-export type chatComposerMutation$variables = {
-  input: SendMessageInput;
+export type chatItemDeleteMutation$variables = {
+  input: DeleteChatInput;
 };
-export type chatComposerMutation$data = {
-  readonly sendMessage: {
-    readonly clientMutationId: string | null | undefined;
+export type chatItemDeleteMutation$data = {
+  readonly deleteChat: {
+    readonly deletedId: string | null | undefined;
   } | null | undefined;
 };
-export type chatComposerMutation = {
-  response: chatComposerMutation$data;
-  variables: chatComposerMutation$variables;
+export type chatItemDeleteMutation = {
+  response: chatItemDeleteMutation$data;
+  variables: chatItemDeleteMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -45,16 +44,16 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "SendMessagePayload",
+    "concreteType": "DeleteChatPayload",
     "kind": "LinkedField",
-    "name": "sendMessage",
+    "name": "deleteChat",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "clientMutationId",
+        "name": "deletedId",
         "storageKey": null
       }
     ],
@@ -66,7 +65,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "chatComposerMutation",
+    "name": "chatItemDeleteMutation",
     "selections": (v1/*: any*/),
     "type": "mutation",
     "abstractKey": null
@@ -75,20 +74,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "chatComposerMutation",
+    "name": "chatItemDeleteMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "1ca479e1bc361f1a3c9e5e1a853c58cc",
+    "cacheID": "786630c41dd950acec0dbd385f2e7cd1",
     "id": null,
     "metadata": {},
-    "name": "chatComposerMutation",
+    "name": "chatItemDeleteMutation",
     "operationKind": "mutation",
-    "text": "mutation chatComposerMutation(\n  $input: SendMessageInput!\n) {\n  sendMessage(input: $input) {\n    clientMutationId\n  }\n}\n"
+    "text": "mutation chatItemDeleteMutation(\n  $input: DeleteChatInput!\n) {\n  deleteChat(input: $input) {\n    deletedId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "efbc4d12ac37b09e427dedfb7e1f6052";
+(node as any).hash = "434c309acce6bd14750e75255293bd25";
 
 export default node;

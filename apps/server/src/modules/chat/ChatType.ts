@@ -68,7 +68,7 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 					: null;
 
 				return {
-					cursor: toGlobalId("message", node?.id),
+					cursor: toGlobalId("Message", node?.id),
 					node,
 				};
 			},

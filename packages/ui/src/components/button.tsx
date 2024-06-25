@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 import { Spinner } from "./spinner";
 
-const variants = cva(
+export const buttonVariants = cva(
 	"rounded-md flex justify-center items-center w-fit text-sm transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed outline-none",
 	{
 		variants: {
@@ -35,7 +35,7 @@ const variants = cva(
 		],
 	},
 );
-export type ButtonVariantProps = VariantProps<typeof variants>;
+export type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
 export const Button = React.forwardRef<
 	HTMLButtonElement,
@@ -61,7 +61,7 @@ export const Button = React.forwardRef<
 			ref={ref}
 			disabled={props.disabled || isLoading}
 			aria-busy={isLoading}
-			className={cn(variants({ size, design }), className)}
+			className={cn(buttonVariants({ size, design }), className)}
 			{...props}
 		>
 			<Slottable>{children}</Slottable>

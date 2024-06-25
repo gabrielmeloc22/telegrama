@@ -4,6 +4,7 @@ import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { cn } from "@ui/lib/utils";
 import { Check, ChevronRight, Circle } from "lucide-react";
 import * as React from "react";
+import { buttonVariants, type ButtonVariantProps } from "./button";
 
 const ContextMenu = ContextMenuPrimitive.Root;
 
@@ -61,7 +62,7 @@ const ContextMenuContent = React.forwardRef<
 		<ContextMenuPrimitive.Content
 			ref={ref}
 			className={cn(
-				"data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-lg p-1 text-popover-foreground shadow-lg shadow-neutral-800/50 backdrop-blur-lg data-[state=closed]:animate-out data-[state=open]:animate-in dark:bg-neutral-800/60",
+				"data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-lg p-1 text-popover-foreground shadow-md shadow-neutral-900/30 backdrop-blur-lg data-[state=closed]:animate-out data-[state=open]:animate-in dark:bg-neutral-800/80",
 				className,
 			)}
 			{...props}
@@ -74,14 +75,18 @@ const ContextMenuItem = React.forwardRef<
 	React.ElementRef<typeof ContextMenuPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item> & {
 		inset?: boolean;
+		design?: ButtonVariantProps["design"];
 	}
->(({ className, inset, ...props }, ref) => (
+>(({ className, inset, design = "ghost", ...props }, ref) => (
 	<ContextMenuPrimitive.Item
 		ref={ref}
 		className={cn(
-			"relative flex cursor-pointer select-none items-center gap-4 rounded-md px-3 py-1.5 text-primary-foreground text-sm outline-none transition-colors data-[disabled]:pointer-events-none dark:focus:bg-muted/20 data-[disabled]:opacity-50",
-			inset && "pl-8",
-			className,
+			buttonVariants({ design }),
+			cn(
+				"relative flex w-full cursor-pointer select-none items-center justify-start gap-4 rounded-md px-3 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+				inset && "pl-8",
+				className,
+			),
 		)}
 		{...props}
 	/>

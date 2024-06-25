@@ -52,7 +52,7 @@ export const MessageType = new GraphQLObjectType<Message, Context>({
 			resolve: async (msg, _args, ctx) => {
 				const node = await ChatLoader.load(ctx, msg.chat);
 
-				return { cursor: toGlobalId("chat", node?.id), node };
+				return { cursor: toGlobalId("Chat", node?.id), node };
 			},
 		},
 	}),

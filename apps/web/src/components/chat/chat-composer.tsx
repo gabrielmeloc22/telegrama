@@ -7,12 +7,9 @@ import type { chatComposerMutation } from "../../../__generated__/chatComposerMu
 import type { chatComposerSendTypingStatusMutation } from "../../../__generated__/chatComposerSendTypingStatusMutation.graphql";
 
 const SendMessageMutation = graphql`
-  mutation chatComposerMutation(
-		$input: SendMessageInput!, 
-		) {
-    sendMessage (input: $input)
-		 {
-			id
+  mutation chatComposerMutation($input: SendMessageInput!) {
+    sendMessage (input: $input){
+			clientMutationId
     }
   }
 `;
@@ -31,16 +28,6 @@ type ChatComposerProps = {
 	selectable?: boolean;
 	onCancelSelection?: () => void;
 	onDelete?: () => void;
-};
-
-const calculateHeight = (content: string, width: number) => {
-	const stringified = JSON.stringify(content);
-
-	const lineBreaks = stringified.match(/\\n/g);
-	stringified.replaceAll("/n", "");
-	// console.log(lineBreaks);
-
-	return Math.floor(stringified.length / width + (lineBreaks?.length ?? 0));
 };
 
 export function ChatComposer({
@@ -73,7 +60,7 @@ export function ChatComposer({
 	};
 
 	const onSendMessage = () => {
-		if (textbox.current) {
+		if (textbox.current?.innerText.trim()) {
 			sendMessage({
 				variables: {
 					input: { to: userId, content: textbox.current.innerText.trim() },
@@ -135,14 +122,20 @@ export function ChatComposer({
 							<span
 								ref={textbox}
 								onKeyDown={(e) => {
-									setText(e.currentTarget.innerText);
+									setText(e.currentTarget.innerText.trim());
 
-									if (!typing && text !== e.currentTarget.innerText.trim()) {
+									const textUpdated = text !== e.currentTarget.innerText.trim();
+
+									if (!typing && textUpdated) {
 										setTyping(true);
 										onSendTypingStatus(true);
 									}
 
-									if (!e.shiftKey && e.key === "Enter") {
+									if (
+										!e.shiftKey &&
+										e.key === "Enter" &&
+										!!e.currentTarget.innerText.trim()
+									) {
 										e.preventDefault();
 										typingTimeoutRef.current &&
 											clearTimeout(typingTimeoutRef.current);
