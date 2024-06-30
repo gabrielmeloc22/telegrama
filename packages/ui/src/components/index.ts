@@ -66,6 +66,7 @@ import {
 	NavigationStackItem,
 	NavigationStackTrigger,
 	useNavigationStackControls,
+	type NavigationStackApi,
 } from "./navigation-stack";
 import {
 	ResizableHandle,
@@ -147,4 +148,5 @@ export {
 	TextEllipsis,
 	useFormField,
 	useNavigationStackControls,
+	type NavigationStackApi,
 };
