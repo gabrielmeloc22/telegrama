@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6c711974f2b405869f7b533682b51e5d>>
+ * @generated SignedSource<<e8aee6afc66abc3766002acf853da4d7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,15 +13,15 @@ import { FragmentRefs } from "relay-runtime";
 export type UserFilter = {
   username?: string | null | undefined;
 };
-export type userListSearchQuery$variables = {
+export type chatCreateUserListQuery$variables = {
   filter?: UserFilter | null | undefined;
 };
-export type userListSearchQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"userListSearchFragment">;
+export type chatCreateUserListQuery$data = {
+  readonly " $fragmentSpreads": FragmentRefs<"userListFragment">;
 };
-export type userListSearchQuery = {
-  response: userListSearchQuery$data;
-  variables: userListSearchQuery$variables;
+export type chatCreateUserListQuery = {
+  response: chatCreateUserListQuery$data;
+  variables: chatCreateUserListQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -50,14 +50,14 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "userListSearchQuery",
+    "name": "chatCreateUserListQuery",
     "selections": [
       {
         "args": [
           (v1/*: any*/)
         ],
         "kind": "FragmentSpread",
-        "name": "userListSearchFragment"
+        "name": "userListFragment"
       }
     ],
     "type": "query",
@@ -67,7 +67,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "userListSearchQuery",
+    "name": "chatCreateUserListQuery",
     "selections": [
       {
         "alias": null,
@@ -111,13 +111,6 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "_id",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
                     "name": "username",
                     "storageKey": null
                   },
@@ -126,6 +119,13 @@ return {
                     "args": null,
                     "kind": "ScalarField",
                     "name": "avatar",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "_id",
                     "storageKey": null
                   },
                   {
@@ -183,16 +183,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "db32011fe219d6887fa66ff46b88df27",
+    "cacheID": "ee666cdfc7ec198a87c716e3db339e03",
     "id": null,
     "metadata": {},
-    "name": "userListSearchQuery",
+    "name": "chatCreateUserListQuery",
     "operationKind": "query",
-    "text": "query userListSearchQuery(\n  $filter: UserFilter\n) {\n  ...userListSearchFragment_Vt7Yj\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListSearchFragment_Vt7Yj on query {\n  users(filter: $filter, first: 20) {\n    edges {\n      cursor\n      node {\n        id\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatCreateUserListQuery(\n  $filter: UserFilter\n) {\n  ...userListFragment_Vt7Yj\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListFragment_Vt7Yj on query {\n  users(filter: $filter, first: 20) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "21181d4506a790204ae77f7ad3670d1d";
+(node as any).hash = "e884028dc8d52d09ef4a59fe46a493b4";
 
 export default node;

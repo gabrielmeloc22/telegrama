@@ -302,6 +302,7 @@ type mutation {
   sendTypingStatus(input: SendTypingStatusInput!): SendTypingStatusPayload
   deleteMessage(input: DeleteMessageInput!): DeleteMessagePayload
   deleteChat(input: DeleteChatInput!): DeleteChatPayload
+  createGroupChat(input: CreateGroupChatInput!): CreateGroupChatPayload
 }
 
 type RegisterUserPayload {
@@ -385,6 +386,21 @@ type DeleteChatPayload {
 
 input DeleteChatInput {
   chatId: String!
+  clientMutationId: String
+}
+
+type CreateGroupChatPayload {
+  """The created group chat"""
+  chat: Chat
+  clientMutationId: String
+}
+
+input CreateGroupChatInput {
+  """The group chat name"""
+  name: String
+
+  """The members added to the group"""
+  members: [String]!
   clientMutationId: String
 }
 

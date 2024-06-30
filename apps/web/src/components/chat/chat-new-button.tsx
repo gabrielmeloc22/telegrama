@@ -23,10 +23,12 @@ export function ChatNewButton({ className, onNewGroup }: ChatNewButtonProps) {
 						New message
 					</DropdownMenuItem>
 				</NavigationStackTrigger>
-				<DropdownMenuItem onClick={onNewGroup}>
-					<Users className="size-5"/>
-					New group chat
-				</DropdownMenuItem>
+				<NavigationStackTrigger navigate={2} asChild>
+					<DropdownMenuItem onClick={onNewGroup}>
+						<Users className="size-5" />
+						New group chat
+					</DropdownMenuItem>
+				</NavigationStackTrigger>
 			</DropdownMenuContent>
 			<DropdownMenuTrigger asChild>
 				<NavigationStackTrigger navigate="backwards" asChild>

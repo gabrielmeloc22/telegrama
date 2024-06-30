@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c3f9983e3a5599d32fd37e88f4bc150b>>
+ * @generated SignedSource<<0c2f573227238f65380c5cce3554b93a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,21 +10,23 @@
 
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type userListSearchFragment$data = {
+export type userListFragment$data = {
   readonly users: {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
+        readonly avatar: string | null | undefined;
         readonly id: string;
+        readonly username: string;
         readonly " $fragmentSpreads": FragmentRefs<"userItemFragment">;
       } | null | undefined;
     } | null | undefined>;
   };
-  readonly " $fragmentType": "userListSearchFragment";
+  readonly " $fragmentType": "userListFragment";
 };
-export type userListSearchFragment$key = {
-  readonly " $data"?: userListSearchFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"userListSearchFragment">;
+export type userListFragment$key = {
+  readonly " $data"?: userListFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"userListFragment">;
 };
 
 const node: ReaderFragment = (function(){
@@ -72,7 +74,7 @@ return {
       "operation": require('./userSearchRefetchQuery.graphql')
     }
   },
-  "name": "userListSearchFragment",
+  "name": "userListFragment",
   "selections": [
     {
       "alias": "users",
@@ -116,6 +118,20 @@ return {
                   "args": null,
                   "kind": "ScalarField",
                   "name": "id",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "username",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "avatar",
                   "storageKey": null
                 },
                 {
@@ -170,6 +186,6 @@ return {
 };
 })();
 
-(node as any).hash = "9077768178ecedad0c7cda0a663f5ed4";
+(node as any).hash = "2a12f9fd7eadf41786ee75d373e753b8";
 
 export default node;

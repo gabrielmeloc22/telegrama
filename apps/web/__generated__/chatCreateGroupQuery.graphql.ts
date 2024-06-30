@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<944544796c33748b0f3bb7d90a91f744>>
+ * @generated SignedSource<<b7e9ca858e323eff7f61cd8ebbf57d92>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,31 +13,19 @@ import { FragmentRefs } from "relay-runtime";
 export type UserFilter = {
   username?: string | null | undefined;
 };
-export type userSearchRefetchQuery$variables = {
-  count?: number | null | undefined;
-  cursor?: string | null | undefined;
+export type chatCreateGroupQuery$variables = {
   filter?: UserFilter | null | undefined;
 };
-export type userSearchRefetchQuery$data = {
+export type chatCreateGroupQuery$data = {
   readonly " $fragmentSpreads": FragmentRefs<"userListFragment">;
 };
-export type userSearchRefetchQuery = {
-  response: userSearchRefetchQuery$data;
-  variables: userSearchRefetchQuery$variables;
+export type chatCreateGroupQuery = {
+  response: chatCreateGroupQuery$data;
+  variables: chatCreateGroupQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
-  {
-    "defaultValue": 20,
-    "kind": "LocalArgument",
-    "name": "count"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "cursor"
-  },
   {
     "defaultValue": null,
     "kind": "LocalArgument",
@@ -50,16 +38,11 @@ v1 = {
   "variableName": "filter"
 },
 v2 = [
-  {
-    "kind": "Variable",
-    "name": "after",
-    "variableName": "cursor"
-  },
   (v1/*: any*/),
   {
-    "kind": "Variable",
+    "kind": "Literal",
     "name": "first",
-    "variableName": "count"
+    "value": 20
   }
 ];
 return {
@@ -67,20 +50,10 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "userSearchRefetchQuery",
+    "name": "chatCreateGroupQuery",
     "selections": [
       {
         "args": [
-          {
-            "kind": "Variable",
-            "name": "count",
-            "variableName": "count"
-          },
-          {
-            "kind": "Variable",
-            "name": "cursor",
-            "variableName": "cursor"
-          },
           (v1/*: any*/)
         ],
         "kind": "FragmentSpread",
@@ -94,7 +67,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "userSearchRefetchQuery",
+    "name": "chatCreateGroupQuery",
     "selections": [
       {
         "alias": null,
@@ -210,16 +183,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3b58385d2c50bc9e128f0e92e8b787e1",
+    "cacheID": "c72b8ab8e7867780eb91d465eccdf1b4",
     "id": null,
     "metadata": {},
-    "name": "userSearchRefetchQuery",
+    "name": "chatCreateGroupQuery",
     "operationKind": "query",
-    "text": "query userSearchRefetchQuery(\n  $count: Int = 20\n  $cursor: String\n  $filter: UserFilter\n) {\n  ...userListFragment_3KQYpM\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListFragment_3KQYpM on query {\n  users(filter: $filter, after: $cursor, first: $count) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatCreateGroupQuery(\n  $filter: UserFilter\n) {\n  ...userListFragment_Vt7Yj\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListFragment_Vt7Yj on query {\n  users(filter: $filter, first: 20) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2a12f9fd7eadf41786ee75d373e753b8";
+(node as any).hash = "8d4333d2ef99d266f0a0749bdd133c7e";
 
 export default node;

@@ -9,6 +9,7 @@ export const events = {
 	chat: {
 		typingStatus: "CHAT:TYPING",
 		delete: "CHAT:DELETE",
+		new: "CHAT:NEW",
 	},
 } as const;
 

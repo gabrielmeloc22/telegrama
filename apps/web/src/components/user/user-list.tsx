@@ -1,18 +1,13 @@
-import { useLazyLoadQuery, usePaginationFragment } from "react-relay";
-import { graphql } from "relay-runtime";
-import type { userItemFragment$key } from "../../../__generated__/userItemFragment.graphql";
-import type { userListSearchFragment$key } from "../../../__generated__/userListSearchFragment.graphql";
-import type { userListSearchQuery } from "../../../__generated__/userListSearchQuery.graphql";
+import { usePaginationFragment } from "react-relay";
+import { graphql, type OperationType } from "relay-runtime";
+import type {
+	userListFragment$data,
+	userListFragment$key,
+} from "../../../__generated__/userListFragment.graphql";
 import { UserItem } from "./user-item";
 
-const UserListSearchQuery = graphql`
-	query userListSearchQuery($filter: UserFilter) {
-		...userListSearchFragment @arguments(filter: $filter)
-	}
-`;
-
-const UserSearchFragment = graphql`
-  fragment userListSearchFragment on query 
+export const UserListFragment = graphql`
+  fragment userListFragment on query 
   @argumentDefinitions(
     cursor: { type: "String" }
     count: { type: "Int", defaultValue: 20 }
@@ -27,6 +22,8 @@ const UserSearchFragment = graphql`
         cursor
         node {
           id
+					username
+					avatar
           ...userItemFragment
         }
       }
@@ -34,23 +31,23 @@ const UserSearchFragment = graphql`
   }
 `;
 type UserListProps = {
-	query?: string;
-	onSelect: (userId: string) => void;
+	userList: userListFragment$key;
+	// query?: string;
+	onSelect: (edge: userListFragment$data["users"]["edges"][number]) => void;
+	selected?: string[];
+	multiple?: boolean;
 };
 
-export function UserList({ query, onSelect }: UserListProps) {
-	const usersQuery = useLazyLoadQuery<userListSearchQuery>(
-		UserListSearchQuery,
-		{
-			filter: { username: query },
-		},
-		{ fetchPolicy: query ? "store-or-network" : "store-only" },
+export function UserList({
+	selected,
+	userList,
+	multiple = false,
+	onSelect,
+}: UserListProps) {
+	const { data } = usePaginationFragment<OperationType, userListFragment$key>(
+		UserListFragment,
+		userList,
 	);
-
-	const { data } = usePaginationFragment<
-		userListSearchQuery,
-		userListSearchFragment$key
-	>(UserSearchFragment, usersQuery);
 
 	if (!data.users) {
 		return null;
@@ -61,15 +58,24 @@ export function UserList({ query, onSelect }: UserListProps) {
 	return (
 		<div className="flex">
 			<ul className="flex w-full flex-col gap-2">
-				{users.map((edge) => (
-					<li key={edge?.node?.id} className="flex">
-						<UserItem
-							link
-							user={edge?.node as userItemFragment$key}
-							onClick={() => edge?.node?.id && onSelect(edge.node.id)}
-						/>
-					</li>
-				))}
+				{users.map((edge) =>
+					edge?.node ? (
+						<li key={edge.node.id} className="flex items-center">
+							<UserItem
+								selectable={multiple}
+								selected={selected?.includes(edge.node.id)}
+								user={edge.node}
+								{...(multiple
+									? {
+											onClick: () => onSelect(edge),
+										}
+									: {
+											link: true,
+										})}
+							/>
+						</li>
+					) : null,
+				)}
 			</ul>
 		</div>
 	);
