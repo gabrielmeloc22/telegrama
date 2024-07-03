@@ -1,4 +1,4 @@
-import { PubSub } from "graphql-subscriptions";
+import { RedisPubSub } from "graphql-redis-subscriptions";
 
 export const events = {
 	message: {
@@ -13,4 +13,7 @@ export const events = {
 	},
 } as const;
 
-export const pubSub = new PubSub();
+export const pubSub = new RedisPubSub({
+	publisher: new Redis({ lazyConnect: true }),
+	subscriber: new Redis({ lazyConnect: true }),
+});
