@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b8249ba27589cad0680f7f22a539a4aa>>
+ * @generated SignedSource<<09b1cbc6a93dd02da0b8a508f95856d0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,9 +9,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type useUserQuery$variables = Record<PropertyKey, never>;
+export type useUserQuery$variables = {
+  skip: boolean;
+};
 export type useUserQuery$data = {
-  readonly me: {
+  readonly me?: {
     readonly _id: string;
     readonly avatar: string | null | undefined;
     readonly id: string;
@@ -26,73 +28,87 @@ export type useUserQuery = {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "alias": null,
-    "args": null,
-    "concreteType": "User",
-    "kind": "LinkedField",
-    "name": "me",
-    "plural": false,
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "skip"
+  }
+],
+v1 = [
+  {
+    "condition": "skip",
+    "kind": "Condition",
+    "passingValue": false,
     "selections": [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "_id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "username",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "avatar",
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "me",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "_id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "avatar",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
-    ],
-    "storageKey": null
+    ]
   }
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useUserQuery",
-    "selections": (v0/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useUserQuery",
-    "selections": (v0/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "ecff99879fb7f32da28f13341d7b7615",
+    "cacheID": "3b5aaea98b51b0faae51eb0c35ca51b4",
     "id": null,
     "metadata": {},
     "name": "useUserQuery",
     "operationKind": "query",
-    "text": "query useUserQuery {\n  me {\n    _id\n    id\n    username\n    avatar\n  }\n}\n"
+    "text": "query useUserQuery(\n  $skip: Boolean!\n) {\n  me @skip(if: $skip) {\n    _id\n    id\n    username\n    avatar\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0aa471e1c2b54e8aa5530927c7523a9c";
+(node as any).hash = "4e21faa9ca00cbd5c78d4a56980c1541";
 
 export default node;

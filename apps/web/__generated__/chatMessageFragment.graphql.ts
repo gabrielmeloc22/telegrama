@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d901d286690be46a05ed4fa19818c1b3>>
+ * @generated SignedSource<<a109789cecbf2cee876bad7b738c1c89>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,11 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type chatMessageFragment$data = {
+  readonly chat: {
+    readonly node: {
+      readonly group: boolean | null | undefined;
+    } | null | undefined;
+  } | null | undefined;
   readonly content: string;
   readonly createdAt: any | null | undefined;
   readonly delivered: boolean;
@@ -74,6 +79,35 @@ return {
     {
       "alias": null,
       "args": null,
+      "concreteType": "ChatEdge",
+      "kind": "LinkedField",
+      "name": "chat",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Chat",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "group",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "kind": "ScalarField",
       "name": "content",
       "storageKey": null
@@ -119,6 +153,6 @@ return {
 };
 })();
 
-(node as any).hash = "5ed135989febf23ebed8eb3e4156d580";
+(node as any).hash = "69ac8b9d382c8b2a570c8da9a53a8248";
 
 export default node;

@@ -1,16 +1,17 @@
-import { useUser } from "@/hooks/useUser";
+import { useTypingStatusSubscription } from "@/hooks/useTypingStatusSubscription";
+import { DotLottiePlayer } from "@dotlottie/react-player";
+import { cn } from "@ui/lib/utils";
 import {
 	AnimatePresence,
+	type HTMLMotionProps,
 	LayoutGroup,
 	motion,
-	type HTMLMotionProps,
 } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
-import { usePaginationFragment, useSubscription } from "react-relay";
-import { graphql, type GraphQLSubscriptionConfig } from "relay-runtime";
+import { useEffect } from "react";
+import { usePaginationFragment } from "react-relay";
+import { graphql } from "relay-runtime";
 import type { chatLayoutQuery } from "../../../__generated__/chatLayoutQuery.graphql";
 import type { chatMessagesFragment$key } from "../../../__generated__/chatMessagesFragment.graphql";
-import type { chatMessagesTypingStatusSubscription } from "../../../__generated__/chatMessagesTypingStatusSubscription.graphql";
 import { ChatMessage } from "./chat-message";
 
 const ChatMessageFragment = graphql`
@@ -18,11 +19,11 @@ const ChatMessageFragment = graphql`
   @argumentDefinitions(
     cursor: { type : "String"}
     count: { type: "Int", defaultValue: 50}
-		userId: { type: "String" }
+		chatId: { type: "String!" }
   )
   @refetchable(queryName: "chatMessagesRefetchQuery")
   {
-    messages(userId: $userId, after: $cursor, first: $count) 
+    messages(chatId: $chatId, after: $cursor, first: $count) 
     @connection(key: "ChatMessagesFragment_messages")
     {
       edges {
@@ -36,16 +37,6 @@ const ChatMessageFragment = graphql`
       }
     }
   }
-`;
-
-export const ChatMessagesTypingStatusSubscription = graphql`
-	subscription chatMessagesTypingStatusSubscription($input: onTypeInput!){
-		onType(input: $input) {
-			typing
-			userId
-		}
-	}
-
 `;
 
 type ChatMessagesProps = {
@@ -67,33 +58,12 @@ export function ChatMessages({
 	setSelectable,
 	onDelete,
 }: ChatMessagesProps) {
-	const currUser = useUser();
-
-	const [typing, setTyping] = useState(false);
 	const { data, loadNext, hasNext } = usePaginationFragment<
 		chatLayoutQuery,
 		chatMessagesFragment$key
 	>(ChatMessageFragment, messages);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	const config = useMemo<
-		GraphQLSubscriptionConfig<chatMessagesTypingStatusSubscription>
-	>(
-		() => ({
-			subscription: ChatMessagesTypingStatusSubscription,
-			onNext: (res) => {
-				if (res?.onType && res.onType.userId !== currUser?.id) {
-					setTyping(res.onType?.typing ?? false);
-				}
-			},
-			variables: {
-				input: { chatId },
-			},
-		}),
-		[chatId, ChatMessagesTypingStatusSubscription],
-	);
-
-	useSubscription(config);
+	const userTyping = useTypingStatusSubscription({ chatId });
 
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
@@ -126,19 +96,34 @@ export function ChatMessages({
 		>
 			<LayoutGroup>
 				<AnimatePresence>
-					{typing && (
+					{userTyping && (
 						<MessageMotionWrapper
-							className="mx-[22.5%] h-[32px] w-fit rounded-xl px-4 py-2 dark:bg-neutral-800"
+							className="mx-[22.5%] h-7 w-fit rounded-xl px-4 py-2 dark:bg-neutral-800"
 							exit={{ y: 100, opacity: 0 }}
 						>
-							<dotlottie-player src="/assets/loading.lottie" loop autoplay />
+							<DotLottiePlayer
+								src="/assets/loading.lottie"
+								loop
+								autoplay
+								className="size-4"
+							/>
 						</MessageMotionWrapper>
 					)}
-					{messagesData?.map(
-						(message) =>
+					{messagesData?.map((message, i) => {
+						const firstOfSequence =
+							messagesData[i + 1]?.node?.from.id !== message?.node?.from.id;
+						const lastOfSequence =
+							messagesData[i - 1]?.node?.from.id !== message?.node?.from.id;
+
+						return (
 							message?.node && (
-								<MessageMotionWrapper key={message.node.id}>
+								<MessageMotionWrapper
+									key={message.node.id}
+									className={cn(firstOfSequence && "mt-2")}
+								>
 									<ChatMessage
+										lastOfSequence={lastOfSequence}
+										firstOfSequence={firstOfSequence}
 										message={message.node}
 										selected={selected.includes(message.node.id)}
 										selectable={selectable}
@@ -147,8 +132,9 @@ export function ChatMessages({
 										onSelect={() => onSelect(message.node?.id ?? "")}
 									/>
 								</MessageMotionWrapper>
-							),
-					)}
+							)
+						);
+					})}
 				</AnimatePresence>
 			</LayoutGroup>
 		</div>

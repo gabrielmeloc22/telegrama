@@ -10,25 +10,29 @@ import {
 import type { useUserQuery } from "../../__generated__/useUserQuery.graphql";
 
 const MeQuery = graphql`
-  query useUserQuery {
-    me {
+  query useUserQuery($skip: Boolean!) {
+    me @skip(if: $skip) {
 			_id
-      id
+      id 
       username
       avatar
     }
   }
 `;
 
-export function useUser() {
+export function useUser(skip = false) {
 	const [fetchKey, setFetchKey] = useState(0);
-	const { me } = useLazyLoadQuery<useUserQuery>(MeQuery, {}, { fetchKey });
+	const { me } = useLazyLoadQuery<useUserQuery>(
+		MeQuery,
+		{ skip },
+		{ fetchKey },
+	);
 
-	useSubscribeToInvalidationState([], () => {
+	useSubscribeToInvalidationState([me?.id ?? ""], () => {
 		setFetchKey((prev) => prev + 1);
 	});
 
-	if (!me) {
+	if (!me && !skip) {
 		logout();
 		return null;
 	}

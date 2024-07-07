@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<04fe09830b6ddd5bfebd8a19597c7dc1>>
+ * @generated SignedSource<<ffc52eae033d163363506ae077b76e84>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,9 +12,20 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type chatHeaderFragment$data = {
   readonly chat: {
+    readonly group: boolean | null | undefined;
     readonly name: string;
+    readonly users: {
+      readonly edges: ReadonlyArray<{
+        readonly node: {
+          readonly avatar: string | null | undefined;
+          readonly id: string;
+          readonly username: string;
+        } | null | undefined;
+      } | null | undefined>;
+    } | null | undefined;
   } | null | undefined;
   readonly user: {
+    readonly id: string;
     readonly username: string;
   } | null | undefined;
   readonly " $fragmentType": "chatHeaderFragment";
@@ -25,19 +36,26 @@ export type chatHeaderFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
-  {
-    "kind": "Variable",
-    "name": "userId",
-    "variableName": "userId"
-  }
-];
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "username",
+  "storageKey": null
+};
 return {
   "argumentDefinitions": [
     {
       "defaultValue": null,
       "kind": "LocalArgument",
-      "name": "userId"
+      "name": "chatId"
     }
   ],
   "kind": "Fragment",
@@ -46,7 +64,13 @@ return {
   "selections": [
     {
       "alias": null,
-      "args": (v0/*: any*/),
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "id",
+          "variableName": "chatId"
+        }
+      ],
       "concreteType": "Chat",
       "kind": "LinkedField",
       "name": "chat",
@@ -58,25 +82,75 @@ return {
           "kind": "ScalarField",
           "name": "name",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "group",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "UserConnection",
+          "kind": "LinkedField",
+          "name": "users",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "UserEdge",
+              "kind": "LinkedField",
+              "name": "edges",
+              "plural": true,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "avatar",
+                      "storageKey": null
+                    },
+                    (v1/*: any*/)
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
         }
       ],
       "storageKey": null
     },
     {
       "alias": null,
-      "args": (v0/*: any*/),
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "userId",
+          "variableName": "chatId"
+        }
+      ],
       "concreteType": "User",
       "kind": "LinkedField",
       "name": "user",
       "plural": false,
       "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "username",
-          "storageKey": null
-        }
+        (v0/*: any*/),
+        (v1/*: any*/)
       ],
       "storageKey": null
     }
@@ -86,6 +160,6 @@ return {
 };
 })();
 
-(node as any).hash = "055928c3a3895ee9033ee2a71d72f85e";
+(node as any).hash = "dac46cb90b3b8c6d4e27d93cb518b8d9";
 
 export default node;

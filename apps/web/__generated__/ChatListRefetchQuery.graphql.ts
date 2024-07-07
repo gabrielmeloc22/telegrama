@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<30c2f78ffc5830f1c099f43eb6d70958>>
+ * @generated SignedSource<<1fd69eedb8c7b8e58310562fa2c1da70>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -65,6 +65,13 @@ v3 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "_id",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -119,12 +126,20 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "kind": "ScalarField",
+                "name": "cursor",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": "Chat",
                 "kind": "LinkedField",
                 "name": "node",
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -133,13 +148,7 @@ return {
                     "name": "user",
                     "plural": false,
                     "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "_id",
-                        "storageKey": null
-                      },
+                      (v4/*: any*/),
                       (v3/*: any*/),
                       {
                         "alias": null,
@@ -161,38 +170,8 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "MessageEdge",
-                    "kind": "LinkedField",
-                    "name": "lastMessage",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Message",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "createdAt",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "content",
-                            "storageKey": null
-                          },
-                          (v3/*: any*/)
-                        ],
-                        "storageKey": null
-                      }
-                    ],
+                    "kind": "ScalarField",
+                    "name": "updatedAt",
                     "storageKey": null
                   },
                   {
@@ -212,18 +191,48 @@ return {
                   {
                     "alias": null,
                     "args": null,
+                    "concreteType": "MessageEdge",
+                    "kind": "LinkedField",
+                    "name": "lastMessage",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Message",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v3/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "createdAt",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "content",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
                     "kind": "ScalarField",
                     "name": "__typename",
                     "storageKey": null
                   }
                 ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "cursor",
                 "storageKey": null
               }
             ],
@@ -283,16 +292,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f52d35b305e1fe5f92ab33891f59e3c4",
+    "cacheID": "9d8a0e8c11a4d726b57a08199ced30cd",
     "id": null,
     "metadata": {},
     "name": "ChatListRefetchQuery",
     "operationKind": "query",
-    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      node {\n        id\n        user {\n          _id\n          id\n        }\n        lastMessage {\n          node {\n            createdAt\n            content\n            id\n          }\n        }\n        ...chatItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  _id\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "826e72f348f8e9831dc082bd33eb9f4b";
+(node as any).hash = "76f96d9f8d2dbf7abcae75867922b41d";
 
 export default node;

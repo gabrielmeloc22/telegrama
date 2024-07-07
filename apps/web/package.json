@@ -13,13 +13,14 @@
 		"generate:relay": "relay-compiler"
 	},
 	"dependencies": {
-		"@dotlottie/player-component": "^2.7.12",
+		"@dotlottie/react-player": "^1.6.19",
 		"@hookform/resolvers": "^3.6.0",
 		"@phosphor-icons/react": "^2.1.7",
 		"@repo/ui": "workspace:*",
 		"framer-motion": "^11.2.12",
 		"graphql-sse": "^2.5.3",
 		"lucide-react": "^0.372.0",
+		"murmurhash": "^2.0.1",
 		"next": "^14.2.4",
 		"nookies": "^2.5.2",
 		"react": "^18.3.1",

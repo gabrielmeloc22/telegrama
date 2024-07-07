@@ -15,7 +15,7 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [value, setValue] = useState("sign-in");
 	const [client, setClient] = useState(false);
-	const me = useUser();
+	const me = useUser(!client);
 
 	// avoid hydration errors
 	// TODO: find a better way to handle sign-in/sign-up mutations

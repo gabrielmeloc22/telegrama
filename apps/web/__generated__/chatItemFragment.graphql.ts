@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d4a220e6e03c01a28e51e444b3fbe25>>
+ * @generated SignedSource<<c34370efa52b62dad23becde83d71c6a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type chatItemFragment$data = {
+  readonly _id: string;
   readonly group: boolean | null | undefined;
   readonly id: string;
   readonly lastMessage: {
@@ -38,6 +39,13 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "_id",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 };
@@ -48,6 +56,7 @@ return {
   "name": "chatItemFragment",
   "selections": [
     (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -70,13 +79,7 @@ return {
       "name": "user",
       "plural": false,
       "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "_id",
-          "storageKey": null
-        },
+        (v0/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -110,7 +113,7 @@ return {
           "name": "node",
           "plural": false,
           "selections": [
-            (v0/*: any*/),
+            (v1/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -137,6 +140,6 @@ return {
 };
 })();
 
-(node as any).hash = "30839f69d85217d984cb293e68afa171";
+(node as any).hash = "4b1a463283c73ce0a2fea6c7574d877e";
 
 export default node;

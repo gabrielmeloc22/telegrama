@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6d5d51c929691c4d859a8abf7b407a98>>
+ * @generated SignedSource<<3efdab683c4a7155ee7277ae562622af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,14 +14,11 @@ export type chatListFragment$data = {
   readonly chats: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
+        readonly _id: string;
         readonly id: string;
-        readonly lastMessage: {
-          readonly node: {
-            readonly content: string;
-            readonly createdAt: any | null | undefined;
-          } | null | undefined;
-        } | null | undefined;
+        readonly updatedAt: any | null | undefined;
         readonly user: {
           readonly _id: string;
         } | null | undefined;
@@ -39,7 +36,14 @@ export type chatListFragment$key = {
 const node: ReaderFragment = (function(){
 var v0 = [
   "chats"
-];
+],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "_id",
+  "storageKey": null
+};
 return {
   "argumentDefinitions": [
     {
@@ -108,6 +112,13 @@ return {
             {
               "alias": null,
               "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
               "concreteType": "Chat",
               "kind": "LinkedField",
               "name": "node",
@@ -120,6 +131,7 @@ return {
                   "name": "id",
                   "storageKey": null
                 },
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -128,50 +140,15 @@ return {
                   "name": "user",
                   "plural": false,
                   "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "_id",
-                      "storageKey": null
-                    }
+                    (v1/*: any*/)
                   ],
                   "storageKey": null
                 },
                 {
                   "alias": null,
                   "args": null,
-                  "concreteType": "MessageEdge",
-                  "kind": "LinkedField",
-                  "name": "lastMessage",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "Message",
-                      "kind": "LinkedField",
-                      "name": "node",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "createdAt",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "content",
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
-                    }
-                  ],
+                  "kind": "ScalarField",
+                  "name": "updatedAt",
                   "storageKey": null
                 },
                 {
@@ -187,13 +164,6 @@ return {
                   "storageKey": null
                 }
               ],
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "cursor",
               "storageKey": null
             }
           ],
@@ -245,6 +215,6 @@ return {
 };
 })();
 
-(node as any).hash = "826e72f348f8e9831dc082bd33eb9f4b";
+(node as any).hash = "76f96d9f8d2dbf7abcae75867922b41d";
 
 export default node;

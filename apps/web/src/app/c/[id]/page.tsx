@@ -6,5 +6,7 @@ import { useParams } from "next/navigation";
 export default function Chat() {
 	const { id } = useParams();
 
-	return <ChatLayout userId={id as string} />;
+	if (typeof id !== "string") return null;
+
+	return <ChatLayout chatId={id} />;
 }

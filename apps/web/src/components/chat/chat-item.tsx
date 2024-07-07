@@ -1,4 +1,4 @@
-import { useUser } from "@/hooks/useUser";
+import { useTypingStatusSubscription } from "@/hooks/useTypingStatusSubscription";
 import {
 	Button,
 	ContextMenu,
@@ -17,17 +17,16 @@ import {
 import { cn } from "@ui/lib/utils";
 import { MessageCircleX, Trash } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { useFragment, useMutation, useSubscription } from "react-relay";
-import { graphql, type GraphQLSubscriptionConfig } from "relay-runtime";
+import { useState } from "react";
+import { useFragment, useMutation } from "react-relay";
+import { graphql } from "relay-runtime";
 import type { chatItemDeleteMutation } from "../../../__generated__/chatItemDeleteMutation.graphql";
 import type { chatItemFragment$key } from "../../../__generated__/chatItemFragment.graphql";
-import type { chatMessagesTypingStatusSubscription } from "../../../__generated__/chatMessagesTypingStatusSubscription.graphql";
 import { UserAvatar } from "../user/user-avatar";
-import { ChatMessagesTypingStatusSubscription } from "./chat-messages";
 
 const ChatItemFragment = graphql`
   fragment chatItemFragment on Chat {
+		_id
 		id
     name       
     group
@@ -60,8 +59,6 @@ type ChatItemProps = {
 };
 
 export function ChatItem({ chat, selected }: ChatItemProps) {
-	const currUser = useUser();
-
 	const data = useFragment<chatItemFragment$key>(ChatItemFragment, chat);
 
 	const [confirmDeletion, setConfirmDeletion] = useState(false);
@@ -77,26 +74,7 @@ export function ChatItem({ chat, selected }: ChatItemProps) {
 		});
 	};
 
-	const [typing, setTyping] = useState(false);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	const config = useMemo<
-		GraphQLSubscriptionConfig<chatMessagesTypingStatusSubscription>
-	>(
-		() => ({
-			subscription: ChatMessagesTypingStatusSubscription,
-			onNext: (res) => {
-				if (res?.onType && res.onType.userId !== currUser?.id) {
-					setTyping(res.onType?.typing ?? false);
-				}
-			},
-			variables: {
-				input: { chatId: data.id },
-			},
-		}),
-		[data, ChatMessagesTypingStatusSubscription],
-	);
-
-	useSubscription(config);
+	const userTyping = useTypingStatusSubscription({ chatId: data.id });
 
 	const createdAt = new Date(data.lastMessage?.node?.createdAt);
 	const fromToday = createdAt.toDateString() === new Date().toDateString();
@@ -120,7 +98,7 @@ export function ChatItem({ chat, selected }: ChatItemProps) {
 			</ContextMenuContent>
 			<ContextMenuTrigger asChild>
 				<Link
-					href={`/c/${data.user?._id}`}
+					href={`/c/${data.user?._id ?? data._id}`}
 					className={cn(
 						"flex w-full gap-4 rounded-lg px-3 py-2 transition-all hover:dark:bg-neutral-700/50",
 						selected &&
@@ -150,7 +128,11 @@ export function ChatItem({ chat, selected }: ChatItemProps) {
 								selected && "text-white",
 							)}
 						>
-							{typing ? "typing..." : data.lastMessage?.node?.content}
+							{userTyping
+								? data.group
+									? `${userTyping.username} is typing...`
+									: "typing..."
+								: data.lastMessage?.node?.content}
 						</TextEllipsis>
 					</div>
 				</Link>

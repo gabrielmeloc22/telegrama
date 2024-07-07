@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<43cbb114e42202fe5275e777ca016740>>
+ * @generated SignedSource<<faa13db3fcf52cf689e61dd085515ab3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,9 +11,9 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type chatMessagesRefetchQuery$variables = {
+  chatId: string;
   count?: number | null | undefined;
   cursor?: string | null | undefined;
-  userId?: string | null | undefined;
 };
 export type chatMessagesRefetchQuery$data = {
   readonly " $fragmentSpreads": FragmentRefs<"chatMessagesFragment">;
@@ -26,6 +26,11 @@ export type chatMessagesRefetchQuery = {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "chatId"
+  },
+  {
     "defaultValue": 50,
     "kind": "LocalArgument",
     "name": "count"
@@ -34,17 +39,12 @@ var v0 = [
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "cursor"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "userId"
   }
 ],
 v1 = {
   "kind": "Variable",
-  "name": "userId",
-  "variableName": "userId"
+  "name": "chatId",
+  "variableName": "chatId"
 },
 v2 = [
   {
@@ -52,12 +52,12 @@ v2 = [
     "name": "after",
     "variableName": "cursor"
   },
+  (v1/*: any*/),
   {
     "kind": "Variable",
     "name": "first",
     "variableName": "count"
-  },
-  (v1/*: any*/)
+  }
 ],
 v3 = {
   "alias": null,
@@ -75,6 +75,7 @@ return {
     "selections": [
       {
         "args": [
+          (v1/*: any*/),
           {
             "kind": "Variable",
             "name": "count",
@@ -84,8 +85,7 @@ return {
             "kind": "Variable",
             "name": "cursor",
             "variableName": "cursor"
-          },
-          (v1/*: any*/)
+          }
         ],
         "kind": "FragmentSpread",
         "name": "chatMessagesFragment"
@@ -146,6 +146,36 @@ return {
                         "args": null,
                         "kind": "ScalarField",
                         "name": "avatar",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "ChatEdge",
+                    "kind": "LinkedField",
+                    "name": "chat",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Chat",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "group",
+                            "storageKey": null
+                          },
+                          (v3/*: any*/)
+                        ],
                         "storageKey": null
                       }
                     ],
@@ -245,7 +275,7 @@ return {
         "alias": null,
         "args": (v2/*: any*/),
         "filters": [
-          "userId"
+          "chatId"
         ],
         "handle": "connection",
         "key": "ChatMessagesFragment_messages",
@@ -255,16 +285,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fc9dc98cf928c52be366cb2b014b9fb1",
+    "cacheID": "5e08ff1ad4d6e8ac4d30c6d1f2bb699c",
     "id": null,
     "metadata": {},
     "name": "chatMessagesRefetchQuery",
     "operationKind": "query",
-    "text": "query chatMessagesRefetchQuery(\n  $count: Int = 50\n  $cursor: String\n  $userId: String\n) {\n  ...chatMessagesFragment_2PpJm0\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_2PpJm0 on query {\n  messages(userId: $userId, after: $cursor, first: $count) {\n    edges {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatMessagesRefetchQuery(\n  $chatId: String!\n  $count: Int = 50\n  $cursor: String\n) {\n  ...chatMessagesFragment_2v0QF4\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_2v0QF4 on query {\n  messages(chatId: $chatId, after: $cursor, first: $count) {\n    edges {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "61241e9fbf596225d8fe3e259a4dbd70";
+(node as any).hash = "d4d208719c9620430a8297fb07ec51fc";
 
 export default node;

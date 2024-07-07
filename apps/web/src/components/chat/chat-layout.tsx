@@ -2,7 +2,7 @@
 
 import { Dialog, Spinner } from "@ui/components";
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useLazyLoadQuery, useMutation } from "react-relay";
 import { graphql } from "relay-runtime";
 import type { chatLayoutDeleteMessagesMutation } from "../../../__generated__/chatLayoutDeleteMessagesMutation.graphql";
@@ -13,23 +13,22 @@ import { DeleteMessageDialog } from "./chat-message";
 import { ChatMessages } from "./chat-messages";
 
 export const ChatLayoutQuery = graphql`
-	query chatLayoutQuery($userId: String!) {
-		user(userId: $userId) {
+	query chatLayoutQuery($chatId: String!) {
+		user(userId: $chatId) {
 			id
 			username
 			avatar
 		}
-		chat(userId: $userId) {
+		chat(id: $chatId) {
 			id
-			...chatItemFragment
 		}
-		...chatHeaderFragment @arguments(userId: $userId)
-		...chatMessagesFragment @arguments(userId: $userId)
+		...chatHeaderFragment @arguments(chatId: $chatId)
+		...chatMessagesFragment @arguments(chatId: $chatId)
 	}
 	`;
 
 type ChatLayoutProps = {
-	userId: string;
+	chatId: string;
 };
 
 const ChatMessagesDeleteMutation = graphql`
@@ -40,10 +39,10 @@ const ChatMessagesDeleteMutation = graphql`
 	}
 `;
 
-export function ChatLayout({ userId }: ChatLayoutProps) {
+export function ChatLayout({ chatId }: ChatLayoutProps) {
 	const router = useRouter();
 	const data = useLazyLoadQuery<chatLayoutQuery>(ChatLayoutQuery, {
-		userId,
+		chatId,
 	});
 
 	const [selectable, setSelectable] = useState(false);
@@ -53,8 +52,13 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
 	);
 	const [confirmDeletion, setConfirmDeletion] = useState(false);
 
-	if (!data.user) {
-		router.replace("/c");
+	useEffect(() => {
+		if (!data.user && !data.chat) {
+			router.replace("/c");
+		}
+	}, [data, router]);
+
+	if (!data.user && !data.chat) {
 		return null;
 	}
 
@@ -90,7 +94,7 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
 					selectable={selectable}
 					setSelectable={setSelectable}
 					messages={data}
-					chatId={data.chat?.id ?? ""}
+					chatId={data.chat?.id ?? data.user?.id ?? ""}
 					onSelect={(id) => {
 						if (id) {
 							setSelectedMessages((prev) => {
@@ -112,8 +116,7 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
 				/>
 			</Suspense>
 			<ChatComposer
-				userId={userId}
-				chatId={data.chat?.id}
+				chatId={data.chat ? data.chat.id : data.user?.id ?? ""}
 				selectable={selectable}
 				onCancelSelection={() => {
 					setSelectedMessages([]);

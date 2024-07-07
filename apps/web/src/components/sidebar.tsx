@@ -1,8 +1,8 @@
 import {
 	NavigationStack,
+	type NavigationStackApi,
 	NavigationStackItem,
 	Spinner,
-	type NavigationStackApi,
 } from "@ui/components";
 import { Suspense, useState } from "react";
 import { ChatCreate } from "./chat/chat-create";
@@ -18,7 +18,7 @@ export function Sidebar() {
 	return (
 		<aside className="relative flex h-screen w-full flex-col overflow-hidden dark:bg-neutral-800">
 			<NavigationStack setApi={setStackApi}>
-				<NavigationStackItem value={0}>
+				<NavigationStackItem value={0} forceMount>
 					<div className="flex size-full w-full flex-col gap-6 p-2">
 						<Topbar onSearch={setSearch} />
 						<Suspense

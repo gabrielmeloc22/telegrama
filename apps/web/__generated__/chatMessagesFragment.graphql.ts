@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6491da628e27e6c0d7b4f4b4774c2d73>>
+ * @generated SignedSource<<53b53e2c2e6bdb0d53d77b0278e546af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -43,6 +43,11 @@ v1 = {
 return {
   "argumentDefinitions": [
     {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "chatId"
+    },
+    {
       "defaultValue": 50,
       "kind": "LocalArgument",
       "name": "count"
@@ -51,11 +56,6 @@ return {
       "defaultValue": null,
       "kind": "LocalArgument",
       "name": "cursor"
-    },
-    {
-      "defaultValue": null,
-      "kind": "LocalArgument",
-      "name": "userId"
     }
   ],
   "kind": "Fragment",
@@ -88,8 +88,8 @@ return {
       "args": [
         {
           "kind": "Variable",
-          "name": "userId",
-          "variableName": "userId"
+          "name": "chatId",
+          "variableName": "chatId"
         }
       ],
       "concreteType": "MessageConnection",
@@ -185,6 +185,6 @@ return {
 };
 })();
 
-(node as any).hash = "61241e9fbf596225d8fe3e259a4dbd70";
+(node as any).hash = "d4d208719c9620430a8297fb07ec51fc";
 
 export default node;

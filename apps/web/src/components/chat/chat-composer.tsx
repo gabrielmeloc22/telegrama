@@ -23,8 +23,7 @@ const SendTypingStatusMutation = graphql`
 `;
 
 type ChatComposerProps = {
-	userId: string;
-	chatId?: string | null;
+	chatId: string;
 	selectable?: boolean;
 	onCancelSelection?: () => void;
 	onDelete?: () => void;
@@ -34,7 +33,6 @@ export function ChatComposer({
 	onDelete,
 	selectable,
 	onCancelSelection,
-	userId,
 	chatId,
 }: ChatComposerProps) {
 	const currUser = useUser();
@@ -54,7 +52,7 @@ export function ChatComposer({
 	const onSendTypingStatus = (typing: boolean) => {
 		if (chatId && currUser) {
 			sendTypingStatus({
-				variables: { input: { chatId, typing, userId: currUser?.id } },
+				variables: { input: { chatId, typing } },
 			});
 		}
 	};
@@ -63,7 +61,7 @@ export function ChatComposer({
 		if (textbox.current?.innerText.trim()) {
 			sendMessage({
 				variables: {
-					input: { to: userId, content: textbox.current.innerText.trim() },
+					input: { to: chatId, content: textbox.current.innerText.trim() },
 				},
 			});
 			textbox.current.innerText = "";
@@ -115,7 +113,7 @@ export function ChatComposer({
 					<div
 						className="max-h-[calc(20lh+1rem)] min-h-12 w-full overflow-y-auto rounded-lg bg-neutral-800 transition-[height] duration-300"
 						style={{
-							height: (height ?? 0) + 32,
+							height: (height ?? 20) + 32,
 						}}
 					>
 						<div className="flex">

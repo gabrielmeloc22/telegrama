@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9bd1ccf594dbfc52c484b9dc73411eb3>>
+ * @generated SignedSource<<01686b1897b57a156bc63cc2e4374c74>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,18 +13,21 @@ export type onTypeInput = {
   chatId: string;
   clientSubscriptionId?: string | null | undefined;
 };
-export type chatMessagesTypingStatusSubscription$variables = {
+export type useTypingStatusSubscription$variables = {
   input: onTypeInput;
 };
-export type chatMessagesTypingStatusSubscription$data = {
+export type useTypingStatusSubscription$data = {
   readonly onType: {
     readonly typing: boolean | null | undefined;
-    readonly userId: string | null | undefined;
+    readonly user: {
+      readonly id: string;
+      readonly username: string;
+    } | null | undefined;
   } | null | undefined;
 };
-export type chatMessagesTypingStatusSubscription = {
-  response: chatMessagesTypingStatusSubscription$data;
-  variables: chatMessagesTypingStatusSubscription$variables;
+export type useTypingStatusSubscription = {
+  response: useTypingStatusSubscription$data;
+  variables: useTypingStatusSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -60,8 +63,26 @@ v1 = [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "userId",
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ],
@@ -73,7 +94,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "chatMessagesTypingStatusSubscription",
+    "name": "useTypingStatusSubscription",
     "selections": (v1/*: any*/),
     "type": "subscription",
     "abstractKey": null
@@ -82,20 +103,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "chatMessagesTypingStatusSubscription",
+    "name": "useTypingStatusSubscription",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "747fb9dfcf3c2938d21b178f71e2152d",
+    "cacheID": "3cbbea74ac67ced2e2b0641ca87389d9",
     "id": null,
     "metadata": {},
-    "name": "chatMessagesTypingStatusSubscription",
+    "name": "useTypingStatusSubscription",
     "operationKind": "subscription",
-    "text": "subscription chatMessagesTypingStatusSubscription(\n  $input: onTypeInput!\n) {\n  onType(input: $input) {\n    typing\n    userId\n  }\n}\n"
+    "text": "subscription useTypingStatusSubscription(\n  $input: onTypeInput!\n) {\n  onType(input: $input) {\n    typing\n    user {\n      id\n      username\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "02159fb207639f3a41d0115702714c3e";
+(node as any).hash = "9e2e146dacaf1a830d3e72a90aa0f537";
 
 export default node;

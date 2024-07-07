@@ -15,6 +15,7 @@ import {
 } from "@ui/components";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Suspense, useDeferredValue, useState } from "react";
 import { useFragment, useLazyLoadQuery, useMutation } from "react-relay";
 import { graphql } from "relay-runtime";
@@ -207,6 +208,9 @@ const ChatCreateGroupMutation = graphql`
  mutation chatCreateGroupMutation($input: CreateGroupChatInput!){
 	createGroupChat(input: $input) {
 		clientMutationId
+		chat {
+			_id
+		}
 	}
  }
 `;
@@ -216,6 +220,7 @@ function GroupInfoStep({
 	goBack,
 }: Pick<GroupStepProps, "selected" | "goBack">) {
 	const [groupNameValue, setGroupNameValue] = useState<string | null>(null);
+	const router = useRouter();
 
 	const currUser = useUser();
 
@@ -291,6 +296,10 @@ function GroupInfoStep({
 							size="icon"
 							onClick={() => {
 								createChat({
+									onCompleted: (data) => {
+										goBack();
+										router.push(`/c/${data.createGroupChat?.chat?._id}`);
+									},
 									variables: {
 										input: {
 											members: selected.map((e) => e?.node?.id),
@@ -298,7 +307,6 @@ function GroupInfoStep({
 										},
 									},
 								});
-								goBack();
 							}}
 						>
 							<ArrowRight className="size-5" />

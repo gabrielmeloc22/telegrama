@@ -1,5 +1,5 @@
 import { usePaginationFragment } from "react-relay";
-import { graphql, type OperationType } from "relay-runtime";
+import { type OperationType, graphql } from "relay-runtime";
 import type {
 	userListFragment$data,
 	userListFragment$key,
@@ -65,13 +65,12 @@ export function UserList({
 								selectable={multiple}
 								selected={selected?.includes(edge.node.id)}
 								user={edge.node}
-								{...(multiple
+								onClick={() => onSelect(edge)}
+								{...(!multiple
 									? {
-											onClick: () => onSelect(edge),
-										}
-									: {
 											link: true,
-										})}
+										}
+									: {})}
 							/>
 						</li>
 					) : null,

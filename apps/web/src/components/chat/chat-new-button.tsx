@@ -31,11 +31,9 @@ export function ChatNewButton({ className, onNewGroup }: ChatNewButtonProps) {
 				</NavigationStackTrigger>
 			</DropdownMenuContent>
 			<DropdownMenuTrigger asChild>
-				<NavigationStackTrigger navigate="backwards" asChild>
-					<Button size="icon" className={className}>
-						<Edit2 className="size-5" />
-					</Button>
-				</NavigationStackTrigger>
+				<Button size="icon" className={className}>
+					<Edit2 className="size-5" />
+				</Button>
 			</DropdownMenuTrigger>
 		</DropdownMenu>
 	);

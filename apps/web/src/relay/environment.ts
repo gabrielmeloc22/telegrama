@@ -1,15 +1,15 @@
 "use client";
 
-import { createClient, type Sink } from "graphql-sse";
+import { type Sink, createClient } from "graphql-sse";
 import cookies from "nookies";
 import {
 	Environment,
+	type GraphQLResponse,
 	Network,
 	Observable,
 	RecordSource,
-	Store,
-	type GraphQLResponse,
 	type RequestParameters,
+	Store,
 	type Variables,
 } from "relay-runtime";
 
@@ -30,9 +30,6 @@ function fetchOrSubscribe(operation: RequestParameters, variables: Variables) {
 	return Observable.create<GraphQLResponse>((sink) => {
 		// prevent queries from happening on server since sse does not work quite well with react suspense on the server
 		// TODO: investigate this behavior more
-		if (typeof window === "undefined") {
-			sink.complete();
-		}
 
 		if (!operation.text) {
 			return sink.error(new Error("Operation text cannot be empty"));

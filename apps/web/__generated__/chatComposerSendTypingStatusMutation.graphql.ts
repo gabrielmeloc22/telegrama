@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<85068fd092b1f04e246d8345d9696e5e>>
+ * @generated SignedSource<<9ca61f0f0b83e9cef91cab095917dc44>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,6 @@ export type SendTypingStatusInput = {
   chatId: string;
   clientMutationId?: string | null | undefined;
   typing: boolean;
-  userId: string;
 };
 export type chatComposerSendTypingStatusMutation$variables = {
   input: SendTypingStatusInput;
