@@ -76,7 +76,9 @@ const NavigationStack = React.forwardRef<
 
 	const reset = useCallback(() => {
 		if (tab === 0) return;
+		lastTab.current = tab;
 
+		setNavigating(true);
 		setDirection("backwards");
 		setTab(0);
 	}, [tab]);
@@ -154,7 +156,7 @@ const NavigationStackItem = React.forwardRef<
 	const selected = value === tab;
 
 	return (
-		(selected || (navigating && lastTab === value)) && (
+		(forceMount || selected || (navigating && lastTab === value)) && (
 			<section
 				// biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
 				tabIndex={0}
