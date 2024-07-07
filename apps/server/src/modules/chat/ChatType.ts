@@ -10,6 +10,7 @@ import {
 	GraphQLString,
 } from "graphql";
 import { connectionArgs, globalIdField, toGlobalId } from "graphql-relay";
+import { DateTimeResolver } from "graphql-scalars";
 import { MessageLoader } from "../message/MessageLoader";
 import { MessageConnection } from "../message/MessageType";
 import { addTypeLoader, nodeInterface } from "../node/register";
@@ -34,13 +35,12 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 			type: UserType,
 			description: "The recipient when not a group chat",
 			resolve: (chat, _, ctx) => {
-				return (
-					chat.users.length <= 2 &&
-					UserModel.findById(
-						chat.users.find(({ _id }) => !_id.equals(ctx.user?.id)) ??
-							chat.users[0],
-					)
-				);
+				return !chat.createdBy
+					? UserModel.findById(
+							chat.users.find(({ _id }) => !_id.equals(ctx.user?.id)) ??
+								chat.users[0],
+						)
+					: null;
 			},
 		},
 		name: {
@@ -67,6 +67,8 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 					? await MessageLoader.load(ctx, chat.lastMessage)
 					: null;
 
+				if (!node) return null;
+
 				return {
 					cursor: toGlobalId("Message", node?.id),
 					node,
@@ -75,7 +77,7 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 		},
 		group: {
 			type: GraphQLBoolean,
-			resolve: (chat) => chat.users.length > 2,
+			resolve: (chat) => !!chat.createdBy,
 		},
 		users: {
 			description: "Group chat users",
@@ -87,6 +89,12 @@ export const ChatType: GraphQLObjectType<Chat, Context> = new GraphQLObjectType<
 					withFilter(args, { _id_in: chat.users }),
 				);
 			},
+		},
+		updatedAt: {
+			type: DateTimeResolver,
+		},
+		createdAt: {
+			type: DateTimeResolver,
 		},
 		messages: {
 			type: MessageConnection.connectionType,

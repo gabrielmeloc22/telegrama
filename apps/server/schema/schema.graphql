@@ -25,11 +25,8 @@ type query {
     before: String
     last: Int
 
-    """The chat id"""
-    chatId: String
-
-    """The user id for individual chats"""
-    userId: String
+    """Either the chat id or an user id for individual chats"""
+    chatId: String!
   ): MessageConnection!
 
   """All users"""
@@ -60,11 +57,8 @@ type query {
 
   """A chat"""
   chat(
-    """Chat id for use with group chats"""
-    chatId: String
-
-    """User id for use with individual chats"""
-    userId: String
+    """Either the chat id or an user id for individual chats"""
+    id: String!
   ): Chat
 }
 
@@ -215,6 +209,8 @@ type Chat implements Node {
     """Returns the last n items from the list."""
     last: Int
   ): UserConnection
+  updatedAt: DateTime
+  createdAt: DateTime
   messages(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -360,7 +356,6 @@ type SendTypingStatusPayload {
 input SendTypingStatusInput {
   chatId: String!
   typing: Boolean!
-  userId: String!
   clientMutationId: String
 }
 
@@ -388,6 +383,7 @@ input DeleteChatInput {
   chatId: String!
   clientMutationId: String
 }
+
 type CreateGroupChatPayload {
   """The created group chat"""
   chat: Chat
@@ -423,7 +419,7 @@ input MessageInput {
 
 type onTypePayload {
   typing: Boolean
-  userId: String
+  user: User
   clientSubscriptionId: String
 }
 

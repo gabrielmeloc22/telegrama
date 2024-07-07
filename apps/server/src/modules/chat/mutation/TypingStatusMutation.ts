@@ -5,7 +5,6 @@ import { fromGlobalId, mutationWithClientMutationId } from "graphql-relay";
 import { ChatLoader } from "../ChatLoader";
 
 type TypingStatusInput = {
-	userId: string;
 	chatId: string;
 	typing: boolean;
 };
@@ -19,20 +18,20 @@ export const SendTypingStatusMutation = mutationWithClientMutationId<
 	inputFields: {
 		chatId: { type: new GraphQLNonNull(GraphQLString) },
 		typing: { type: new GraphQLNonNull(GraphQLBoolean) },
-		userId: { type: new GraphQLNonNull(GraphQLString) },
 	},
 	outputFields: {},
-	mutateAndGetPayload: async ({ userId, chatId, typing }, ctx) => {
+	mutateAndGetPayload: async ({ chatId, typing }, ctx) => {
 		const chat = await ChatLoader.load(ctx, fromGlobalId(chatId).id);
 
 		if (!chat) {
 			throw new Error("chat not found");
 		}
 
-		await pubSub.publish(events.chat.typingStatus, {
+		await pubSub.publish(events.chat.typing, {
+			topic: "CHAT:TYPING",
 			typing,
 			chatId,
-			userId,
+			userId: ctx.user?._id,
 		});
 
 		return null;

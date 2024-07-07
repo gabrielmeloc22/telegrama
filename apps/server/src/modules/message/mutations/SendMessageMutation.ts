@@ -1,12 +1,16 @@
 import type { Context } from "@/context";
 import { ChatLoader } from "@/modules/chat/ChatLoader";
-import { ChatModel, type Chat } from "@/modules/chat/ChatModel";
+import { type Chat, ChatModel } from "@/modules/chat/ChatModel";
 import { ChatConnection } from "@/modules/chat/ChatType";
+import { getChat } from "@/modules/chat/util/getChat";
 import { UserModel } from "@/modules/user/UserModel";
 import { events, pubSub } from "@/pubsub";
-import { getObjectId } from "@entria/graphql-mongo-helpers";
 import { GraphQLNonNull, GraphQLString } from "graphql";
-import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
+import {
+	fromGlobalId,
+	mutationWithClientMutationId,
+	toGlobalId,
+} from "graphql-relay";
 import { GraphQLNonEmptyString } from "graphql-scalars";
 import { startSession } from "mongoose";
 import { MessageLoader } from "../MessageLoader";
@@ -58,20 +62,15 @@ export const SendMessage = mutationWithClientMutationId<
 			},
 		},
 	},
-	mutateAndGetPayload: async ({ content, to }, { user }) => {
-		if (!user) {
+	mutateAndGetPayload: async ({ content, to }, ctx) => {
+		if (!ctx.user) {
 			throw new Error("Sender not specified");
 		}
 
-		const toId = to;
-		const selfMessage = toId === user.id.toString();
+		const toId = fromGlobalId(to).id;
+		const selfMessage = toId === ctx.user.id.toString();
 
-		let chat = await ChatModel.findOne({
-			users: {
-				$size: selfMessage ? 1 : 2,
-				$all: selfMessage ? [user.id] : [getObjectId(toId), user.id],
-			},
-		});
+		let chat = await getChat(ctx, { chatId: toId });
 
 		const recipient = await UserModel.findById(toId);
 
@@ -84,13 +83,13 @@ export const SendMessage = mutationWithClientMutationId<
 		if (!chat) {
 			newChat = true;
 			chat = new ChatModel({
-				users: selfMessage ? [user.id] : [recipient?.id, user.id],
+				users: selfMessage ? [ctx.user.id] : [recipient?.id, ctx.user.id],
 			});
 		}
 
 		const message = new MessageModel({
 			content,
-			from: user,
+			from: ctx.user,
 		});
 
 		const session = await startSession();
@@ -104,11 +103,11 @@ export const SendMessage = mutationWithClientMutationId<
 		} finally {
 			await session.endSession();
 		}
+
 		await pubSub.publish(events.message.new, {
 			topic: events.message.new,
 			newMessageId: message.id,
 			chatId: chat.id,
-			userId: recipient?.id,
 			newChat,
 		} satisfies MessageSubscription);
 

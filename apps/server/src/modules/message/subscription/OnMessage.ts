@@ -22,7 +22,6 @@ export type MessageSubscription = {
 	deletedMessageIds?: string[];
 	chatMembers?: string[];
 	chatId: string;
-	userId?: string;
 	newChat?: boolean;
 };
 
@@ -32,10 +31,18 @@ export const MessageSubscription = subscriptionWithClientId<
 >({
 	name: "Message",
 	outputFields: {
-		newChat: { type: GraphQLBoolean, resolve: (payload) => payload.newChat },
+		newChat: {
+			type: GraphQLBoolean,
+			resolve: (payload) => !!payload.newChat || payload.topic === "CHAT:NEW",
+		},
 		chat: {
 			type: ChatType,
-			resolve: async (payload, _, ctx) => ChatLoader.load(ctx, payload.chatId),
+			resolve: async (payload, _, ctx) => {
+				// because of http2 the connection is open for long periods and we need to clear the dataloader cache
+				ChatLoader.clearCache(ctx, payload.chatId);
+
+				return ChatLoader.load(ctx, payload.chatId);
+			},
 		},
 		deletedChat: {
 			type: GraphQLID,
@@ -74,20 +81,19 @@ export const MessageSubscription = subscriptionWithClientId<
 					events.message.edit,
 					events.message.delete,
 					events.chat.delete,
+					events.chat.new,
 				]),
 			async (payload: MessageSubscription) => {
-				switch (payload.topic) {
-					case "CHAT:DELETE":
-						return !!payload.chatMembers?.includes(ctx.user?.id.toString());
-
-					default: {
-						const chat = await ChatModel.findOne({
-							_id: payload.chatId,
-							users: ctx.user?.id,
-						});
-						return !!chat;
-					}
+				if (payload.topic === "CHAT:DELETE" && payload.chatMembers) {
+					return payload.chatMembers.includes(ctx.user?.id.toString());
 				}
+
+				const chat = await ChatModel.findOne({
+					_id: payload.chatId,
+					users: ctx.user?.id,
+				});
+
+				return !!chat;
 			},
 		);
 		return resolver(null, input, ctx);

@@ -1,38 +1,25 @@
 import type { Context } from "@/context";
 import { ChatModel } from "../ChatModel";
 
-export async function getChat(
-	ctx: Context,
-	args: { userId?: string; chatId?: string },
-) {
-	let chatId = "";
+export async function getChat(ctx: Context, args: { chatId: string }) {
+	const id = args.chatId;
+	const selfChat = ctx.user?.id.toString() === id;
 
-	if (args.chatId) {
-		const id = args.chatId;
-
-		const userInChat = await ChatModel.findOne({
-			_id: id,
-			users: { $elemMatch: { $eq: ctx.user?.id } },
-		});
-
-		if (!userInChat) {
-			throw new Error("Not authorized");
-		}
-		chatId = id;
-	}
-
-	if (args.userId) {
-		const id = args.userId;
-		const selfChat = ctx.user?.id.toString() === id;
-
-		const chat = await ChatModel.findOne({
-			users: {
-				$size: selfChat ? 1 : 2,
-				$all: selfChat ? [ctx.user?.id] : [ctx.user?.id, id],
+	const chat = await ChatModel.findOne({
+		$or: [
+			{
+				_id: id,
+				users: ctx.user?.id,
 			},
-		});
-		chatId = chat?.id;
-	}
+			{
+				createdBy: null, // TODO: use a db flag to know when a chat is a group
+				users: {
+					$size: selfChat ? 1 : 2,
+					$all: selfChat ? [ctx.user?.id] : [ctx.user?.id, id],
+				},
+			},
+		],
+	});
 
-	return chatId;
+	return chat;
 }

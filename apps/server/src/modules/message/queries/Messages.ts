@@ -19,22 +19,21 @@ export const Messages: GraphQLFieldConfig<
 	description: "All messages",
 	args: {
 		...connectionArgs,
-		chatId: { description: "The chat id", type: GraphQLString },
-		userId: {
-			description: "The user id for individual chats",
-			type: GraphQLString,
+		chatId: {
+			description: "Either the chat id or an user id for individual chats",
+			type: new GraphQLNonNull(GraphQLString),
 		},
 	},
 	resolve: async (_, args, ctx) => {
 		if (!ctx.user) {
 			throw new Error("User not authenticated");
 		}
-		const chatId = await getChat(ctx, args);
+		const chat = await getChat(ctx, args);
 
 		return await MessageLoader.loadAll(
 			ctx,
 			withFilter(args, {
-				chat: chatId,
+				chat: chat?.id,
 			}),
 		);
 	},

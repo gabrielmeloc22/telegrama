@@ -27,6 +27,12 @@ export const Users: GraphQLFieldConfig<
 			return new Error("Not authorized");
 		}
 
-		return UserLoader.loadAll(context, withFilter(args, filter));
+		return UserLoader.loadAll(
+			context,
+			withFilter(args, {
+				...filter,
+				_id_ne: context.user.id,
+			}),
+		);
 	},
 };

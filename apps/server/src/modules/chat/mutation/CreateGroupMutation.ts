@@ -68,7 +68,7 @@ export const CreateGroupChatMutation = mutationWithClientMutationId<
 
 		await pubSub.publish(events.chat.new, {
 			topic: events.chat.new,
-			chatId: chat?.id,
+			chatId: chat.id,
 		} satisfies MessageSubscription);
 
 		return { chatId: chat.id };

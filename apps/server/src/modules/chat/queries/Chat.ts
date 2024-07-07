@@ -1,32 +1,31 @@
 import type { Context } from "@/context";
-import { GraphQLString, type GraphQLFieldConfig } from "graphql";
+import {
+	GraphQLNonNull,
+	GraphQLString,
+	type GraphQLFieldConfig,
+} from "graphql";
 import { ChatLoader } from "../ChatLoader";
 import { ChatType } from "../ChatType";
 import { getChat } from "../util/getChat";
 
 type ChatQueryArguments = {
-	chatId?: string;
-	userId?: string;
+	id: string;
 };
 
 export const Chat: GraphQLFieldConfig<unknown, Context, ChatQueryArguments> = {
 	type: ChatType,
 	description: "A chat",
 	args: {
-		chatId: {
-			description: "Chat id for use with group chats",
-			type: GraphQLString,
-		},
-		userId: {
-			description: "User id for use with individual chats",
-			type: GraphQLString,
+		id: {
+			description: "Either the chat id or an user id for individual chats",
+			type: new GraphQLNonNull(GraphQLString),
 		},
 	},
 	resolve: async (_, args, ctx) => {
-		const chatId = await getChat(ctx, args);
+		const chat = await getChat(ctx, { chatId: args.id });
 
-		if (!chatId) return null;
+		if (!chat) return null;
 
-		return ChatLoader.load(ctx, chatId);
+		return ChatLoader.load(ctx, chat.id);
 	},
 };

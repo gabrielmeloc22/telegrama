@@ -1,4 +1,6 @@
 import type { Context } from "@/context";
+import { UserLoader } from "@/modules/user/UserLoader";
+import { UserType } from "@/modules/user/UserType";
 import { events, pubSub } from "@/pubsub";
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from "graphql";
 import { subscriptionWithClientId } from "graphql-relay-subscription";
@@ -27,11 +29,14 @@ export const OnTypeSubscription = subscriptionWithClientId<
 	},
 	outputFields: {
 		typing: { type: GraphQLBoolean, resolve: (payload) => payload.typing },
-		userId: { type: GraphQLString, resolve: (payload) => payload.userId },
+		user: {
+			type: UserType,
+			resolve: (payload, _, ctx) => UserLoader.load(ctx, payload.userId),
+		},
 	},
 	subscribe: (input, ctx) => {
 		const resolver = withFilter(
-			() => pubSub.asyncIterator(events.chat.typingStatus),
+			() => pubSub.asyncIterator(events.chat.typing),
 			(payload: TypingStatusPayload, input: TypingStatusInput) => {
 				if (input.chatId) {
 					return input.chatId === payload.chatId;

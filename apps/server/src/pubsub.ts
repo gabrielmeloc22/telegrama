@@ -1,4 +1,5 @@
 import { RedisPubSub } from "graphql-redis-subscriptions";
+import Redis from "ioredis";
 
 export const events = {
 	message: {
@@ -7,7 +8,7 @@ export const events = {
 		edit: "MESSAGE:EDIT",
 	},
 	chat: {
-		typingStatus: "CHAT:TYPING",
+		typing: "CHAT:TYPING",
 		delete: "CHAT:DELETE",
 		new: "CHAT:NEW",
 	},
