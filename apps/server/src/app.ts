@@ -10,13 +10,13 @@ import { schema } from "./schemas";
 
 const app = new Koa();
 
+app.use(cors());
 app.use(bodyParser());
 app.on("error", (error) => {
 	console.log("App error:", error);
 });
 
 app.use(logger());
-app.use(cors());
 app.use(
 	mount(
 		"/graphql/stream",

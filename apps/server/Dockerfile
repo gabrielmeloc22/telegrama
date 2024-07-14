@@ -1,7 +1,7 @@
 ARG NODE_VERSION=20
 
 # Alpine image
-FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS alpine
+FROM node:${NODE_VERSION}-alpine AS alpine
 RUN apk update
 RUN apk add --no-cache libc6-compat
 
@@ -48,7 +48,7 @@ WORKDIR /app
 COPY --from=builder --chown=nodejs:nodejs /app .
 WORKDIR /app/apps/server
 
-ARG PORT=8080
+ARG PORT=4000
 ENV PORT=${PORT}
 ENV NODE_ENV=production
 EXPOSE ${PORT}
