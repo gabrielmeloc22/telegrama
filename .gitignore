@@ -18,6 +18,9 @@ coverage
 # Turbo
 .turbo
 
+# Terraform
+.terraform
+
 # Vercel
 .vercel
 

@@ -15,6 +15,6 @@ export const events = {
 } as const;
 
 export const pubSub = new RedisPubSub({
-	publisher: new Redis({ lazyConnect: true }),
-	subscriber: new Redis({ lazyConnect: true }),
+	publisher: new Redis(process.env.REDIS_URL, { lazyConnect: true }),
+	subscriber: new Redis(process.env.REDIS_URL, { lazyConnect: true }),
 });

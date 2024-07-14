@@ -3,13 +3,14 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"build": "pnpm generate:schema && tsc",
-		"dev": "pnpm generate:schema && tsx watch --require dotenv/config  src/index.ts",
+		"build": "pnpm generate:schema && tsup src/index.ts",
+		"start": "node dist/index.js",
+		"dev": "pnpm generate:schema && cp ./schema/schema.graphql ../web/data && tsx watch --require dotenv/config  src/index.ts",
 		"format": "pnpm biome format ./src --write",
 		"lint": "pnpm biome lint ./src",
 		"check": "pnpm biome check --apply ./src",
 		"type-check": "tsc --noEmit",
-		"generate:schema": "tsx ./scripts/generateSchema.ts && cp ./schema/schema.graphql ../web/data"
+		"generate:schema": "tsx ./scripts/generateSchema.ts"
 	},
 	"license": "ISC",
 	"dependencies": {
@@ -19,9 +20,9 @@
 		"@koa/cors": "^5.0.0",
 		"@koa/router": "^12.0.1",
 		"@types/koa-mount": "^4.0.5",
+		"@types/regex-escape": "^3.4.1",
 		"bcrypt": "^5.1.1",
 		"dotenv": "^16.4.5",
-		"escape-string-regexp": "^5.0.0",
 		"graphql": "^16.8.2",
 		"graphql-playground-middleware-koa": "^1.6.22",
 		"graphql-redis-subscriptions": "^2.6.1",
@@ -35,7 +36,9 @@
 		"koa": "^2.15.3",
 		"koa-logger": "^3.2.1",
 		"koa-mount": "^4.0.0",
-		"mongoose": "^8.4.3"
+		"mongoose": "^8.4.3",
+		"regex-escape": "^3.4.10",
+		"tsup": "^8.1.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.1",
@@ -46,7 +49,6 @@
 		"@types/koa__cors": "^5.0.0",
 		"@types/koa__router": "^12.0.4",
 		"@types/node": "^20.14.6",
-		"@types/ws": "^8.5.10",
 		"tsx": "^4.15.6",
 		"typescript": "^5.4.5"
 	}

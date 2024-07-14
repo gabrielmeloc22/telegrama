@@ -3,8 +3,8 @@ import {
 	FILTER_CONDITION_TYPE,
 	createLoader,
 } from "@entria/graphql-mongo-helpers";
-import escapeStringRegexp from "escape-string-regexp";
 import { GraphQLInputObjectType, GraphQLString } from "graphql";
+import escapeStringRegexp from "regex-escape";
 import { UserModel } from "./UserModel";
 
 const userFilterMapping = {

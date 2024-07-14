@@ -1,4 +1,19 @@
 services:
+  server:
+    container_name: telegrama_server
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    depends_on:
+      - mongo
+      - redis
+    env_file:
+      - apps/server/.env
+    ports:
+      - 443:433
+    networks:
+      - app_network
+
   mongo:
     image: mongo:latest
     ports:
@@ -6,9 +21,16 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1234
+    networks:
+      - app_network
 
   redis:
     image: redis:6.2-alpine
     restart: always
     ports:
       - 6379:6379
+    networks:
+      - app_network
+
+networks:
+  app_network:

@@ -1,13 +1,13 @@
 import type { Context } from "@/context";
 import { UserModel } from "@/modules/user/UserModel";
 import { withFilter } from "@entria/graphql-mongo-helpers";
-import escapeStringRegexp from "escape-string-regexp";
 import {
+	type GraphQLFieldConfig,
 	GraphQLNonNull,
 	GraphQLString,
-	type GraphQLFieldConfig,
 } from "graphql";
-import { connectionArgs, type ConnectionArguments } from "graphql-relay";
+import { type ConnectionArguments, connectionArgs } from "graphql-relay";
+import escapeStringRegexp from "regex-escape";
 import { ChatLoader } from "../ChatLoader";
 import { ChatConnection } from "../ChatType";
 
