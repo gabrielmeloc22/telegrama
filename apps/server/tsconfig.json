@@ -8,9 +8,9 @@
 		"outDir": "./dist",
 		"lib": ["ESNext", "ESNext.AsyncIterable"],
 		"target": "es2020",
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
+		"module": "CommonJS",
 		"esModuleInterop": true,
+		"sourceMap": true,
 		"noEmit": true,
 		"strict": true,
 		"types": ["node"]

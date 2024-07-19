@@ -1,6 +1,6 @@
 "use client";
 
-import { type Sink, createClient } from "graphql-sse";
+import { type Sink, createClient } from "graphql-ws";
 import cookies from "nookies";
 import {
 	Environment,
@@ -15,7 +15,7 @@ import {
 
 const subscriptionsClient = createClient({
 	url: process.env.NEXT_PUBLIC_API_URL,
-	headers: () => {
+	connectionParams: () => {
 		const token = cookies.get().token;
 
 		if (!token) return {};
@@ -26,15 +26,14 @@ const subscriptionsClient = createClient({
 	},
 });
 
-function fetchOrSubscribe(operation: RequestParameters, variables: Variables) {
-	return Observable.create<GraphQLResponse>((sink) => {
-		// prevent queries from happening on server since sse does not work quite well with react suspense on the server
-		// TODO: investigate this behavior more
-
+function fetchOrSubscribe(
+	operation: RequestParameters,
+	variables: Variables,
+): Observable<GraphQLResponse> {
+	return Observable.create((sink) => {
 		if (!operation.text) {
 			return sink.error(new Error("Operation text cannot be empty"));
 		}
-
 		return subscriptionsClient.subscribe(
 			{
 				operationName: operation.name,

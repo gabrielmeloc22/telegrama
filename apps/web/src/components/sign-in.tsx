@@ -50,14 +50,15 @@ export function SignIn() {
 			variables: {
 				input: { username: data.credential, password: data.password },
 			},
-			updater: (store, data) => {
-				if (data?.login?.token) {
-					store.invalidateStore();
-				}
-			},
+			// updater: (store, data) => {
+			// 	if (data?.login?.token) {
+			// 		store.invalidateStore();
+			// 	}
+			// },
 			onCompleted: (data, errors) => {
 				if (data.login?.token) {
 					login(data.login.token);
+					location.reload();
 				}
 				if (errors) {
 					// TODO: improve error handling with server codes

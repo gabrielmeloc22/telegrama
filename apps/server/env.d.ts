@@ -2,6 +2,7 @@ declare namespace NodeJS {
 	export interface ProcessEnv {
 		NODE_ENV: "development" | "production";
 		PORT?: string;
+		WS_PORT?: string;
 		DATABASE_URL: string;
 		REDIS_URL: string;
 		JWT_SECRET: string;

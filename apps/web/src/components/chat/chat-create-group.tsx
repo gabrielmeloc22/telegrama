@@ -155,7 +155,7 @@ function GroupMembersStep({ goBack, selected, setSelected }: GroupStepProps) {
 											user={m?.node}
 											onSelect={() =>
 												setSelected((prev) =>
-													prev.filter((id) => m?.node?.id !== id),
+													prev.filter((id) => m?.node?.id !== id?.node?.id),
 												)
 											}
 										/>

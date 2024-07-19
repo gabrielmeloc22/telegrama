@@ -148,7 +148,9 @@ export function ChatMessage({
 							<div
 								className={cn(
 									"mx-[22.5%] flex gap-1",
-									!sentByMe && "ml-[calc(22.5%-32px)]",
+									!sentByMe &&
+										data.chat?.node?.group &&
+										"ml-[calc(22.5%-32px)]",
 									selectable && "select-none",
 								)}
 							>
@@ -160,7 +162,7 @@ export function ChatMessage({
 								)}
 								<div
 									className={cn(
-										"flex size-fit max-w-[60%] flex-col whitespace-pre-wrap rounded-xl px-2 py-0.5 dark:bg-neutral-800",
+										"flex size-fit max-w-[80%] flex-col whitespace-pre-wrap rounded-xl px-2 py-0.5 lg:max-w-[60%] dark:bg-neutral-800",
 										sentByMe && "ml-auto bg-primary dark:bg-primary",
 										showUserAvatar && !firstOfSequence && "ml-9",
 									)}

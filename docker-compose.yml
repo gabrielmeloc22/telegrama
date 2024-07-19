@@ -1,18 +1,18 @@
 services:
-  server:
-    container_name: telegrama_server
-    build:
-      context: .
-      dockerfile: ./apps/server/Dockerfile
-    depends_on:
-      - mongo
-      - redis
-    env_file:
-      - apps/server/.env
-    ports:
-      - 443:433
-    networks:
-      - app_network
+  # server:
+  #   container_name: telegrama_server
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/server/Dockerfile
+  #   depends_on:
+  #     - mongo
+  #     - redis
+  #   env_file:
+  #     - apps/server/.env
+  #   ports:
+  #     - 443:433
+  #   networks:
+  #     - app_network
 
   mongo:
     image: mongo:latest
