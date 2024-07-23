@@ -48,7 +48,7 @@ WORKDIR /app
 COPY --from=builder --chown=nodejs:nodejs /app .
 WORKDIR /app/apps/server
 
-ARG PORT=4000
+ARG PORT=8080
 ENV PORT=${PORT}
 ENV NODE_ENV=production
 EXPOSE ${PORT}
