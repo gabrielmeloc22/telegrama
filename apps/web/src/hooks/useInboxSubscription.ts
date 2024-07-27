@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { useSubscription } from "react-relay";
@@ -9,6 +8,7 @@ import {
 	graphql,
 } from "relay-runtime";
 import type { useInboxSubscription as useInboxSubscriptionType } from "../../__generated__/useInboxSubscription.graphql";
+import { useUser } from "./useUser";
 
 const UseInboxSubscription = graphql`
   subscription useInboxSubscription($input: MessageInput!, $chatConnections: [ID!]!) {
@@ -17,10 +17,10 @@ const UseInboxSubscription = graphql`
 			deletedMessages
 			deletedChat 
 			chat @appendNode(connections: $chatConnections, edgeTypeName: "ChatEdge") {
-				_id
+				id
 				group
 				user {
-					_id
+					id
 				}
 				updatedAt
 				...chatItemFragment
@@ -29,7 +29,7 @@ const UseInboxSubscription = graphql`
 				node {
 					id
 					from {
-						_id
+						id
 					}
 					...chatMessageFragment
         }
@@ -40,6 +40,8 @@ const UseInboxSubscription = graphql`
 
 const useInboxSubscription = () => {
 	const router = useRouter();
+	const currUser = useUser();
+
 	const chatConnectionID = ConnectionHandler.getConnectionID(
 		"root",
 		"ChatListFragment_chats",
@@ -62,7 +64,7 @@ const useInboxSubscription = () => {
 					store.getRoot(),
 					"ChatMessagesFragment_messages",
 					{
-						chatId: chat?.group ? chat?._id : chat?.user?._id,
+						chatId: chat?.group ? chat?.id : chat?.user?.id,
 					},
 				);
 
@@ -72,7 +74,11 @@ const useInboxSubscription = () => {
 					}
 				}
 
-				if (newMessage) {
+				// Only handle incoming messages since out coming messages are handled on mutations
+				if (
+					newMessage &&
+					data.onMessage.newMessage.node.from.id !== currUser?.id
+				) {
 					const message = store
 						.getRootField("onMessage")
 						.getLinkedRecord("newMessage");

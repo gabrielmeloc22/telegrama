@@ -2,18 +2,18 @@ import type { Context } from "@/context";
 import { getChat } from "@/modules/chat/util/getChat";
 import { connectionArgs, withFilter } from "@entria/graphql-mongo-helpers";
 import {
+	type GraphQLFieldConfig,
 	GraphQLNonNull,
 	GraphQLString,
-	type GraphQLFieldConfig,
 } from "graphql";
-import type { ConnectionArguments } from "graphql-relay";
+import { type ConnectionArguments, fromGlobalId } from "graphql-relay";
 import { MessageLoader } from "../MessageLoader";
 import { MessageConnection } from "../MessageType";
 
 export const Messages: GraphQLFieldConfig<
 	unknown,
 	Context,
-	ConnectionArguments & { chatId: string; userId: string }
+	ConnectionArguments & { chatId: string }
 > = {
 	type: new GraphQLNonNull(MessageConnection.connectionType),
 	description: "All messages",
@@ -28,7 +28,10 @@ export const Messages: GraphQLFieldConfig<
 		if (!ctx.user) {
 			throw new Error("User not authenticated");
 		}
-		const chat = await getChat(ctx, args);
+
+		const chat = await getChat(ctx, {
+			chatId: fromGlobalId(args.chatId).id,
+		});
 
 		return await MessageLoader.loadAll(
 			ctx,

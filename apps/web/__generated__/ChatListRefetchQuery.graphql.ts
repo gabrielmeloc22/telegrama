@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1fd69eedb8c7b8e58310562fa2c1da70>>
+ * @generated SignedSource<<8dcace32d92ac4063255eb4d36b9d667>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -292,12 +292,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9d8a0e8c11a4d726b57a08199ced30cd",
+    "cacheID": "0a8057ab053bfddee88bdd1fff6fe3c7",
     "id": null,
     "metadata": {},
     "name": "ChatListRefetchQuery",
     "operationKind": "query",
-    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  _id\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

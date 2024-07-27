@@ -1,4 +1,5 @@
 import { Checkbox } from "@ui/components";
+import base64url from "base64-url";
 import Link from "next/link";
 import { useFragment } from "react-relay";
 import { graphql } from "relay-runtime";
@@ -7,7 +8,7 @@ import { UserAvatar } from "./user-avatar";
 
 export const UserItemFragment = graphql`
   fragment userItemFragment on User {
-    _id
+		id
     username
     avatar
   }
@@ -36,7 +37,7 @@ export function UserItem({
 			onClick={onClick}
 			className="flex w-full cursor-pointer items-center gap-4 rounded-md px-4 py-2 transition-colors dark:hover:bg-neutral-700/50"
 			{...(Component === Link
-				? { href: `/c/${data._id}` }
+				? { href: `/c/${base64url.escape(data.id)}` }
 				: ({} as { href: string }))}
 		>
 			{selectable && <Checkbox checked={selected} />}

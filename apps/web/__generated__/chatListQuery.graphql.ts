@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<10729304393ec909c76bf6e41c1ebf3a>>
+ * @generated SignedSource<<5f04f175fea14f82239ce7e5966d571c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -265,12 +265,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a48b46a07f8388366cedfb9c116ba52e",
+    "cacheID": "9245e2a718a8188788288823808a768c",
     "id": null,
     "metadata": {},
     "name": "chatListQuery",
     "operationKind": "query",
-    "text": "query chatListQuery(\n  $search: String\n) {\n  ...chatListFragment_40zwac\n}\n\nfragment chatItemFragment on Chat {\n  _id\n  id\n  name\n  group\n  user {\n    _id\n    username\n    avatar\n    id\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_40zwac on query {\n  chats(first: 10, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatListQuery(\n  $search: String\n) {\n  ...chatListFragment_40zwac\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_40zwac on query {\n  chats(first: 10, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

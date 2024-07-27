@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<944544796c33748b0f3bb7d90a91f744>>
+ * @generated SignedSource<<922f9041828ca52758878e086a8265fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -152,13 +152,6 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "_id",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
                     "name": "__typename",
                     "storageKey": null
                   }
@@ -210,12 +203,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3b58385d2c50bc9e128f0e92e8b787e1",
+    "cacheID": "9f785d0a96a07cb383a37404dd943f24",
     "id": null,
     "metadata": {},
     "name": "userSearchRefetchQuery",
     "operationKind": "query",
-    "text": "query userSearchRefetchQuery(\n  $count: Int = 20\n  $cursor: String\n  $filter: UserFilter\n) {\n  ...userListFragment_3KQYpM\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListFragment_3KQYpM on query {\n  users(filter: $filter, after: $cursor, first: $count) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query userSearchRefetchQuery(\n  $count: Int = 20\n  $cursor: String\n  $filter: UserFilter\n) {\n  ...userListFragment_3KQYpM\n}\n\nfragment userItemFragment on User {\n  id\n  username\n  avatar\n}\n\nfragment userListFragment_3KQYpM on query {\n  users(filter: $filter, after: $cursor, first: $count) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

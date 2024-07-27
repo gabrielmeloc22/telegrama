@@ -1,9 +1,10 @@
 import type { Context } from "@/context";
 import {
+	type GraphQLFieldConfig,
 	GraphQLNonNull,
 	GraphQLString,
-	type GraphQLFieldConfig,
 } from "graphql";
+import { fromGlobalId } from "graphql-relay";
 import { ChatLoader } from "../ChatLoader";
 import { ChatType } from "../ChatType";
 import { getChat } from "../util/getChat";
@@ -22,7 +23,9 @@ export const Chat: GraphQLFieldConfig<unknown, Context, ChatQueryArguments> = {
 		},
 	},
 	resolve: async (_, args, ctx) => {
-		const chat = await getChat(ctx, { chatId: args.id });
+		if (!args.id) return null;
+
+		const chat = await getChat(ctx, { chatId: fromGlobalId(args.id).id });
 
 		if (!chat) return null;
 

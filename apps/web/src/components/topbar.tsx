@@ -7,9 +7,9 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@ui/components";
+import base64url from "base64-url";
 import { Bookmark, LogOut, Menu, Settings } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SearchField } from "./search-field";
 
 type TopBarProps = {
@@ -18,7 +18,6 @@ type TopBarProps = {
 
 export function Topbar({ onSearch }: TopBarProps) {
 	const user = useUser();
-	const router = useRouter();
 
 	return (
 		<nav className="flex items-center gap-2 px-2">
@@ -28,7 +27,7 @@ export function Topbar({ onSearch }: TopBarProps) {
 						<Settings className="size-5" />
 						Settings
 					</DropdownMenuItem>
-					<Link href={`/c/${user?._id}`}>
+					<Link href={`/c/${base64url.escape(user?.id ?? "")}`}>
 						<DropdownMenuItem>
 							<Bookmark className="size-5" />
 							Saved messages

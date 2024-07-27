@@ -17,6 +17,7 @@
 		"@hookform/resolvers": "^3.9.0",
 		"@phosphor-icons/react": "^2.1.7",
 		"@repo/ui": "workspace:*",
+		"base64-url": "^2.3.3",
 		"framer-motion": "^11.3.8",
 		"graphql-sse": "^2.5.3",
 		"graphql-ws": "^5.16.0",
@@ -35,6 +36,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
+		"@types/base64-url": "^2.2.2",
 		"@repo/tailwind-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "^20.14.11",

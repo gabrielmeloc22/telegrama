@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b7e9ca858e323eff7f61cd8ebbf57d92>>
+ * @generated SignedSource<<055938d6418b89e45f988b314af9eef9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -125,13 +125,6 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "_id",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
                     "name": "__typename",
                     "storageKey": null
                   }
@@ -183,12 +176,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c72b8ab8e7867780eb91d465eccdf1b4",
+    "cacheID": "e5a36f8e2b74b9eb636bd3f5db562e04",
     "id": null,
     "metadata": {},
     "name": "chatCreateGroupQuery",
     "operationKind": "query",
-    "text": "query chatCreateGroupQuery(\n  $filter: UserFilter\n) {\n  ...userListFragment_Vt7Yj\n}\n\nfragment userItemFragment on User {\n  _id\n  username\n  avatar\n}\n\nfragment userListFragment_Vt7Yj on query {\n  users(filter: $filter, first: 20) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatCreateGroupQuery(\n  $filter: UserFilter\n) {\n  ...userListFragment_Vt7Yj\n}\n\nfragment userItemFragment on User {\n  id\n  username\n  avatar\n}\n\nfragment userListFragment_Vt7Yj on query {\n  users(filter: $filter, first: 20) {\n    edges {\n      cursor\n      node {\n        id\n        username\n        avatar\n        ...userItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

@@ -15,6 +15,7 @@ import {
 	TextEllipsis,
 } from "@ui/components";
 import { cn } from "@ui/lib/utils";
+import base64url from "base64-url";
 import { MessageCircleX, Trash } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -26,12 +27,11 @@ import { UserAvatar } from "../user/user-avatar";
 
 const ChatItemFragment = graphql`
   fragment chatItemFragment on Chat {
-		_id
 		id
     name       
     group
     user {
-			_id
+			id
       username
       avatar
     }
@@ -98,7 +98,7 @@ export function ChatItem({ chat, selected }: ChatItemProps) {
 			</ContextMenuContent>
 			<ContextMenuTrigger asChild>
 				<Link
-					href={`/c/${data.user?._id ?? data._id}`}
+					href={`/c/${base64url.escape(data.user?.id ?? data.id)}`}
 					className={cn(
 						"flex w-full gap-4 rounded-lg px-3 py-2 transition-all hover:dark:bg-neutral-700/50",
 						selected &&
