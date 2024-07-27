@@ -11,6 +11,7 @@ export interface Message extends Document {
 	createdAt: Date;
 	updatedAt: Date;
 	chat: Types.ObjectId;
+	localId: number;
 }
 
 const MessageSchema = new Schema<Message>(
@@ -22,6 +23,7 @@ const MessageSchema = new Schema<Message>(
 		seenAt: Date,
 		content: { type: String, required: true },
 		chat: { type: Schema.Types.ObjectId, ref: "Chat", required: true },
+		localId: { type: Number, required: true },
 	},
 	{
 		timestamps: true,
@@ -30,5 +32,6 @@ const MessageSchema = new Schema<Message>(
 );
 
 MessageSchema.index({ createdAt: -1 });
+MessageSchema.index({ userId: 1, localId: 1 }, { unique: true });
 
 export const MessageModel = model<Message>("Message", MessageSchema);

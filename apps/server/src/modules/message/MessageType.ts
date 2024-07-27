@@ -2,6 +2,7 @@ import type { Context } from "@/context";
 import { connectionDefinitions } from "@entria/graphql-mongo-helpers";
 import {
 	GraphQLBoolean,
+	GraphQLInt,
 	GraphQLNonNull,
 	GraphQLObjectType,
 	GraphQLString,
@@ -24,6 +25,9 @@ export const MessageType = new GraphQLObjectType<Message, Context>({
 			type: new GraphQLNonNull(GraphQLString),
 			description: "mongoose_id",
 			resolve: (msg) => msg.id,
+		},
+		localId: {
+			type: new GraphQLNonNull(GraphQLInt),
 		},
 		from: {
 			type: new GraphQLNonNull(UserType),

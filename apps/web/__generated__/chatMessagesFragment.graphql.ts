@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<53b53e2c2e6bdb0d53d77b0278e546af>>
+ * @generated SignedSource<<87c0abcd990d3a5b5930f82432e39bc7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,7 @@ export type chatMessagesFragment$data = {
           readonly id: string;
         };
         readonly id: string;
+        readonly localId: string;
         readonly " $fragmentSpreads": FragmentRefs<"chatMessageFragment">;
       } | null | undefined;
     } | null | undefined>;
@@ -117,6 +118,13 @@ return {
                 {
                   "alias": null,
                   "args": null,
+                  "kind": "ScalarField",
+                  "name": "localId",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
                   "concreteType": "User",
                   "kind": "LinkedField",
                   "name": "from",
@@ -185,6 +193,6 @@ return {
 };
 })();
 
-(node as any).hash = "d4d208719c9620430a8297fb07ec51fc";
+(node as any).hash = "d5f48072beb9a3c1787fc8c39521da39";
 
 export default node;

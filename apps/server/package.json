@@ -44,7 +44,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.1",
-		"@types/ws": "^8.5.11",
 		"@types/bcrypt": "^5.0.2",
 		"@types/jsonwebtoken": "^9.0.6",
 		"@types/koa": "^2.15.0",
@@ -52,6 +51,7 @@
 		"@types/koa__cors": "^5.0.0",
 		"@types/koa__router": "^12.0.4",
 		"@types/node": "^20.14.6",
+		"@types/ws": "^8.5.11",
 		"tsx": "^4.15.6",
 		"typescript": "^5.4.5"
 	}

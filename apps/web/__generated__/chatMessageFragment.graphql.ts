@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a109789cecbf2cee876bad7b738c1c89>>
+ * @generated SignedSource<<e061e0dc1a3503ddbb13bc04d1b8c440>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,7 @@ export type chatMessageFragment$data = {
     readonly username: string;
   };
   readonly id: string;
+  readonly localId: string;
   readonly seen: boolean;
   readonly seenAt: any | null | undefined;
   readonly " $fragmentType": "chatMessageFragment";
@@ -109,6 +110,13 @@ return {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
+      "name": "localId",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
       "name": "content",
       "storageKey": null
     },
@@ -153,6 +161,6 @@ return {
 };
 })();
 
-(node as any).hash = "69ac8b9d382c8b2a570c8da9a53a8248";
+(node as any).hash = "c1b896fd64e8959c31efc7d064a7cf53";
 
 export default node;

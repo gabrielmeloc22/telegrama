@@ -147,6 +147,7 @@ type Message implements Node {
 
   """mongoose_id"""
   _id: String!
+  localId: String!
   from: User!
   delivered: Boolean!
   deliveredAt: DateTime
@@ -336,8 +337,7 @@ input LoginMutationInput {
 scalar NonEmptyString
 
 type SendMessagePayload {
-  message: Message
-  chat: ChatEdge
+  message: MessageEdge
   clientMutationId: String
 }
 
@@ -345,9 +345,17 @@ input SendMessageInput {
   content: NonEmptyString
 
   """The recipient id, a user or a chat"""
-  to: String!
+  toId: String!
+
+  """A valid uuid that identifies the message locally"""
+  localId: UUID!
   clientMutationId: String
 }
+
+"""
+A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
+"""
+scalar UUID
 
 type SendTypingStatusPayload {
   clientMutationId: String

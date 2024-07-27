@@ -1,34 +1,23 @@
 import type { Context } from "@/context";
-import { ChatLoader } from "@/modules/chat/ChatLoader";
-import { type Chat, ChatModel } from "@/modules/chat/ChatModel";
-import { ChatConnection } from "@/modules/chat/ChatType";
-import { getChat } from "@/modules/chat/util/getChat";
-import { UserModel } from "@/modules/user/UserModel";
-import { events, pubSub } from "@/pubsub";
-import { GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLInt, GraphQLNonNull, GraphQLString } from "graphql";
 import {
 	fromGlobalId,
 	mutationWithClientMutationId,
 	toGlobalId,
 } from "graphql-relay";
 import { GraphQLNonEmptyString } from "graphql-scalars";
-import { startSession } from "mongoose";
 import { MessageLoader } from "../MessageLoader";
-import { MessageModel } from "../MessageModel";
-import { MessageType } from "../MessageType";
-import type { MessageSubscription } from "../subscription/OnMessage";
+import type { Message } from "../MessageModel";
+import { MessageConnection } from "../MessageType";
+import { sendMessage } from "./lib/sendMessage";
 
-type SendMessageInput = {
-	to: string;
+export type SendMessageInput = {
+	toId: string;
 	content: string;
+	localId: number;
 };
 
-type SendMessageOutput = {
-	content: string;
-	createdAt: Date;
-	id: string;
-	chat: Chat | null;
-};
+type SendMessageOutput = { message: Message };
 
 export const SendMessage = mutationWithClientMutationId<
 	SendMessageInput,
@@ -38,84 +27,44 @@ export const SendMessage = mutationWithClientMutationId<
 	name: "SendMessage",
 	inputFields: {
 		content: { type: GraphQLNonEmptyString },
-		to: {
+		toId: {
 			type: new GraphQLNonNull(GraphQLString),
 			description: "The recipient id, a user or a chat",
+		},
+		localId: {
+			type: new GraphQLNonNull(GraphQLInt),
+			description:
+				"A int that identifies the message of a user in chat locally",
 		},
 	},
 	outputFields: {
 		message: {
-			type: MessageType,
-			resolve: async (out, _, ctx) => MessageLoader.load(ctx, (await out).id),
-		},
-		chat: {
-			type: ChatConnection.edgeType,
-			resolve: async (res, _, ctx) => {
-				const { chat } = await res;
-				const node = await ChatLoader.load(ctx, chat?.id);
+			type: MessageConnection.edgeType,
+			resolve: async (out, _, ctx) => {
+				const node = await MessageLoader.load(
+					ctx,
+					(await out).message._id as string,
+				);
+				if (!node) return null;
 
-				if (!node) {
-					return null;
-				}
-
-				return { cursor: toGlobalId("Chat", node.id), node };
+				return {
+					cursor: toGlobalId("Message", node.id),
+					node,
+				};
 			},
 		},
 	},
-	mutateAndGetPayload: async ({ content, to }, ctx) => {
+	mutateAndGetPayload: async ({ toId, ...data }, ctx) => {
 		if (!ctx.user) {
 			throw new Error("Sender not specified");
 		}
 
-		const toId = fromGlobalId(to).id;
-		const selfMessage = toId === ctx.user.id.toString();
-
-		let chat = await getChat(ctx, { chatId: toId });
-
-		const recipient = await UserModel.findById(toId);
-
-		if (!chat && !recipient) {
-			throw new Error("Recipient not specified");
-		}
-
-		let newChat = false;
-
-		if (!chat) {
-			newChat = true;
-			chat = new ChatModel({
-				users: selfMessage ? [ctx.user.id] : [recipient?.id, ctx.user.id],
-			});
-		}
-
-		const message = new MessageModel({
-			content,
-			from: ctx.user,
+		const { message } = await sendMessage({
+			...data,
+			toId: fromGlobalId(toId).id,
+			ctx,
 		});
 
-		const session = await startSession();
-
-		try {
-			chat.lastMessage = message.id;
-			message.chat = chat.id;
-
-			await message.save({ session });
-			await chat.save({ session });
-		} finally {
-			await session.endSession();
-		}
-
-		await pubSub.publish(events.message.new, {
-			topic: events.message.new,
-			newMessageId: message.id,
-			chatId: chat.id,
-			newChat,
-		} satisfies MessageSubscription);
-
-		return {
-			id: toGlobalId("Message", message.id),
-			content: message.content,
-			createdAt: message.createdAt,
-			chat,
-		};
+		return { message };
 	},
 });

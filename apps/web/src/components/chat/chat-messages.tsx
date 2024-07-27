@@ -29,6 +29,7 @@ const ChatMessageFragment = graphql`
       edges {
         node {
           id
+					localId
 					from {
 						id
 					}
@@ -118,7 +119,7 @@ export function ChatMessages({
 						return (
 							message?.node && (
 								<MessageMotionWrapper
-									key={message.node.id}
+									key={message.node.localId}
 									className={cn(firstOfSequence && "mt-2")}
 								>
 									<ChatMessage
