@@ -13,6 +13,7 @@ import {
 	NavigationStackTrigger,
 	Spinner,
 } from "@ui/components";
+import base64url from "base64-url";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -209,7 +210,7 @@ const ChatCreateGroupMutation = graphql`
 	createGroupChat(input: $input) {
 		clientMutationId
 		chat {
-			_id
+			id
 		}
 	}
  }
@@ -298,7 +299,9 @@ function GroupInfoStep({
 								createChat({
 									onCompleted: (data) => {
 										goBack();
-										router.push(`/c/${data.createGroupChat?.chat?._id}`);
+										router.push(
+											`/c/${base64url.escape(data.createGroupChat?.chat?.id ?? "")}`,
+										);
 									},
 									variables: {
 										input: {
