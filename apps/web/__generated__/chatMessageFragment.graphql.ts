@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e061e0dc1a3503ddbb13bc04d1b8c440>>
+ * @generated SignedSource<<0724794ea3682bff7d8c96b25a6f2755>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,7 +26,7 @@ export type chatMessageFragment$data = {
     readonly username: string;
   };
   readonly id: string;
-  readonly localId: string;
+  readonly localId: number;
   readonly seen: boolean;
   readonly seenAt: any | null | undefined;
   readonly " $fragmentType": "chatMessageFragment";

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<87c0abcd990d3a5b5930f82432e39bc7>>
+ * @generated SignedSource<<9451c17cceca026773b44b9272fd51aa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type chatMessagesFragment$data = {
           readonly id: string;
         };
         readonly id: string;
-        readonly localId: string;
+        readonly localId: number;
         readonly " $fragmentSpreads": FragmentRefs<"chatMessageFragment">;
       } | null | undefined;
     } | null | undefined>;

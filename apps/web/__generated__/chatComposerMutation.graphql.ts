@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7f12e6daed96b108e294341e909a5427>>
+ * @generated SignedSource<<323d629a94a6b057b2395a3e0a52042b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type SendMessageInput = {
   clientMutationId?: string | null | undefined;
   content?: any | null | undefined;
-  localId: any;
+  localId: number;
   toId: string;
 };
 export type chatComposerMutation$variables = {
@@ -38,7 +38,7 @@ export type chatComposerMutation$data = {
           readonly username: string;
         };
         readonly id: string;
-        readonly localId: string;
+        readonly localId: number;
         readonly seen: boolean;
         readonly seenAt: any | null | undefined;
       } | null | undefined;

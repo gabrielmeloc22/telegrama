@@ -116,7 +116,8 @@ export function ChatLayout({ chatId }: ChatLayoutProps) {
 				/>
 			</Suspense>
 			<ChatComposer
-				chatId={data.user?.id ? data.user.id : data?.chat?.id ?? ""}
+				chatId={data.chat?.id}
+				recipientId={data?.user?.id ?? data?.chat?.id ?? ""}
 				selectable={selectable}
 				onCancelSelection={() => {
 					setSelectedMessages([]);

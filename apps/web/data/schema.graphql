@@ -147,7 +147,7 @@ type Message implements Node {
 
   """mongoose_id"""
   _id: String!
-  localId: String!
+  localId: Int!
   from: User!
   delivered: Boolean!
   deliveredAt: DateTime
@@ -347,15 +347,10 @@ input SendMessageInput {
   """The recipient id, a user or a chat"""
   toId: String!
 
-  """A valid uuid that identifies the message locally"""
-  localId: UUID!
+  """A int that identifies the message of a user in chat locally"""
+  localId: Int!
   clientMutationId: String
 }
-
-"""
-A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
-"""
-scalar UUID
 
 type SendTypingStatusPayload {
   clientMutationId: String

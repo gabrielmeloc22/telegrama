@@ -1,4 +1,6 @@
 import { useTypingStatusSubscription } from "@/hooks/useTypingStatusSubscription";
+import { useUser } from "@/hooks/useUser";
+import { setNextLocalId } from "@/utils/localId";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import { cn } from "@ui/lib/utils";
 import {
@@ -59,12 +61,22 @@ export function ChatMessages({
 	setSelectable,
 	onDelete,
 }: ChatMessagesProps) {
+	const currentUser = useUser();
 	const { data, loadNext, hasNext } = usePaginationFragment<
 		chatLayoutQuery,
 		chatMessagesFragment$key
 	>(ChatMessageFragment, messages);
 
 	const userTyping = useTypingStatusSubscription({ chatId });
+
+	useEffect(() => {
+		const message = data.messages.edges.find(
+			(e) => e?.node?.from.id === currentUser?.id,
+		);
+		if (message) {
+			setNextLocalId(chatId, (message?.node?.localId ?? 0) + 1);
+		}
+	}, [data, chatId, currentUser]);
 
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
@@ -119,7 +131,7 @@ export function ChatMessages({
 						return (
 							message?.node && (
 								<MessageMotionWrapper
-									key={message.node.localId}
+									key={`${currentUser?.id}${message.node.localId}`}
 									className={cn(firstOfSequence && "mt-2")}
 								>
 									<ChatMessage
