@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f04f175fea14f82239ce7e5966d571c>>
+ * @generated SignedSource<<acfa9f841b3877b5993b9ad150aff579>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -47,13 +47,6 @@ v3 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "_id",
   "storageKey": null
 };
 return {
@@ -112,7 +105,6 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -121,7 +113,6 @@ return {
                     "name": "user",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/),
                       (v3/*: any*/),
                       {
                         "alias": null,
@@ -265,12 +256,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9245e2a718a8188788288823808a768c",
+    "cacheID": "17ca833b216acbf1e08ce230744274e3",
     "id": null,
     "metadata": {},
     "name": "chatListQuery",
     "operationKind": "query",
-    "text": "query chatListQuery(\n  $search: String\n) {\n  ...chatListFragment_40zwac\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_40zwac on query {\n  chats(first: 10, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatListQuery(\n  $search: String\n) {\n  ...chatListFragment_40zwac\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_40zwac on query {\n  chats(first: 10, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        user {\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

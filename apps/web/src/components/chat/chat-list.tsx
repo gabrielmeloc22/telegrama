@@ -2,6 +2,7 @@
 
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import { NavigationStackTrigger } from "@ui/components";
+import base64url from "base64-url";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useLazyLoadQuery, usePaginationFragment } from "react-relay";
@@ -28,9 +29,8 @@ const ChatListFragment = graphql`
 				cursor
         node {
 					id
-					_id
 					user {
-						_id
+						id
 					}
 					updatedAt
           ...chatItemFragment 
@@ -51,7 +51,8 @@ type ChatListProps = {
 };
 
 export function ChatList({ filter }: ChatListProps) {
-	const { id } = useParams();
+	const params = useParams();
+	const id = base64url.unescape(typeof params.id === "string" ? params.id : "");
 
 	const chatsQuery = useLazyLoadQuery<chatListQuery>(ChatListQuery, {
 		search: filter,
@@ -89,11 +90,11 @@ export function ChatList({ filter }: ChatListProps) {
 			{chatEdges
 				.sort((a, b) => (a?.node?.updatedAt < b?.node?.updatedAt ? 1 : -1))
 				.map((chatEdge) => {
-					const chatId = chatEdge?.node?.user?._id || chatEdge?.node?._id;
+					const chatId = chatEdge?.node?.user?.id || chatEdge?.node?.id;
 
 					return (
 						<motion.div
-							key={chatEdge?.node?._id ?? ""}
+							key={chatEdge?.node?.id ?? ""}
 							layout="position"
 							className="w-full dark:bg-neutral-800"
 						>

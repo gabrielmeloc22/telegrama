@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3efdab683c4a7155ee7277ae562622af>>
+ * @generated SignedSource<<2b567cb1e6e21a5552a716583132c6c6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,11 +16,10 @@ export type chatListFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly _id: string;
         readonly id: string;
         readonly updatedAt: any | null | undefined;
         readonly user: {
-          readonly _id: string;
+          readonly id: string;
         } | null | undefined;
         readonly " $fragmentSpreads": FragmentRefs<"chatItemFragment">;
       } | null | undefined;
@@ -41,7 +40,7 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "_id",
+  "name": "id",
   "storageKey": null
 };
 return {
@@ -124,13 +123,6 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "id",
-                  "storageKey": null
-                },
                 (v1/*: any*/),
                 {
                   "alias": null,
@@ -215,6 +207,6 @@ return {
 };
 })();
 
-(node as any).hash = "76f96d9f8d2dbf7abcae75867922b41d";
+(node as any).hash = "85b641895ebe1fd584c53b3f941df6bd";
 
 export default node;

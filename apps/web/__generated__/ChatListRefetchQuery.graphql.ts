@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8dcace32d92ac4063255eb4d36b9d667>>
+ * @generated SignedSource<<71daabe9ed5022e4046bec2e28695951>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -64,13 +64,6 @@ v3 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "_id",
   "storageKey": null
 };
 return {
@@ -139,7 +132,6 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -148,7 +140,6 @@ return {
                     "name": "user",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/),
                       (v3/*: any*/),
                       {
                         "alias": null,
@@ -292,16 +283,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0a8057ab053bfddee88bdd1fff6fe3c7",
+    "cacheID": "01e0b3c0f7073d31907a037da8cdb962",
     "id": null,
     "metadata": {},
     "name": "ChatListRefetchQuery",
     "operationKind": "query",
-    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        _id\n        user {\n          _id\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query ChatListRefetchQuery(\n  $count: Int = 10\n  $cursor: String\n  $search: String\n) {\n  ...chatListFragment_3PfUTl\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatListFragment_3PfUTl on query {\n  chats(after: $cursor, first: $count, search: $search) {\n    edges {\n      cursor\n      node {\n        id\n        user {\n          id\n        }\n        updatedAt\n        ...chatItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "76f96d9f8d2dbf7abcae75867922b41d";
+(node as any).hash = "85b641895ebe1fd584c53b3f941df6bd";
 
 export default node;
