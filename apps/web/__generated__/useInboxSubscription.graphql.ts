@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<33a4a2cea7c5f0af22d5d69172d69158>>
+ * @generated SignedSource<<94f6d63ce001ec51e6f93931350998d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -384,13 +384,6 @@ return {
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "localId",
-                    "storageKey": null
-                  },
                   (v12/*: any*/),
                   {
                     "alias": null,
@@ -433,12 +426,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b836ee4584f4f8d13f0707c8f81fd43a",
+    "cacheID": "b24ba7a7dbc3c8b71766e36ee69bd637",
     "id": null,
     "metadata": {},
     "name": "useInboxSubscription",
     "operationKind": "subscription",
-    "text": "subscription useInboxSubscription(\n  $input: MessageInput!\n) {\n  onMessage(input: $input) {\n    newChat\n    deletedMessages\n    deletedChat\n    chat {\n      id\n      group\n      user {\n        id\n      }\n      updatedAt\n      ...chatItemFragment\n    }\n    newMessage {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n      }\n    }\n  }\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  localId\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n"
+    "text": "subscription useInboxSubscription(\n  $input: MessageInput!\n) {\n  onMessage(input: $input) {\n    newChat\n    deletedMessages\n    deletedChat\n    chat {\n      id\n      group\n      user {\n        id\n      }\n      updatedAt\n      ...chatItemFragment\n    }\n    newMessage {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n      }\n    }\n  }\n}\n\nfragment chatItemFragment on Chat {\n  id\n  name\n  group\n  user {\n    id\n    username\n    avatar\n  }\n  lastMessage {\n    node {\n      id\n      createdAt\n      content\n    }\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n"
   }
 };
 })();
