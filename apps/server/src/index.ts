@@ -12,7 +12,7 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import Koa from "koa";
 import logger from "koa-logger";
 import mount from "koa-mount";
-import * as ws from "ws";
+import { WebSocketServer } from "ws";
 import { buildContext } from "./context";
 import { connectDb } from "./database";
 import { schema } from "./schemas";
@@ -64,9 +64,11 @@ app.use(async (ctx) => {
 const port = process.env.PORT ?? "4000";
 
 const server = app.listen(port, async () => {
-	await connectDb();
+	if (process.env.NODE_ENV !== "test") {
+		await connectDb();
+	}
 
-	const wsServer = new ws.Server({
+	const wsServer = new WebSocketServer({
 		server,
 		path: "/graphql",
 	});

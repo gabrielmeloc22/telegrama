@@ -13,8 +13,8 @@
 		"sourceMap": true,
 		"noEmit": true,
 		"strict": true,
-		"types": ["node"]
+		"types": ["node", "vitest/globals"]
 	},
 	"exclude": ["node_modules"],
-	"include": ["env.d.ts", "./**/*.ts"]
+	"include": ["env.d.ts", "./**/*.ts", "vitest.config.mts"]
 }
