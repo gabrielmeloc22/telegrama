@@ -48,8 +48,8 @@ const checkLocalId = async ({
 		 discarding the data, it gets processed right away
 		 **/
 		if (
-			!senderLastMessage ||
-			senderLastMessage?.localId + 1 === localId ||
+			(!senderLastMessage && localId === 0) ||
+			(senderLastMessage && senderLastMessage.localId + 1 === localId) ||
 			now - startTime > MAX_TIMEOUT
 		) {
 			break;
