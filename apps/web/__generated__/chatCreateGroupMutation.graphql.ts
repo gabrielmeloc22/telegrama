@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cff201264a8c68b61a6aa813bcc66181>>
+ * @generated SignedSource<<06c24e1e216775ed51db3a0b1fdba5a6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type chatCreateGroupMutation$variables = {
 export type chatCreateGroupMutation$data = {
   readonly createGroupChat: {
     readonly chat: {
-      readonly _id: string;
+      readonly id: string;
     } | null | undefined;
     readonly clientMutationId: string | null | undefined;
   } | null | undefined;
@@ -40,57 +40,55 @@ var v0 = [
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
-  }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "clientMutationId",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "_id",
-  "storageKey": null
-};
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "chatCreateGroupMutation",
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
+    ],
+    "concreteType": "CreateGroupChatPayload",
+    "kind": "LinkedField",
+    "name": "createGroupChat",
+    "plural": false,
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "CreateGroupChatPayload",
+        "args": null,
+        "kind": "ScalarField",
+        "name": "clientMutationId",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Chat",
         "kind": "LinkedField",
-        "name": "createGroupChat",
+        "name": "chat",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "Chat",
-            "kind": "LinkedField",
-            "name": "chat",
-            "plural": false,
-            "selections": [
-              (v3/*: any*/)
-            ],
+            "kind": "ScalarField",
+            "name": "id",
             "storageKey": null
           }
         ],
         "storageKey": null
       }
     ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "chatCreateGroupMutation",
+    "selections": (v1/*: any*/),
     "type": "mutation",
     "abstractKey": null
   },
@@ -99,51 +97,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "chatCreateGroupMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "CreateGroupChatPayload",
-        "kind": "LinkedField",
-        "name": "createGroupChat",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Chat",
-            "kind": "LinkedField",
-            "name": "chat",
-            "plural": false,
-            "selections": [
-              (v3/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "e65cade2d26d111a3dde52d3e7edb418",
+    "cacheID": "af32d45b8499d05cf1e8b8131dda92c2",
     "id": null,
     "metadata": {},
     "name": "chatCreateGroupMutation",
     "operationKind": "mutation",
-    "text": "mutation chatCreateGroupMutation(\n  $input: CreateGroupChatInput!\n) {\n  createGroupChat(input: $input) {\n    clientMutationId\n    chat {\n      _id\n      id\n    }\n  }\n}\n"
+    "text": "mutation chatCreateGroupMutation(\n  $input: CreateGroupChatInput!\n) {\n  createGroupChat(input: $input) {\n    clientMutationId\n    chat {\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "55706f5b33531f34f587c221b50e8951";
+(node as any).hash = "6f534c4d87353e791527f753278e8b8a";
 
 export default node;
