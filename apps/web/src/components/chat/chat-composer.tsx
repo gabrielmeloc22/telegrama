@@ -70,11 +70,16 @@ export function ChatComposer({
 			const localId = chatId ? getNextLocalId(chatId) : 0;
 
 			sendMessage({
+				updater: (store) => {
+					if (!chatId) {
+						store.invalidateStore();
+					}
+				},
 				optimisticResponse: {
 					sendMessage: {
 						message: {
 							node: {
-								id: `client:newMessage:${recipientId}:${localId}`,
+								id: `${recipientId}:${currUser?.id}:${localId}`,
 								content,
 								from: {
 									avatar: currUser?.avatar,

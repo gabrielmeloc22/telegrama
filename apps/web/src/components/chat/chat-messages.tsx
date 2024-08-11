@@ -131,7 +131,7 @@ export function ChatMessages({
 						return (
 							message?.node && (
 								<MessageMotionWrapper
-									key={`${currentUser?.id}${message.node.localId}`}
+									key={`${chatId}${message.node.from.id}${message.node.localId}`}
 									className={cn(firstOfSequence && "mt-2")}
 								>
 									<ChatMessage
