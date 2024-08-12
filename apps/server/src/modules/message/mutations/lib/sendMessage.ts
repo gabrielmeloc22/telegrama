@@ -63,7 +63,7 @@ export const sendMessage = async ({
 	localId,
 	ctx,
 }: SendMessageArgs) => {
-	const fromId = ctx.user?.id;
+	const fromId = ctx.user?.id.toString();
 
 	const selfMessage = toId === fromId;
 
