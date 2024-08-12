@@ -1,4 +1,5 @@
 import type { Context } from "@/context";
+import { getChat } from "@/modules/chat/util/getChat";
 import { GraphQLInt, GraphQLNonNull, GraphQLString } from "graphql";
 import {
 	fromGlobalId,
@@ -7,7 +8,7 @@ import {
 } from "graphql-relay";
 import { GraphQLNonEmptyString } from "graphql-scalars";
 import { MessageLoader } from "../MessageLoader";
-import type { Message } from "../MessageModel";
+import { type Message, MessageModel } from "../MessageModel";
 import { MessageConnection } from "../MessageType";
 import { sendMessage } from "./lib/sendMessage";
 
@@ -59,9 +60,26 @@ export const SendMessage = mutationWithClientMutationId<
 			throw new Error("Sender not specified");
 		}
 
+		const recipient = fromGlobalId(toId);
+		const sender = ctx.user.id;
+
+		const chat = await getChat(ctx, { chatId: recipient.id });
+
+		const duplicatedMessage =
+			chat &&
+			(await MessageModel.findOne({
+				chat: chat?.id,
+				localId: data.localId,
+				from: sender,
+			}));
+
+		if (duplicatedMessage) {
+			return { message: duplicatedMessage };
+		}
+
 		const { message } = await sendMessage({
 			...data,
-			toId: fromGlobalId(toId).id,
+			toId: recipient.id,
 			ctx,
 		});
 
