@@ -47,6 +47,7 @@ export function SignUp() {
 			onCompleted: (data) => {
 				if (data.register?.token) {
 					login(data.register.token);
+					location.reload();
 				}
 			},
 		});

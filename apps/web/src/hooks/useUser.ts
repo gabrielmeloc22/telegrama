@@ -5,8 +5,8 @@ import type { useUserQuery } from "../../__generated__/useUserQuery.graphql";
 const MeQuery = graphql`
   query useUserQuery($skip: Boolean!) {
     me @skip(if: $skip) {
-			_id
-      id 
+      _id
+      id
       username
       avatar
     }
@@ -14,16 +14,7 @@ const MeQuery = graphql`
 `;
 
 export function useUser(skip = false) {
-	// const [fetchKey, setFetchKey] = useState(0);
-	const { me } = useLazyLoadQuery<useUserQuery>(
-		MeQuery,
-		{ skip: false },
-		// { fetchKey },
-	);
-
-	// useSubscribeToInvalidationState([], () => {
-	// 	setFetchKey((prev) => prev + 1);
-	// });
+	const { me } = useLazyLoadQuery<useUserQuery>(MeQuery, { skip: false });
 
 	if (!me && !skip) {
 		return null;
