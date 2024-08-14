@@ -17,7 +17,7 @@ import {
 	DialogTrigger,
 } from "@ui/components";
 import { cn } from "@ui/lib/utils";
-import { Check, CheckCircle2, Trash } from "lucide-react";
+import { Check, CheckCircle2, Clock, Trash } from "lucide-react";
 import murmurhash from "murmurhash";
 import { useFragment } from "react-relay";
 import { graphql } from "relay-runtime";
@@ -37,6 +37,7 @@ const ChatMessageFragment = graphql`
 				group
 			}
 		}
+		localId
     content
     seen
     createdAt
@@ -74,13 +75,16 @@ export function ChatMessage({
 		message,
 	);
 
+	// When using optimistic response the fragment data is returned as undefined, even though the data exists
+	if (!data) return;
+
 	const sentByMe = user?.id === data.from.id;
 	const createdAt = new Date(data.createdAt);
 
-	const userHash = murmurhash.v3(data.from.id);
+	const isPending = !data.chat;
 
 	const userColor = data.chat?.node?.group
-		? userHash % (CHAT_COLORS.length - 1)
+		? murmurhash.v3(data.from.id) % (CHAT_COLORS.length - 1)
 		: 0;
 
 	const showUserAvatar = !!data.chat?.node?.group && !sentByMe && !sentByMe;
@@ -175,11 +179,15 @@ export function ChatMessage({
 
 									<p className="w-full break-words text-sm">
 										{data.content}
-										<span className="float-right mt-2 ml-3 inline-flex items-center gap-1 whitespace-nowrap text-xs leading-none">
+										<span className="float-right mt-2 ml-3 inline-flex h-4 items-center gap-1 whitespace-nowrap text-xs leading-none">
 											{new Intl.DateTimeFormat("default", {
 												timeStyle: "short",
 											}).format(createdAt)}
-											<Check className="size-4" />
+											{isPending ? (
+												<Clock className="size-3" />
+											) : (
+												<Check className="size-4" />
+											)}
 										</span>
 									</p>
 								</div>

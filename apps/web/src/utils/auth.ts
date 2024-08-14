@@ -1,9 +1,10 @@
 import cookies from "nookies";
 
 export const login = (token: string) => {
-  cookies.set(null, "token", token);
+	cookies.set(null, "token", token);
 };
 
 export const logout = () => {
-  cookies.destroy(null, "token");
+	localStorage.clear();
+	cookies.destroy(null, "token");
 };

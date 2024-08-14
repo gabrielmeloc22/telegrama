@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fc25c6e7fe3354428f905d8691351ffa>>
+ * @generated SignedSource<<c2cdc36dd9ccd64e122c3b1631270bc4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -234,6 +234,13 @@ return {
                   {
                     "alias": null,
                     "args": null,
+                    "kind": "ScalarField",
+                    "name": "localId",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
                     "concreteType": "User",
                     "kind": "LinkedField",
                     "name": "from",
@@ -369,12 +376,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "243ef7a71126e734ab42b8dbe599ac17",
+    "cacheID": "732b408bd983bd89b09419583d18043b",
     "id": null,
     "metadata": {},
     "name": "chatLayoutQuery",
     "operationKind": "query",
-    "text": "query chatLayoutQuery(\n  $chatId: String!\n) {\n  user(userId: $chatId) {\n    id\n    username\n    avatar\n  }\n  chat(id: $chatId) {\n    id\n  }\n  ...chatHeaderFragment_1IzeVY\n  ...chatMessagesFragment_1IzeVY\n}\n\nfragment chatHeaderFragment_1IzeVY on query {\n  chat(id: $chatId) {\n    name\n    group\n    users {\n      edges {\n        node {\n          id\n          avatar\n          username\n        }\n      }\n    }\n    id\n  }\n  user(userId: $chatId) {\n    id\n    username\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_1IzeVY on query {\n  messages(chatId: $chatId, first: 50) {\n    edges {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatLayoutQuery(\n  $chatId: String!\n) {\n  user(userId: $chatId) {\n    id\n    username\n    avatar\n  }\n  chat(id: $chatId) {\n    id\n  }\n  ...chatHeaderFragment_1IzeVY\n  ...chatMessagesFragment_1IzeVY\n}\n\nfragment chatHeaderFragment_1IzeVY on query {\n  chat(id: $chatId) {\n    name\n    group\n    users {\n      edges {\n        node {\n          id\n          avatar\n          username\n        }\n      }\n    }\n    id\n  }\n  user(userId: $chatId) {\n    id\n    username\n  }\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  localId\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_1IzeVY on query {\n  messages(chatId: $chatId, first: 50) {\n    edges {\n      node {\n        id\n        localId\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

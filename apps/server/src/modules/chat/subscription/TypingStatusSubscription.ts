@@ -3,6 +3,7 @@ import { UserLoader } from "@/modules/user/UserLoader";
 import { UserType } from "@/modules/user/UserType";
 import { events, pubSub } from "@/pubsub";
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from "graphql";
+import { fromGlobalId } from "graphql-relay";
 import { subscriptionWithClientId } from "graphql-relay-subscription";
 import { withFilter } from "graphql-subscriptions";
 
@@ -39,7 +40,7 @@ export const OnTypeSubscription = subscriptionWithClientId<
 			() => pubSub.asyncIterator(events.chat.typing),
 			(payload: TypingStatusPayload, input: TypingStatusInput) => {
 				if (input.chatId) {
-					return input.chatId === payload.chatId;
+					return fromGlobalId(input.chatId).id === payload.chatId;
 				}
 				return false;
 			},

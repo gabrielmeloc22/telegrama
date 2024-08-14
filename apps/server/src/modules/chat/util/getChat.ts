@@ -1,10 +1,7 @@
 import type { Context } from "@/context";
 import { ChatModel } from "../ChatModel";
 
-export async function getChat(
-	ctx: Context | { userId: string },
-	args: { chatId: string },
-) {
+export async function getChat(ctx: Context, args: { chatId: string }) {
 	const currentUserId = "userId" in ctx ? ctx.userId : ctx.user?.id.toString();
 
 	const id = args.chatId;

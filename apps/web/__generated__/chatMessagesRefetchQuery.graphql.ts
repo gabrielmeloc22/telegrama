@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<faa13db3fcf52cf689e61dd085515ab3>>
+ * @generated SignedSource<<e4064dfc13c6f833f714b65f889140d6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -125,6 +125,13 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "localId",
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -285,16 +292,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5e08ff1ad4d6e8ac4d30c6d1f2bb699c",
+    "cacheID": "ef7127718b5ecc58b5b3885885b69c49",
     "id": null,
     "metadata": {},
     "name": "chatMessagesRefetchQuery",
     "operationKind": "query",
-    "text": "query chatMessagesRefetchQuery(\n  $chatId: String!\n  $count: Int = 50\n  $cursor: String\n) {\n  ...chatMessagesFragment_2v0QF4\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_2v0QF4 on query {\n  messages(chatId: $chatId, after: $cursor, first: $count) {\n    edges {\n      node {\n        id\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query chatMessagesRefetchQuery(\n  $chatId: String!\n  $count: Int = 50\n  $cursor: String\n) {\n  ...chatMessagesFragment_2v0QF4\n}\n\nfragment chatMessageFragment on Message {\n  id\n  from {\n    id\n    username\n    avatar\n  }\n  chat {\n    node {\n      group\n      id\n    }\n  }\n  localId\n  content\n  seen\n  createdAt\n  seenAt\n  delivered\n  deliveredAt\n}\n\nfragment chatMessagesFragment_2v0QF4 on query {\n  messages(chatId: $chatId, after: $cursor, first: $count) {\n    edges {\n      node {\n        id\n        localId\n        from {\n          id\n        }\n        ...chatMessageFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d4d208719c9620430a8297fb07ec51fc";
+(node as any).hash = "d5f48072beb9a3c1787fc8c39521da39";
 
 export default node;

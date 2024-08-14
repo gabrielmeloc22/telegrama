@@ -3,7 +3,11 @@
 import { Dialog, Spinner } from "@ui/components";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { useLazyLoadQuery, useMutation } from "react-relay";
+import {
+	useLazyLoadQuery,
+	useMutation,
+	useSubscribeToInvalidationState,
+} from "react-relay";
 import { graphql } from "relay-runtime";
 import type { chatLayoutDeleteMessagesMutation } from "../../../__generated__/chatLayoutDeleteMessagesMutation.graphql";
 import type { chatLayoutQuery } from "../../../__generated__/chatLayoutQuery.graphql";
@@ -40,10 +44,17 @@ const ChatMessagesDeleteMutation = graphql`
 `;
 
 export function ChatLayout({ chatId }: ChatLayoutProps) {
+	const [fetchKey, setFetchKey] = useState(0);
 	const router = useRouter();
-	const data = useLazyLoadQuery<chatLayoutQuery>(ChatLayoutQuery, {
-		chatId,
-	});
+	const data = useLazyLoadQuery<chatLayoutQuery>(
+		ChatLayoutQuery,
+		{
+			chatId,
+		},
+		{ fetchKey },
+	);
+
+	useSubscribeToInvalidationState([], () => setFetchKey((prev) => prev + 1));
 
 	const [selectable, setSelectable] = useState(false);
 	const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
@@ -116,7 +127,8 @@ export function ChatLayout({ chatId }: ChatLayoutProps) {
 				/>
 			</Suspense>
 			<ChatComposer
-				chatId={data.user?.id ? data.user.id : data?.chat?.id ?? ""}
+				chatId={data.chat?.id}
+				recipientId={data?.user?.id ?? data?.chat?.id ?? ""}
 				selectable={selectable}
 				onCancelSelection={() => {
 					setSelectedMessages([]);

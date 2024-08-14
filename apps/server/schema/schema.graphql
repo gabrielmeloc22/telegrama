@@ -147,6 +147,7 @@ type Message implements Node {
 
   """mongoose_id"""
   _id: String!
+  localId: Int!
   from: User!
   delivered: Boolean!
   deliveredAt: DateTime
@@ -336,8 +337,7 @@ input LoginMutationInput {
 scalar NonEmptyString
 
 type SendMessagePayload {
-  message: Message
-  chat: ChatEdge
+  message: MessageEdge
   clientMutationId: String
 }
 
@@ -345,7 +345,10 @@ input SendMessageInput {
   content: NonEmptyString
 
   """The recipient id, a user or a chat"""
-  to: String!
+  toId: String!
+
+  """A int that identifies the message of a user in chat locally"""
+  localId: Int!
   clientMutationId: String
 }
 

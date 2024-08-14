@@ -1,15 +1,20 @@
 import { useUser } from "@/hooks/useUser";
+import { getNextLocalId, setNextLocalId } from "@/utils/localId";
 import { Button } from "@ui/components";
 import { SendHorizonal, Trash, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { graphql, useMutation } from "react-relay";
+import { ConnectionHandler, graphql, useMutation } from "react-relay";
 import type { chatComposerMutation } from "../../../__generated__/chatComposerMutation.graphql";
 import type { chatComposerSendTypingStatusMutation } from "../../../__generated__/chatComposerSendTypingStatusMutation.graphql";
 
 const SendMessageMutation = graphql`
-  mutation chatComposerMutation($input: SendMessageInput!) {
+  mutation chatComposerMutation($input: SendMessageInput!, $connections: [ID!]!) {
     sendMessage (input: $input){
-			clientMutationId
+			message @prependEdge(connections: $connections){
+				node {
+				...chatMessageFragment @relay(mask: false) 
+				}
+			}
     }
   }
 `;
@@ -23,7 +28,8 @@ const SendTypingStatusMutation = graphql`
 `;
 
 type ChatComposerProps = {
-	chatId: string;
+	recipientId: string;
+	chatId?: string;
 	selectable?: boolean;
 	onCancelSelection?: () => void;
 	onDelete?: () => void;
@@ -33,6 +39,7 @@ export function ChatComposer({
 	onDelete,
 	selectable,
 	onCancelSelection,
+	recipientId,
 	chatId,
 }: ChatComposerProps) {
 	const currUser = useUser();
@@ -50,21 +57,63 @@ export function ChatComposer({
 	);
 
 	const onSendTypingStatus = (typing: boolean) => {
-		if (chatId && currUser) {
+		if (recipientId && currUser) {
 			sendTypingStatus({
-				variables: { input: { chatId, typing } },
+				variables: { input: { chatId: recipientId, typing } },
 			});
 		}
 	};
 
-	const onSendMessage = () => {
+	const onSendMessage = async () => {
 		if (textbox.current?.innerText.trim()) {
+			const content = textbox.current.innerText.trim();
+			const localId = chatId ? getNextLocalId(chatId) : 0;
+
 			sendMessage({
+				updater: (store) => {
+					if (!chatId) {
+						store.invalidateStore();
+					}
+				},
+				optimisticResponse: {
+					sendMessage: {
+						message: {
+							node: {
+								id: `${recipientId}:${currUser?.id}:${localId}`,
+								content,
+								from: {
+									avatar: currUser?.avatar,
+									id: currUser?.id ?? "",
+									username: currUser?.username ?? "",
+								},
+								localId,
+								createdAt: new Date(),
+								chat: null,
+								seen: false,
+								seenAt: null,
+								delivered: false,
+								deliveredAt: null,
+							},
+						},
+					},
+				} satisfies chatComposerMutation["response"],
 				variables: {
-					input: { to: chatId, content: textbox.current.innerText.trim() },
+					input: {
+						toId: recipientId,
+						content,
+						localId,
+					},
+					connections: [
+						ConnectionHandler.getConnectionID(
+							"client:root",
+							"ChatMessagesFragment_messages",
+							{ chatId: recipientId },
+						),
+					],
 				},
 			});
 			textbox.current.innerText = "";
+			chatId && setNextLocalId(chatId, localId + 1);
 			setText("");
 		}
 	};
@@ -157,7 +206,7 @@ export function ChatComposer({
 								role="textbox"
 								contentEditable
 								data-placeholder="Enter a message"
-								className="w-full px-6 py-4 text-sm leading-normal outline-none dark:before:text-neutral-400 data-[placeholder]:empty:before:content-[attr(data-placeholder)]"
+								className="w-full px-6 py-4 text-sm leading-normal outline-none data-[placeholder]:empty:before:content-[attr(data-placeholder)] dark:before:text-neutral-400"
 							/>
 						</div>
 					</div>
