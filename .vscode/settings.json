@@ -11,5 +11,11 @@
 	},
 	"editor.formatOnSave": true,
 	"relay.rootDirectory": "./apps/web",
-	"relay.autoStartCompiler": true
+	"relay.autoStartCompiler": true,
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
 }
