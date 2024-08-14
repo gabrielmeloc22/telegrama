@@ -31,6 +31,38 @@ const sendMessageMutation = ({
 	},
 });
 
+const testIdempotentResponse = async ({
+	toId,
+	token,
+}: { toId: string; token: string }) => {
+	const mutation = sendMessageMutation({
+		content: "hello",
+		toId: toGlobalId("User", toId),
+		localId: 0,
+	});
+
+	const res1 = await executeQuery(mutation, token);
+	const res2 = await executeQuery(
+		{
+			...mutation,
+			variables: { ...mutation.variables, content: "hello again" },
+		},
+		token,
+	);
+
+	const id1 = fromGlobalId(res1.body.data.sendMessage.message.node.id).id;
+	const id2 = fromGlobalId(res2.body.data.sendMessage.message.node.id).id;
+
+	const message = await MessageModel.findById(
+		fromGlobalId(res1.body.data.sendMessage.message.node.id).id,
+	);
+	const messageCount = await MessageModel.countDocuments();
+
+	expect(messageCount).toBe(1);
+	expect(id1).toEqual(id2);
+	expect(message?.content).toEqual("hello");
+};
+
 describe("message/mutations/SendMessage", () => {
 	it("should be able to send a message to a chat", async () => {
 		const user = await createUser();
@@ -119,5 +151,35 @@ describe("message/mutations/SendMessage", () => {
 			expect.objectContaining({ localId: 1 }),
 			expect.objectContaining({ localId: 0 }),
 		]);
+	});
+
+	it("should return stored message for duplicate local id in a self chat", async () => {
+		const userA = await createUser();
+
+		const token = generateToken(userA);
+
+		await testIdempotentResponse({ toId: userA.id as string, token });
+	});
+
+	it("should return stored message for duplicate local id in a private chat", async () => {
+		const userA = await createUser();
+		const userB = await createUser();
+
+		const token = generateToken(userA);
+
+		await testIdempotentResponse({ toId: userB.id as string, token });
+	});
+
+	it("should return stored message for duplicate local id in a group chat", async () => {
+		const userA = await createUser();
+		const userB = await createUser();
+
+		const chat = await createChat({
+			users: [userA.id, userB.id],
+			createdBy: userA.id,
+		});
+		const token = generateToken(userA);
+
+		await testIdempotentResponse({ toId: chat.id as string, token });
 	});
 });
