@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cfa59af379513e4942e6206621cf7e34>>
+ * @generated SignedSource<<21b95dec261cfa1256fb5c0de7a9010f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type RegisterMutationErrors = "EMAIL_TAKEN" | "USERNAME_TAKEN" | "%future added value";
 export type RegisterUserInput = {
   clientMutationId?: string | null | undefined;
   email?: any | null | undefined;
@@ -20,6 +21,7 @@ export type signUpMutation$variables = {
 };
 export type signUpMutation$data = {
   readonly register: {
+    readonly errors: ReadonlyArray<RegisterMutationErrors> | null | undefined;
     readonly token: string | null | undefined;
   } | null | undefined;
 };
@@ -55,6 +57,13 @@ v1 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
+        "name": "errors",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
         "name": "token",
         "storageKey": null
       }
@@ -80,16 +89,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "66dd23d210dcae92f1ea1c34e58b6a99",
+    "cacheID": "a6c30a7b101ecbb9544722512c98f18c",
     "id": null,
     "metadata": {},
     "name": "signUpMutation",
     "operationKind": "mutation",
-    "text": "mutation signUpMutation(\n  $input: RegisterUserInput!\n) {\n  register(input: $input) {\n    token\n  }\n}\n"
+    "text": "mutation signUpMutation(\n  $input: RegisterUserInput!\n) {\n  register(input: $input) {\n    errors\n    token\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "7ccb1de92d60cc47ad30bd70a4a99d20";
+(node as any).hash = "b0598d4169075ac85d3ee1b413d17191";
 
 export default node;

@@ -27,6 +27,7 @@ const UserRegisterFormSchema = z.object({
 const RegisterUserMutation = graphql`
   mutation signUpMutation($input: RegisterUserInput!) {
     register(input: $input) {
+			errors
       token
     }
   }
@@ -39,15 +40,24 @@ export function SignUp() {
 	const onSubmit = form.handleSubmit((data) => {
 		register({
 			variables: { input: data },
-			updater: (store, data) => {
-				if (data?.register?.token) {
-					store.invalidateStore();
-				}
-			},
 			onCompleted: (data) => {
 				if (data.register?.token) {
 					login(data.register.token);
 					location.reload();
+				}
+				if (data.register?.errors) {
+					for (const error of data.register.errors) {
+						switch (error) {
+							case "EMAIL_TAKEN":
+								form.setError("email", { message: "Email already taken" });
+								break;
+							case "USERNAME_TAKEN":
+								form.setError("username", {
+									message: "Username already taken",
+								});
+								break;
+						}
+					}
 				}
 			},
 		});

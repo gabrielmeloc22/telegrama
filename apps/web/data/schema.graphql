@@ -305,7 +305,13 @@ type mutation {
 type RegisterUserPayload {
   token: String
   user: User
+  errors: [RegisterMutationErrors!]
   clientMutationId: String
+}
+
+enum RegisterMutationErrors {
+  USERNAME_TAKEN
+  EMAIL_TAKEN
 }
 
 input RegisterUserInput {
