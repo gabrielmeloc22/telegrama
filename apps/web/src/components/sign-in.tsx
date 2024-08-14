@@ -32,6 +32,7 @@ const SignInMutation = graphql`
   mutation signInMutation($input: LoginMutationInput!) {
     login(input: $input) {
       token
+      errors
     }
   }
 `;
@@ -50,23 +51,27 @@ export function SignIn() {
 			variables: {
 				input: { username: data.credential, password: data.password },
 			},
-			// updater: (store, data) => {
-			// 	if (data?.login?.token) {
-			// 		store.invalidateStore();
-			// 	}
-			// },
-			onCompleted: (data, errors) => {
+			onCompleted: (data) => {
 				if (data.login?.token) {
 					login(data.login.token);
 					location.reload();
 				}
-				if (errors) {
-					// TODO: improve error handling with server codes
-					const message = errors[0]?.message;
-					form.setError(
-						message?.includes("password") ? "password" : "credential",
-						{ message },
-					);
+
+				if (data.login?.errors) {
+					for (const error of data.login.errors) {
+						switch (error) {
+							case "INVALID_CREDENTIALS":
+								form.setError("credential", {
+									message: "Invalid e-mail or username",
+								});
+								break;
+							case "INVALID_PASSWORD":
+								form.setError("password", {
+									message: "Invalid password",
+								});
+								break;
+						}
+					}
 				}
 			},
 		});

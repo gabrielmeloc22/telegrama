@@ -321,9 +321,15 @@ A field whose value conforms to the standard internet email address format as sp
 scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
 type LoginMutationPayload {
-  token: String!
+  token: String
   user: User
+  errors: [LoginMutationErrors!]
   clientMutationId: String
+}
+
+enum LoginMutationErrors {
+  INVALID_CREDENTIALS
+  INVALID_PASSWORD
 }
 
 input LoginMutationInput {

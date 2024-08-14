@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<71a7b3ace6092302442518eb1b54b416>>
+ * @generated SignedSource<<7a2ba8244749b7a2a1b038411c3a851c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type LoginMutationErrors = "INVALID_CREDENTIALS" | "INVALID_PASSWORD" | "%future added value";
 export type LoginMutationInput = {
   clientMutationId?: string | null | undefined;
   email?: string | null | undefined;
@@ -20,7 +21,8 @@ export type signInMutation$variables = {
 };
 export type signInMutation$data = {
   readonly login: {
-    readonly token: string;
+    readonly errors: ReadonlyArray<LoginMutationErrors> | null | undefined;
+    readonly token: string | null | undefined;
   } | null | undefined;
 };
 export type signInMutation = {
@@ -57,6 +59,13 @@ v1 = [
         "kind": "ScalarField",
         "name": "token",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "errors",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -80,16 +89,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "bd993aa4126099cecaa476bd8b538eae",
+    "cacheID": "93f56d0594ee50174c0f4450c44b8cf8",
     "id": null,
     "metadata": {},
     "name": "signInMutation",
     "operationKind": "mutation",
-    "text": "mutation signInMutation(\n  $input: LoginMutationInput!\n) {\n  login(input: $input) {\n    token\n  }\n}\n"
+    "text": "mutation signInMutation(\n  $input: LoginMutationInput!\n) {\n  login(input: $input) {\n    token\n    errors\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4fa36ed103325b0e115e52cb17a6a6a1";
+(node as any).hash = "aa79abbe3474eed7c9b0f4a48b6cf027";
 
 export default node;
