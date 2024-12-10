@@ -15,6 +15,7 @@ A telegram clone using Graphql
 - User authentication and authorization
 - Group chats
 - Typing indicators
+- Consistent message arriving order
 
 ## Installation
 
