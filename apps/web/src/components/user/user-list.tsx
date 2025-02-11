@@ -1,8 +1,8 @@
 import { usePaginationFragment } from "react-relay";
 import { type OperationType, graphql } from "relay-runtime";
 import type {
-	userListFragment$data,
-	userListFragment$key,
+  userListFragment$data,
+  userListFragment$key,
 } from "../../../__generated__/userListFragment.graphql";
 import { UserItem } from "./user-item";
 
@@ -31,51 +31,49 @@ export const UserListFragment = graphql`
   }
 `;
 type UserListProps = {
-	userList: userListFragment$key;
-	// query?: string;
-	onSelect: (edge: userListFragment$data["users"]["edges"][number]) => void;
-	selected?: string[];
-	multiple?: boolean;
+  userList: userListFragment$key;
+  // query?: string;
+  onSelect: (edge: userListFragment$data["users"]["edges"][number]) => void;
+  selected?: string[];
+  multiple?: boolean;
 };
 
 export function UserList({
-	selected,
-	userList,
-	multiple = false,
-	onSelect,
+  selected,
+  userList,
+  multiple = false,
+  onSelect,
 }: UserListProps) {
-	const { data } = usePaginationFragment<OperationType, userListFragment$key>(
-		UserListFragment,
-		userList,
-	);
+  const { data } = usePaginationFragment<OperationType, userListFragment$key>(
+    UserListFragment,
+    userList,
+  );
 
-	if (!data.users) {
-		return null;
-	}
+  if (!data.users) {
+    return null;
+  }
 
-	const users = data.users.edges;
+  const users = data.users.edges;
 
-	return (
-		<div className="flex">
-			<ul className="flex w-full flex-col gap-2">
-				{users.map((edge) =>
-					edge?.node ? (
-						<li key={edge.node.id} className="flex items-center">
-							<UserItem
-								selectable={multiple}
-								selected={selected?.includes(edge.node.id)}
-								user={edge.node}
-								onClick={() => onSelect(edge)}
-								{...(!multiple
-									? {
-											link: true,
-										}
-									: {})}
-							/>
-						</li>
-					) : null,
-				)}
-			</ul>
-		</div>
-	);
+  return (
+    <ul className="flex flex-grow h-full w-full flex-col gap-2 overflow-y-auto">
+      {users.map((edge) =>
+        edge?.node ? (
+          <li key={edge.node.id} className="flex items-center">
+            <UserItem
+              selectable={multiple}
+              selected={selected?.includes(edge.node.id)}
+              user={edge.node}
+              onClick={() => onSelect(edge)}
+              {...(!multiple
+                ? {
+                  link: true,
+                }
+                : {})}
+            />
+          </li>
+        ) : null,
+      )}
+    </ul>
+  );
 }
